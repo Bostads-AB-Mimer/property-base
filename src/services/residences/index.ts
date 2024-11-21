@@ -225,26 +225,27 @@ export const routes = (router: KoaRouter) => {
    *                   format: date-time
    *                 energyIndex:
    *                   type: number
-   *
-   *   get:
-   *     summary: Get a residence by ID.
-   *     description: Returns a residence with the specified ID.
-   *     tags:
-   *       - Residences
-   *     parameters:
-   *       - in: path
-   *         name: id
-   *         required: true
-   *         schema:
-   *           type: string
-   *         description: The ID of the residence.
-   *     responses:
-   *       200:
-   *         description: Successfully retrieved the residence.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               $ref: '#/components/schemas/Residence'
+   * paths:
+   *   /residences/{id}:
+   *     get:
+   *       summary: Get a residence by ID.
+   *       description: Returns a residence with the specified ID.
+   *       tags:
+   *         - Residences
+   *       parameters:
+   *         - in: path
+   *           name: id
+   *           required: true
+   *           schema:
+   *             type: string
+   *           description: The ID of the residence.
+   *       responses:
+   *         200:
+   *           description: Successfully retrieved the residence.
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/Residence'
    */
   router.get('(.*)/residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
