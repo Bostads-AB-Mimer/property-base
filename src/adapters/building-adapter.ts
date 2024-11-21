@@ -55,5 +55,15 @@ const getBuildingByCode = async (buildingCode: string) => {
     })
 }
 
+//todo: move
+const getStaircase = async (caption: string) => {
+    console.log("caption: ", caption)
+    return prisma.staircase.findMany({
+      where: {
+          name  : caption,
+      }
+    })
+}
 
-export {getBuildings, getBuildingByCode}
+
+export {getBuildings, getBuildingByCode, getStaircase}

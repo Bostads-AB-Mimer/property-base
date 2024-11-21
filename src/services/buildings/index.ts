@@ -7,7 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
   getBuildingByCode,
-  getBuildings,
+  getBuildings, getStaircase,
 } from '../../adapters/building-adapter'
 
 /**
@@ -87,6 +87,34 @@ export const routes = (router: KoaRouter) => {
       ctx.status = 500
       ctx.body = { content: 'Internal server error', ...metadata }
     }
+  })
+
+  //todo: move
+  /**
+   * @swagger
+   * /staircases/{caption}/:
+   *   get:
+   *     summary: Gets staircases belonging to a property by caption
+   *     description: Returns the staircases belonging to the building.
+   *     tags:
+   *       - Buildings
+   *     parameters:
+   *       - in: path
+   *         name: caption
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The caption of the building.
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the staircases.
+   *         content:
+   */
+  router.get('(.*)/staircases/:propertyCode/', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    logger.info('GET /buildings/:propertyId/', metadata)
+    const response = await getStaircase(ctx.params.caption)
+    ctx.body = { content: response, ...metadata }
   })
 
 }
