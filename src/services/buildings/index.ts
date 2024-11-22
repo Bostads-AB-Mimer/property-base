@@ -129,7 +129,8 @@ export const routes = (router: KoaRouter) => {
       ctx.body = { content: response, ...metadata }
     } catch (err){
       ctx.status = 500
-      ctx.body = {reason: err, ...metadata}
+      const errorMessage = err instanceof Error ? err.message : 'unknown error';
+      ctx.body = {reason: errorMessage, ...metadata}
     }
   })
 }
