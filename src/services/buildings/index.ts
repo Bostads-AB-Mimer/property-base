@@ -7,7 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
   getBuildingByCode,
-  getBuildings, getStaircase,
+  getBuildings, getBuildingStaircases,
 } from '../../adapters/building-adapter'
 
 /**
@@ -92,29 +92,44 @@ export const routes = (router: KoaRouter) => {
   //todo: move
   /**
    * @swagger
-   * /staircases/{caption}/:
+   * /staircases/{buildingCode}/:
    *   get:
-   *     summary: Gets staircases belonging to a property by caption
+   *     summary: Gets staircases belonging to a building by building id
    *     description: Returns the staircases belonging to the building.
    *     tags:
    *       - Buildings
    *     parameters:
    *       - in: path
-   *         name: caption
+   *         name: buildingCode
    *         required: true
    *         schema:
    *           type: string
-   *         description: The caption of the building.
+   *         description: The building code of the building.
    *     responses:
    *       200:
    *         description: Successfully retrieved the staircases.
    *         content:
    */
-  router.get('(.*)/staircases/:propertyCode/', async (ctx) => {
+  router.get('(.*)/staircases/:buildingCode/', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /buildings/:propertyId/', metadata)
-    const response = await getStaircase(ctx.params.caption)
-    ctx.body = { content: response, ...metadata }
-  })
+    logger.info(`GET /staircases/${ctx.params.buildingCode}/`, metadata)
 
+    const { buildingCode } = ctx.params
+
+    if (!buildingCode || buildingCode.length < 7) {
+      ctx.status = 400
+      ctx.body = { content: 'Invalid building code', ...metadata }
+      return
+    }
+
+    const parsedBuildingCode = buildingCode.slice(0, 7)
+
+    try {
+      const response = await getBuildingStaircases(parsedBuildingCode)
+      ctx.body = { content: response, ...metadata }
+    } catch (err){
+      ctx.status = 500
+      ctx.body = {reason: err, ...metadata}
+    }
+  })
 }

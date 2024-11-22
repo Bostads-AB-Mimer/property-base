@@ -1,12 +1,12 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
-  getResidencesByType,
   getLatestResidences,
-  getResidenceById,
+  getResidenceById, getResidencesByBuildingCode,
 } from '../../adapters/residence-adapter'
 import { Residence } from '../../types/residence'
 import { mapDbToResidence } from './residence-mapper'
+import {getBuildingStaircases} from "../../adapters/building-adapter";
 
 /**
  * @swagger
@@ -227,7 +227,7 @@ export const routes = (router: KoaRouter) => {
    *               schema:
    *                 $ref: '#/components/schemas/Residence'
    */
-  router.get('(.*)/residences/:id', async (ctx) => {
+  router.get('(.*)//residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info(`GET /residences/${ctx.params.id}`, metadata)
     const dbRecord = await getResidenceById(ctx.params.id)
@@ -238,5 +238,48 @@ export const routes = (router: KoaRouter) => {
     console.log('dbRecord', dbRecord)
     const response: Residence = mapDbToResidence(dbRecord)
     ctx.body = { content: response, ...metadata }
+  })
+
+  /**
+   * @swagger
+   *   /residences/byBuildingCode/{buildingCode}:
+   *     get:
+   *       summary: Get a residence by building code.
+   *       description: Returns all residences belonging to a specific building by building code.
+   *       tags:
+   *         - Residences
+   *       parameters:
+   *         - in: path
+   *           name: buildingCode
+   *           required: true
+   *           schema:
+   *             type: string
+   *           description: The building code of the building.
+   *       responses:
+   *         200:
+   *           description: Successfully retrieved the residencies.
+   */
+  router.get('(.*)/residences/byBuildingCode/:buildingCode', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(`GET /residences/byBuildingCode/${ctx.params.buildingCode}`, metadata)
+
+    const { buildingCode } = ctx.params
+
+    if (!buildingCode || buildingCode.length < 7) {
+      ctx.status = 400
+      ctx.body = { content: 'Invalid building code', ...metadata }
+      return
+    }
+
+    const parsedBuildingCode = buildingCode.slice(0, 7)
+
+    try {
+      const response = await getResidencesByBuildingCode(parsedBuildingCode)
+      ctx.body = { content: response, ...metadata }
+    } catch (err){
+      ctx.status = 500
+      ctx.body = {reason: err, ...metadata}
+    }
+
   })
 }

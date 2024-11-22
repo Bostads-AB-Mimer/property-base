@@ -39,7 +39,6 @@ const getBuildings = async (propertyCode: string) => {
 }
 
 const getBuildingByCode = async (buildingCode: string) => {
-    console.log("buildingCode: ", buildingCode)
     return prisma.building.findFirst({
         where: {
             buildingCode: {
@@ -55,15 +54,24 @@ const getBuildingByCode = async (buildingCode: string) => {
     })
 }
 
-//todo: move
-const getStaircase = async (caption: string) => {
-    console.log("caption: ", caption)
+async function getBuildingStaircases(buildingCode: string) {
+    const building = await prisma.building.findFirst({
+        where: {
+            buildingCode: {
+                contains: buildingCode,
+            }
+        },
+        select: { name: true },
+    })
+
+    if (!building) {
+        throw new Error(`Building with code ${buildingCode} not found.`)
+    }
+
     return prisma.staircase.findMany({
-      where: {
-          name  : caption,
-      }
+        where: { name: building.name },
     })
 }
 
 
-export {getBuildings, getBuildingByCode, getStaircase}
+export {getBuildings, getBuildingByCode, getBuildingStaircases}
