@@ -10,24 +10,32 @@ const getBuildings = async (propertyCode: string) => {
         where: {
             code: propertyCode,
         },
+
         include: {
-            propertyObject: {
-                include: {
-                    building: true
-                }
-            }
-        }
+            propertyDesignation: {
+                select: {
+                    buildings: true,
+                },
+            },
+            district: {
+                select: {
+                    code: true,
+                    caption: true,
+                },
+            },
+        },
     })
 
     if (!result[0]) {
         return []
     }
 
-    return [{
-        ...result[0].propertyObject?.building,
-        code: result[0].code || '',
-        caption: result[0].designation || ''
-    }]
+    return map(result[0].propertyDesignation?.buildings, (building) => {
+        return {
+            ...building,
+            ...result[0].district,
+        }
+    })
 }
 
 const getBuildingByCode = async (buildingCode: string) => {
