@@ -56,7 +56,7 @@ export const routes = (router: KoaRouter) => {
       ...metadata,
       _links: generateMetaLinks(ctx, '/properties', {
         id: ctx.params.id,
-        buildings: response?.propertyCode || ''
+        buildings: response?.code || ''
       })
     }
   })
@@ -78,7 +78,7 @@ export const routes = (router: KoaRouter) => {
    *         schema:
    *           type: string
    *         description: Optional filter to get properties in a specific tract
-   *         example: "T123"
+   *         example: "Bävern"
    *     responses:
    *       200:
    *         description: Successfully retrieved list of properties
@@ -100,7 +100,7 @@ export const routes = (router: KoaRouter) => {
         ...property,
         _links: {
           self: {
-            href: `/properties/${property.propertyId}`
+            href: `/properties/${property.id}`
           }
         }
       })),
