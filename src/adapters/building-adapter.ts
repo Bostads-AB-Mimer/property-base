@@ -39,7 +39,6 @@ const getBuildings = async (propertyCode: string) => {
 }
 
 const getBuildingByCode = async (buildingCode: string) => {
-    console.log("buildingCode: ", buildingCode)
     return prisma.building.findFirst({
         where: {
             buildingCode: {
@@ -48,11 +47,9 @@ const getBuildingByCode = async (buildingCode: string) => {
         },
         include: {
             buildingType: true,
-            propertyObject: {
-                include: {
-                    property: true
-                }
-            }
+            marketArea: true,
+            propertyDesignation: true,
+            district: true,
         }
     })
 }
