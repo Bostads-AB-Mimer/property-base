@@ -5,7 +5,6 @@ import {
   getResidenceById, getResidencesByBuildingCode,
 } from '../../adapters/residence-adapter'
 import { mapDbToResidence } from './residence-mapper'
-import {getBuildingStaircases} from "../../adapters/building-adapter";
 
 /**
  * @swagger
