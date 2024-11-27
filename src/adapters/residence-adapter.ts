@@ -157,52 +157,17 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
     throw new Error(`Building with code ${buildingCode} not found.`)
   }
 
+  console.log('building:', building.name)
+
+  //todo: this is not good enough -> BELLMANSGATAN 9-11 will not return any residences since they have unique names
   return prisma.residence.findMany({
-    where: { name: building.name },
-    select: {
-      id: true,
-      objectId: true,
-      residenceTypeId: true,
-      code: true,
-      name: true,
-      location: true,
-      wheelchairAccessible: true,
-      residenceAdapted: true,
-      serviceApartment: true,
-      balcony1Location: true,
-      balcony2Location: true,
-      balcony1Type: true,
-      balcony2Type: true,
-      patioLocation: true,
-      hygieneFacility: true,
-      sauna: true,
-      extraToilet: true,
-      sharedKitchen: true,
-      petAllergyFree: true,
-      electricAllergyIntolerance: true,
-      smokeFree: true,
-      elevator: true,
-      asbestos: true,
-      entrance: true,
-      hluFundAvailableAmount: true,
-      hluFundMaxAmount: true,
-      hluDiscountStartDate: true,
-      partNo: true,
-      part: true,
-      deleted: true,
-      fromDate: true,
-      toDate: true,
-      timestamp: true,
-      residenceType: {
-        select: {
-          residenceTypeId: true,
-          code: true,
-          name: true,
-          roomCount: true,
-          kitchen: true,
-          selectionFundAmount: true,
-        },
-      },
+    where: {
+      name: {
+        contains:  building.name!
+      }
+    },
+    include : {
+      residenceType: true,
     }
   })
 
