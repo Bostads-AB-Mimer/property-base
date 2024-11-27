@@ -58,7 +58,6 @@ export const routes = (router: KoaRouter) => {
    *         schema:
    *           type: string
    *         description: The ID of the residence
-   *         example: "_6J50WTZQ2928FJ"
    *     responses:
    *       200:
    *         description: Successfully retrieved the residence

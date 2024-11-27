@@ -78,7 +78,6 @@ export const routes = (router: KoaRouter) => {
    *         schema:
    *           type: string
    *         description: Optional filter to get properties in a specific tract
-   *         example: "Bävern"
    *     responses:
    *       200:
    *         description: Successfully retrieved list of properties
