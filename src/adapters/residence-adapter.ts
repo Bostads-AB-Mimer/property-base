@@ -1,6 +1,14 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 
-export const getLatestResidences = async () => {
+export const getLatestResidences = async (propertyCode?: string) => {
+  const where = propertyCode ? {
+    propertyObject: {
+      property: {
+        propertyCode
+      }
+    }
+  } : undefined
+
   const response = await prisma.residence.findMany({
     orderBy: {
       timestamp: 'desc',
@@ -8,6 +16,21 @@ export const getLatestResidences = async () => {
     select: {
       id: true,
       objectId: true,
+      propertyObject: {
+        select: {
+          property: {
+            select: {
+              id: true,
+              code: true,
+            },
+          },
+          building: {
+            select: {
+              buildingCode: true,
+            },
+          },
+        },
+      },
       residenceTypeId: true,
       code: true,
       name: true,
@@ -46,6 +69,14 @@ export const getLatestResidences = async () => {
           name: true,
           roomCount: true,
           kitchen: true,
+          timestamp: true,
+          systemStandard: true,
+          checklistId: true,
+          componentTypeActionId: true,
+          statisticsGroupSCBId: true,
+          statisticsGroup2Id: true,
+          statisticsGroup3Id: true,
+          statisticsGroup4Id: true,
           selectionFundAmount: true,
         },
       },
@@ -56,52 +87,31 @@ export const getLatestResidences = async () => {
   return response
 }
 
-export const getResidenceById = async (id: string) => {
-  const response = await prisma.residence.findUnique({
+export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
+  include: {
+    residenceType: true
+    propertyObject: {
+      include: {
+        property: true
+        building: true
+      }
+    }
+  }
+}>
+
+export const getResidenceById = async (
+  id: string,
+): Promise<ResidenceWithRelations | null> => {
+  const response = await prisma.residence.findFirst({
     where: {
       id: id,
     },
     include: {
-      residenceType: {
-        select: {
-          code: true,
-          name: true,
-          roomCount: true,
-          kitchen: true,
-          selectionFundAmount: true,
-        },
-      },
+      residenceType: true,
       propertyObject: {
         include: {
-          rooms: true,
           property: true,
-          rentalObject: {
-            select: {
-              rentalObjectId: true,
-              name: true,
-              fromDate: true,
-              toDate: true,
-              timestamp: true,
-              rentalObjectType: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-          building: {
-            select: {
-              buildingCode: true,
-              name: true,
-              constructionYear: true,
-              renovationYear: true,
-              valueYear: true,
-              heating: true,
-              fireRating: true,
-              insuranceClass: true,
-              insuranceValue: true,
-            },
-          },
+          building: true,
         },
       },
     },
@@ -124,12 +134,9 @@ export const getResidencesByType = async (residenceTypeId: string) => {
       name: 'asc',
     },
     select: {
-      id: true,
+      residenceId: true,
       code: true,
       name: true,
-      roomCount: true,
-      kitchen: true,
-      selectionFundAmount: true,
     },
   })
 
