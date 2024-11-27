@@ -54,24 +54,4 @@ const getBuildingByCode = async (buildingCode: string) => {
     })
 }
 
-async function getBuildingStaircases(buildingCode: string) {
-    const building = await prisma.building.findFirst({
-        where: {
-            buildingCode: {
-                contains: buildingCode,
-            }
-        },
-        select: { name: true },
-    })
-
-    if (!building) {
-        throw new Error(`Building with code ${buildingCode} not found.`)
-    }
-
-    return prisma.staircase.findMany({
-        where: { name: building.name },
-    })
-}
-
-
-export {getBuildings, getBuildingByCode, getBuildingStaircases}
+export {getBuildings, getBuildingByCode}

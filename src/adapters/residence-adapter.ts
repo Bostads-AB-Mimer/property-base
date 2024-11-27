@@ -134,7 +134,7 @@ export const getResidencesByType = async (residenceTypeId: string) => {
       name: 'asc',
     },
     select: {
-      residenceId: true,
+      id: true,
       code: true,
       name: true,
     },
@@ -157,7 +157,8 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
     throw new Error(`Building with code ${buildingCode} not found.`)
   }
 
-  //todo: can there be multiple staircases?
+  //todo: can there be multiple staircases? YES
+  //todo: some properties do not have staircases so we should not join on name
   const staircases =  await prisma.staircase.findMany({
     where: { name: building.name },
   })
