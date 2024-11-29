@@ -6,23 +6,26 @@ const prisma = new PrismaClient({
 })
 
 async function getStaircasesByBuildingCode(buildingCode: string) {
-    console.log('buildingCode:', buildingCode)
-    const building = await prisma.building.findFirst({
+    const propertyStructures = await prisma.propertyStructure.findMany({
         where: {
             buildingCode: {
                 contains: buildingCode,
-            }
-        },
-        select: { name: true },
+            },
+            NOT: {
+                floorId: null,
+            },
+            residenceId: null,
+            localeId: null
+        }
     })
 
-    if (!building) {
-        throw new Error(`Building with code ${buildingCode} not found.`)
-    }
-    console.log('building:', building.name)
-    return prisma.staircase.findMany({
-        where: { name: building.name },
-    })
+    return  prisma.staircase.findMany({
+            where: {
+                objectID: {
+                    in: map(propertyStructures, 'objectId')
+                }
+            }
+        })
 }
 
 export {getStaircasesByBuildingCode}

@@ -71,6 +71,8 @@ model PropertyStructure {
   maintenanceUnitByCode MaintenanceUnit? @relation("MaintenanceUnitCodeRelation", fields: [maintenanceUnitCode], references: [maintenanceUnitCode], onDelete: NoAction, onUpdate: NoAction)
   component             Component?       @relation("ComponentToPropertyStructure", fields: [componentId], references: [id])
 
+  staircases Staircase[]
+
   // Indexes
   @@index([leaseObjectId], map: "fkbabufobjaob")
   @@index([buildingPartId], map: "fkbabufobjbdl")
