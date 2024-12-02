@@ -2,7 +2,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
   getLatestResidences,
-  getResidenceById, getResidencesByBuildingCode, getResidencesByBuildingCodeAndStaircaseCode,
+  getResidenceById, getResidencesByBuildingCode, getResidencesByBuildingCodeAndFloorCode,
 } from '../../adapters/residence-adapter'
 import { mapDbToResidence } from './residence-mapper'
 
@@ -83,9 +83,9 @@ export const routes = (router: KoaRouter) => {
 
   /**
    * @swagger
-   *   /residences/byBuildingCode/{buildingCode}:
+   *   /residences/buildingCode/{buildingCode}:
    *     get:
-   *       summary: Get a residence by building code.
+   *       summary: Get residences by building code.
    *       description: Returns all residences belonging to a specific building by building code.
    *       tags:
    *         - Residences
@@ -100,9 +100,9 @@ export const routes = (router: KoaRouter) => {
    *         200:
    *           description: Successfully retrieved the residencies.
    */
-  router.get('(.*)/residences/byBuildingCode/:buildingCode', async (ctx) => {
+  router.get('(.*)/residences/buildingCode/:buildingCode', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /residences/byBuildingCode/${ctx.params.buildingCode}`, metadata)
+    logger.info(`GET /residences/buildingCode/${ctx.params.buildingCode}`, metadata)
 
     const { buildingCode } = ctx.params
 
@@ -124,12 +124,11 @@ export const routes = (router: KoaRouter) => {
     }
   })
 
-  //todo: add floor code? or is it not necessary?
   /**
    * @swagger
-   *   /residences/byBuildingCode/{buildingCode}/staircase/{staircaseCode}:
+   *   /residences/buildingCode/{buildingCode}/staircase/{floorCode}:
    *     get:
-   *       summary: Get a residence by building code.
+   *       summary: Get residences by building and staircase code.
    *       description: Returns all residences belonging to a specific building and staircase.
    *       tags:
    *         - Residences
@@ -141,9 +140,9 @@ export const routes = (router: KoaRouter) => {
    *           schema:
    *             type: string
    *         - in: path
-   *           name: staircaseCode
+   *           name: floorCode
    *           required: true
-   *           description: The staircase code of the building.
+   *           description: The floor code of the building.
    *           schema:
    *             type: string
    *       responses:
@@ -151,11 +150,11 @@ export const routes = (router: KoaRouter) => {
    *           description: Successfully retrieved the residences.
    */
 
-  router.get('(.*)/residences/byBuildingCode/:buildingCode/staircase/:staircaseCode', async (ctx) => {
+  router.get('(.*)/residences/buildingCode/:buildingCode/staircase/:floorCode', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /residences/byBuildingCode/${ctx.params.buildingCode}`, metadata)
+    logger.info(`GET /residences/buildingCode/${ctx.params.buildingCode}`, metadata)
 
-    const { buildingCode, staircaseCode } = ctx.params
+    const { buildingCode, floorCode } = ctx.params
 
     if (!buildingCode || buildingCode.length < 7) {
       ctx.status = 400
@@ -166,7 +165,7 @@ export const routes = (router: KoaRouter) => {
     const parsedBuildingCode = buildingCode.slice(0, 7)
 
     try {
-      const response = await getResidencesByBuildingCodeAndStaircaseCode(parsedBuildingCode, staircaseCode)
+      const response = await getResidencesByBuildingCodeAndFloorCode(parsedBuildingCode, floorCode)
       ctx.body = { content: response, ...metadata }
     } catch (err){
       ctx.status = 500

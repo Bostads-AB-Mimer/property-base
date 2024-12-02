@@ -22,7 +22,7 @@ export const routes = (router: KoaRouter) => {
    * @swagger
    * /staircases/{buildingCode}/:
    *   get:
-   *     summary: Gets staircases belonging to a building by building id
+   *     summary: Gets staircases belonging to a building by building code
    *     description: Returns the staircases belonging to the building.
    *     tags:
    *       - Staircases

@@ -12,7 +12,6 @@ model Staircase {
 
   // Commented out the relation until the target model is defined to avoid migration issues.
   // relatedObject cmobj @relation(fields: [objectID], references: [keycmobj], onDelete: Cascade, onUpdate: NoAction, map: "fkbavankeycmobj") // TODO: change cmobj to new model name when available
-  PropertyStructure PropertyStructure @relation(fields: [objectID], references: [objectId], onDelete: NoAction, onUpdate: NoAction, map: "fkbavankeycmobj") // TODO: change cmobj to new model name when available
 
   @@index([fromDate], map: "inbavan_1A00UMOLZ")
   @@index([toDate], map: "inbavan_1A00UMONA")
