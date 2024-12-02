@@ -142,7 +142,7 @@ export const routes = (router: KoaRouter) => {
    *         - in: path
    *           name: floorCode
    *           required: true
-   *           description: The floor code of the building.
+   *           description: The floor code of the staircase.
    *           schema:
    *             type: string
    *       responses:

@@ -15,7 +15,6 @@ import {getStaircasesByBuildingCode} from "../../adapters/staircase-adapter";
  *     description: Operations related to staircases
  */
 
-//todo: these routes might be refactored into building parts later (including roof and facade)
 export const routes = (router: KoaRouter) => {
 
   /**
