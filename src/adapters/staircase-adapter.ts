@@ -6,6 +6,7 @@ const prisma = new PrismaClient({
 })
 
 async function getStaircasesByBuildingCode(buildingCode: string) {
+    //filter propertyStructures by buildingCode and floorId is not null
     const propertyStructures = await prisma.propertyStructure.findMany({
         where: {
             buildingCode: {
@@ -19,13 +20,18 @@ async function getStaircasesByBuildingCode(buildingCode: string) {
         }
     })
 
-    return  prisma.staircase.findMany({
-            where: {
-                objectID: {
-                    in: map(propertyStructures, 'objectId')
-                }
+    const staircases =  await prisma.staircase.findMany({
+        where: {
+            objectID: {
+                in: map(propertyStructures, 'objectId')
             }
-        })
+        }
+    })
+
+    return staircases.map(staircase => ({
+        ...staircase,
+        buildingCode: buildingCode,
+    }));
 }
 
 export {getStaircasesByBuildingCode}

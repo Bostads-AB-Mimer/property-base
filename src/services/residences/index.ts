@@ -2,7 +2,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
   getLatestResidences,
-  getResidenceById, getResidencesByBuildingCode,
+  getResidenceById, getResidencesByBuildingCode, getResidencesByBuildingCodeAndStaircaseCode,
 } from '../../adapters/residence-adapter'
 import { mapDbToResidence } from './residence-mapper'
 
@@ -116,6 +116,57 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const response = await getResidencesByBuildingCode(parsedBuildingCode)
+      ctx.body = { content: response, ...metadata }
+    } catch (err){
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error';
+      ctx.body = {reason: errorMessage, ...metadata}
+    }
+  })
+
+  //todo: add floor code? or is it not necessary?
+  /**
+   * @swagger
+   *   /residences/byBuildingCode/{buildingCode}/staircase/{staircaseCode}:
+   *     get:
+   *       summary: Get a residence by building code.
+   *       description: Returns all residences belonging to a specific building and staircase.
+   *       tags:
+   *         - Residences
+   *       parameters:
+   *         - in: path
+   *           name: buildingCode
+   *           required: true
+   *           description: The building code of the building.
+   *           schema:
+   *             type: string
+   *         - in: path
+   *           name: staircaseCode
+   *           required: true
+   *           description: The staircase code of the building.
+   *           schema:
+   *             type: string
+   *       responses:
+   *         200:
+   *           description: Successfully retrieved the residences.
+   */
+
+  router.get('(.*)/residences/byBuildingCode/:buildingCode/staircase/:staircaseCode', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(`GET /residences/byBuildingCode/${ctx.params.buildingCode}`, metadata)
+
+    const { buildingCode, staircaseCode } = ctx.params
+
+    if (!buildingCode || buildingCode.length < 7) {
+      ctx.status = 400
+      ctx.body = { content: 'Invalid building code', ...metadata }
+      return
+    }
+
+    const parsedBuildingCode = buildingCode.slice(0, 7)
+
+    try {
+      const response = await getResidencesByBuildingCodeAndStaircaseCode(parsedBuildingCode, staircaseCode)
       ctx.body = { content: response, ...metadata }
     } catch (err){
       ctx.status = 500
