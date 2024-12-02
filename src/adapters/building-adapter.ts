@@ -6,37 +6,6 @@ const prisma = new PrismaClient({
 })
 
 const getBuildings = async (propertyCode: string) => {
-  // const result = await prisma.property.findMany({
-  //   where: {
-  //     code: propertyCode,
-  //   },
-  //
-  //   include: {
-  //     propertyDesignation: {
-  //       select: {
-  //         buildings: true,
-  //       },
-  //     },
-  //     district: {
-  //       select: {
-  //         code: true,
-  //         caption: true,
-  //       },
-  //     },
-  //   },
-  // })
-  //
-  // if (!result[0]) {
-  //   return []
-  // }
-  //
-  // return map(result[0].propertyDesignation?.buildings, (building) => {
-  //   return {
-  //     ...building,
-  //     ...result[0].district,
-  //   }
-  // })
-
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
       propertyCode: {
