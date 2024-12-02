@@ -6,9 +6,6 @@ const prisma = new PrismaClient({
 })
 
 export const getRooms = async (buildingCode: string, floorCode: string, residenceCode: string) => {
-    console.log('buildingCode', buildingCode)
-    console.log('floorCode', floorCode)
-    console.log('residenceCode', residenceCode)
     const propertyStructures = await prisma.propertyStructure.findMany({
         where: {
             buildingCode: {
