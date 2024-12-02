@@ -26,7 +26,10 @@ export const getRooms = async (buildingCode: string, floorCode: string, residenc
         where: {
             propertyObjectId: {
                 in: map(propertyStructures, 'objectId')
-            }
+            },
+        },
+        include: {
+            roomType: true
         }
     })
 }
