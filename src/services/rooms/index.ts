@@ -44,8 +44,8 @@ export const routes = (router: KoaRouter) => {
 
   router.get('(.*)/rooms/buildingCode/:buildingCode/staircase/:floorCode/residenceCode/:residenceCode', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    const { buildingCode, floorcode, residenceCode } = ctx.params
-    logger.info(`GET /rooms/buildingCode/${buildingCode}/residenceCode/${residenceCode}`, metadata)
+    const { buildingCode, floorCode, residenceCode } = ctx.params
+    logger.info(`GET /rooms/buildingCode/${buildingCode}/staircase/${floorCode}/residenceCode/${residenceCode}`, metadata)
 
     if (!buildingCode || buildingCode.length < 7) {
       ctx.status = 400
@@ -56,7 +56,7 @@ export const routes = (router: KoaRouter) => {
     const parsedBuildingCode = buildingCode.slice(0, 7)
 
     try {
-      const response = await getRooms(parsedBuildingCode, floorcode, residenceCode)
+      const response = await getRooms(parsedBuildingCode, floorCode, residenceCode)
       ctx.body = { content: response, ...metadata }
     } catch (err){
       ctx.status = 500
@@ -64,6 +64,4 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {reason: errorMessage, ...metadata}
     }
   })
-
-  //todo: room detail endpoint
 }

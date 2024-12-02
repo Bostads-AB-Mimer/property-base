@@ -1,16 +1,18 @@
-import {PrismaClient} from '@prisma/client'
+import {Prisma, PrismaClient} from '@prisma/client'
 import {map} from "lodash";
 
 const prisma = new PrismaClient({
     log: ['query'],
 })
 
-
 export const getRooms = async (buildingCode: string, floorCode: string, residenceCode: string) => {
+    console.log('buildingCode', buildingCode)
+    console.log('floorCode', floorCode)
+    console.log('residenceCode', residenceCode)
     const propertyStructures = await prisma.propertyStructure.findMany({
         where: {
             buildingCode: {
-                contains: buildingCode
+                contains: buildingCode,
             },
             floorCode: floorCode,
             residenceCode: residenceCode,
@@ -28,9 +30,6 @@ export const getRooms = async (buildingCode: string, floorCode: string, residenc
             propertyObjectId: {
                 in: map(propertyStructures, 'objectId')
             }
-        }, select: {
-            name: true,
-            roomCode: true
         }
     })
 }
