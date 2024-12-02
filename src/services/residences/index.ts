@@ -154,17 +154,15 @@ export const routes = (router: KoaRouter) => {
    *         200:
    *           description: Successfully retrieved the residences.
    */
-
   router.get(
     '(.*)/residences/buildingCode/:buildingCode/staircase/:floorCode',
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
+      const { buildingCode, floorCode } = ctx.params
       logger.info(
-        `GET /residences/buildingCode/${ctx.params.buildingCode}`,
+        `GET /residences/buildingCode/${buildingCode}/staircase/${floorCode}`,
         metadata
       )
-
-      const { buildingCode, floorCode } = ctx.params
 
       if (!buildingCode || buildingCode.length < 7) {
         ctx.status = 400
