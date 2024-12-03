@@ -1,8 +1,19 @@
-import { PrismaClient } from '@prisma/client'
-import {
-  PropertyWithObject,
-  PropertyBasicInfo,
-} from '../types/property-adapter'
+import { PrismaClient, Prisma } from '@prisma/client'
+
+export type PropertyWithObject = Prisma.PropertyGetPayload<{
+  include: {
+    propertyObject: true
+  }
+}>
+
+export type PropertyBasicInfo = Prisma.PropertyGetPayload<{
+  select: {
+    id: true
+    code: true
+    tract: true
+    propertyDesignation: true
+  }
+}>
 
 const prisma = new PrismaClient({
   log: ['query'],
