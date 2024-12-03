@@ -1,8 +1,8 @@
-import { Building } from '@prisma/client'
+import { BuildingWithRelations } from '../../adapters/building-adapter'
 import { BuildingSchema } from '../../types/building'
 import { toBoolean } from '../../utils/data-conversion'
 
-export function mapDbToBuilding(dbRecord: Building) {
+export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({

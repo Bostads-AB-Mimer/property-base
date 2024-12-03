@@ -1,10 +1,19 @@
 import { map } from 'lodash'
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
 import { mapDbToBuilding } from '../services/buildings/building-mapper'
 
 const prisma = new PrismaClient({
   log: ['query'],
 })
+
+export type BuildingWithRelations = Prisma.BuildingGetPayload<{
+  include: {
+    buildingType: true
+    marketArea: true
+    district: true
+    propertyDesignation: true
+  }
+}>
 
 const getBuildings = async (propertyCode: string) => {
   const propertyStructures = await prisma.propertyStructure.findMany({
