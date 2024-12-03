@@ -33,7 +33,7 @@ export function mapDbToRoom(dbRecord: Room) {
     roomType: dbRecord.roomType ? {
       roomTypeId: dbRecord.roomType.roomTypeId,
       roomTypeCode: dbRecord.roomType.code,
-      name: dbRecord.roomType.name,
+      name: dbRecord.roomType.name?.trim() || '',
       use: dbRecord.roomType.use,
       optionAllowed: dbRecord.roomType.optionAllowed,
       isSystemStandard: dbRecord.roomType.isSystemStandard,

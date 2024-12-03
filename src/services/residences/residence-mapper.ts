@@ -6,7 +6,7 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
   return ResidenceSchema.parse({
     id: dbRecord.id.trim(),
     code: dbRecord.code,
-    name: dbRecord.name,
+    name: dbRecord.name?.trim() || '',
     accessibility: {
       wheelchairAccessible: Boolean(dbRecord.wheelchairAccessible),
       residenceAdapted: Boolean(dbRecord.residenceAdapted),
@@ -87,7 +87,7 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
     },
     residenceType: {
       code: dbRecord.residenceType.code,
-      name: dbRecord.residenceType.name,
+      name: dbRecord.residenceType.name?.trim() || '',
       roomCount: dbRecord.residenceType.roomCount,
       kitchen: dbRecord.residenceType.kitchen,
       systemStandard: dbRecord.residenceType.systemStandard || 0,

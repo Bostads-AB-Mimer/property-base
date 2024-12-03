@@ -8,11 +8,11 @@ export function mapDbToBuilding(dbRecord: Building) {
   return BuildingSchema.parse({
     id: dbRecord.buildingId,
     code: dbRecord.buildingCode,
-    name: dbRecord.name,
+    name: dbRecord.name?.trim() || '',
     buildingType: dbRecord.buildingType ? {
       id: dbRecord.buildingType.buildingTypeId,
       code: dbRecord.buildingType.code,
-      name: dbRecord.buildingType.name,
+      name: dbRecord.buildingType.name?.trim() || '',
     } : null,
     construction: {
       constructionYear: dbRecord.constructionYear,
