@@ -33,4 +33,21 @@ const getBuildings = async (propertyCode: string) => {
   })
 }
 
-export { getBuildings }
+//todo: remove this endpoint?
+const getBuildingByCode = async (buildingCode: string) => {
+  return prisma.building.findFirst({
+    where: {
+      buildingCode: {
+        contains: buildingCode,
+      },
+    },
+    include: {
+      buildingType: true,
+      marketArea: true,
+      propertyDesignation: true,
+      district: true,
+    },
+  })
+}
+
+export { getBuildings, getBuildingByCode }
