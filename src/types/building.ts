@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const BuildingTypeSchema = z.object({
+export const BuildingSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
@@ -20,7 +20,4 @@ export const BuildingTypeSchema = z.object({
   deleted: z.boolean(),
 })
 
-export const BuildingListSchema = z.array(BuildingTypeSchema)
-
-export type Building = z.infer<typeof BuildingTypeSchema>
-export type BuildingList = z.infer<typeof BuildingListSchema>
+export type Building = z.infer<typeof BuildingSchema>

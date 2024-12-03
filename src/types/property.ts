@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
-// Extend from the adapter type to ensure compatibility
-export const PropertyTypeSchema = z.object<z.ZodRawShape>({
+export const PropertySchema = z.object<z.ZodRawShape>({
   propertyId: z.string(),
   propertyCode: z.string(),
   tract: z.string(),
@@ -13,7 +12,4 @@ export const PropertyTypeSchema = z.object<z.ZodRawShape>({
   }),
 })
 
-export const PropertyListSchema = z.array(PropertyTypeSchema)
-
-export type Property = z.infer<typeof PropertyTypeSchema>
-export type PropertyList = z.infer<typeof PropertyListSchema>
+export type Property = z.infer<typeof PropertySchema>

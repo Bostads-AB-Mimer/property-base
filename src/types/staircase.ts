@@ -16,7 +16,4 @@ export const StaircaseSchema = z.object({
   timestamp: z.string(),
 })
 
-export const StaircaseListSchema = z.array(StaircaseSchema)
-
 export type Staircase = z.infer<typeof StaircaseSchema>
-export type StaircaseList = z.infer<typeof StaircaseListSchema>

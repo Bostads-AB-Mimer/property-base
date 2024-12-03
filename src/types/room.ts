@@ -39,7 +39,4 @@ export const RoomSchema = z.object({
   roomType: RoomTypeSchema.nullable()
 })
 
-export const RoomListSchema = z.array(RoomSchema)
-
 export type Room = z.infer<typeof RoomSchema>
-export type RoomList = z.infer<typeof RoomListSchema>

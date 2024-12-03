@@ -18,12 +18,6 @@ const schemas = {
     name: 'Building',
     target: 'openApi3',
   }).definitions,
-  BuildingList: {
-    type: 'array',
-    items: {
-      $ref: '#/components/schemas/Building',
-    },
-  },
   ...zodToJsonSchema(ComponentTypeSchema, {
     name: 'Component',
     target: 'openApi3',
@@ -32,32 +26,14 @@ const schemas = {
     name: 'Property',
     target: 'openApi3',
   }).definitions,
-  PropertyList: {
-    type: 'array',
-    items: {
-      $ref: '#/components/schemas/Property',
-    },
-  },
   ...zodToJsonSchema(StaircaseSchema, {
     name: 'Staircase',
     target: 'openApi3',
   }).definitions,
-  StaircaseList: {
-    type: 'array',
-    items: {
-      $ref: '#/components/schemas/Staircase',
-    },
-  },
   ...zodToJsonSchema(RoomSchema, {
     name: 'Room',
     target: 'openApi3',
   }).definitions,
-  RoomList: {
-    type: 'array',
-    items: {
-      $ref: '#/components/schemas/Room',
-    },
-  },
 }
 
 swaggerSpec.definition.components = {
