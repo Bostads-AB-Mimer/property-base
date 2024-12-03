@@ -57,14 +57,31 @@ export const getRooms = async (
       roomType: true,
     },
     transform: (room) => ({
-      ...room,
+      id: room.roomId,
+      code: room.roomCode,
       name: room.name?.trim(),
-      sharedUse: Boolean(room.sharedUse),
-      allowPeriodicWorks: Boolean(room.allowPeriodicWorks),
-      hasToilet: Boolean(room.hasToilet),
-      isHeated: Boolean(room.isHeated),
-      hasThermostatValve: Boolean(room.hasThermostatValve),
-      deleteMark: Boolean(room.deleteMark),
+      usage: {
+        shared: Boolean(room.sharedUse),
+        allowPeriodicWorks: Boolean(room.allowPeriodicWorks),
+        spaceType: room.spaceType,
+      },
+      features: {
+        hasToilet: Boolean(room.hasToilet),
+        isHeated: Boolean(room.isHeated),
+        hasThermostatValve: Boolean(room.hasThermostatValve),
+        orientation: room.orientation,
+      },
+      dates: {
+        installation: room.installationDate,
+        from: room.fromDate,
+        to: room.toDate,
+        availableFrom: room.availableFrom,
+        availableTo: room.availableTo,
+      },
+      sortingOrder: room.sortingOrder,
+      deleted: Boolean(room.deleteMark),
+      timestamp: room.timestamp,
+      roomType: room.roomType,
     }),
   })
 }

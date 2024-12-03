@@ -12,23 +12,29 @@ export const RoomTypeSchema = z.object({
 })
 
 export const RoomSchema = z.object({
-  roomId: z.string(),
-  roomCode: z.string(),
+  id: z.string(),
+  code: z.string(),
   name: z.string().nullable(),
-  sharedUse: z.boolean(),
+  usage: z.object({
+    shared: z.boolean(),
+    allowPeriodicWorks: z.boolean(),
+    spaceType: z.number(),
+  }),
+  features: z.object({
+    hasToilet: z.boolean(),
+    isHeated: z.boolean(),
+    hasThermostatValve: z.boolean(),
+    orientation: z.number(),
+  }),
+  dates: z.object({
+    installation: z.date().nullable(),
+    from: z.date(),
+    to: z.date(),
+    availableFrom: z.date().nullable(),
+    availableTo: z.date().nullable(),
+  }),
   sortingOrder: z.number(),
-  allowPeriodicWorks: z.boolean(),
-  spaceType: z.number(),
-  hasToilet: z.boolean(),
-  isHeated: z.boolean(),
-  hasThermostatValve: z.boolean(),
-  orientation: z.number(),
-  installationDate: z.date().nullable(),
-  deleteMark: z.number(),
-  fromDate: z.date(),
-  toDate: z.date(),
-  availableFrom: z.date().nullable(),
-  availableTo: z.date().nullable(),
+  deleted: z.boolean(),
   timestamp: z.string(),
   roomType: RoomTypeSchema.nullable()
 })
