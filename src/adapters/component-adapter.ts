@@ -68,18 +68,18 @@ export const getComponentByMaintenanceUnitCode = async (
     },
     classification: {
       componentType: {
-        code: component.componentType.componentTypeCode,
-        name: component.componentType.name,
+        code: component.componentType?.componentTypeCode ?? '',
+        name: component.componentType?.name ?? '',
       },
       category: {
-        code: component.componentCategory.code,
-        name: component.componentCategory.name,
+        code: component.componentCategory?.code ?? '',
+        name: component.componentCategory?.name ?? '',
       },
     },
     maintenanceUnits: component.propertyStructures.map((ps) => ({
-      id: ps.maintenanceUnitByCode.maintenanceUnitId,
-      code: ps.maintenanceUnitByCode.maintenanceUnitCode,
-      name: ps.maintenanceUnitByCode.name,
+      id: ps.maintenanceUnitByCode?.maintenanceUnitId ?? '',
+      code: ps.maintenanceUnitByCode?.maintenanceUnitCode ?? '',
+      name: ps.maintenanceUnitByCode?.name ?? '',
     })),
   }))
 }

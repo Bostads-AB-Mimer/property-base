@@ -27,7 +27,7 @@ export const getLatestResidences = async (propertyCode?: string) => {
         select: {
           property: {
             select: {
-              id: true,
+              propertyId: true,
               code: true,
             },
           },
@@ -111,7 +111,7 @@ export const getResidenceById = async (
 ): Promise<ResidenceWithRelations | null> => {
   const response = await prisma.residence.findFirst({
     where: {
-      id: id,
+      residenceId: id,
     },
     include: {
       residenceType: true,

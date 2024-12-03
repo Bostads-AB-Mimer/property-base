@@ -24,7 +24,7 @@ const getPropertyById = async (
 ): Promise<PropertyWithObject | null> => {
   const response = await prisma.property.findUnique({
     where: {
-      id: propertyId,
+      propertyId: propertyId,
     },
     include: {
       propertyObject: {

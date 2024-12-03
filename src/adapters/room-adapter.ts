@@ -56,7 +56,7 @@ export const getRooms = async (
       timestamp: true,
       roomType: true,
     },
-    transform: (room) => ({
+    transform: (room: any) => ({
       id: room.roomId,
       code: room.roomCode,
       name: room.name?.trim(),

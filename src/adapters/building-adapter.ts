@@ -12,17 +12,8 @@ const getBuildings = async (propertyCode: string) => {
       propertyCode,
     },
     include: {
-      propertyDesignation: {
-        select: {
-          buildings: true,
-        },
-      },
-      district: {
-        select: {
-          code: true,
-          caption: true,
-        },
-      },
+      propertyDesignation: true,
+      district: true
     },
   })
 
@@ -30,7 +21,7 @@ const getBuildings = async (propertyCode: string) => {
     return []
   }
 
-  return map(result[0].propertyDesignation?.buildings, (building) => ({
+  return map(result[0]?.propertyDesignation?.Building, (building) => ({
     id: building.id,
     code: building.buildingCode,
     name: building.name,
@@ -64,7 +55,6 @@ const getBuildingByCode = async (buildingCode: string) => {
     },
     include: {
       buildingType: true,
-      marketArea: true,
       propertyDesignation: true,
       district: true,
     },
