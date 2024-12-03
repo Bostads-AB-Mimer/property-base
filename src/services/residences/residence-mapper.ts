@@ -8,9 +8,9 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
     code: dbRecord.code,
     name: dbRecord.name,
     accessibility: {
-      wheelchairAccessible: dbRecord.wheelchairAccessible === 1,
-      residenceAdapted: dbRecord.residenceAdapted === 1,
-      elevator: dbRecord.elevator === 1,
+      wheelchairAccessible: Boolean(dbRecord.wheelchairAccessible),
+      residenceAdapted: Boolean(dbRecord.residenceAdapted),
+      elevator: Boolean(dbRecord.elevator),
     },
     location: dbRecord.location || undefined,
     features: {
@@ -24,13 +24,13 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       },
       patioLocation: dbRecord.patioLocation,
       hygieneFacility: dbRecord.hygieneFacility,
-      sauna: dbRecord.sauna === 1,
-      extraToilet: dbRecord.extraToilet === 1,
-      sharedKitchen: dbRecord.sharedKitchen === 1,
-      petAllergyFree: dbRecord.petAllergyFree === 1,
-      electricAllergyIntolerance: dbRecord.electricAllergyIntolerance === 1,
-      smokeFree: dbRecord.smokeFree === 1,
-      asbestos: dbRecord.asbestos === 1,
+      sauna: Boolean(dbRecord.sauna),
+      extraToilet: Boolean(dbRecord.extraToilet),
+      sharedKitchen: Boolean(dbRecord.sharedKitchen),
+      petAllergyFree: Boolean(dbRecord.petAllergyFree),
+      electricAllergyIntolerance: Boolean(dbRecord.electricAllergyIntolerance),
+      smokeFree: Boolean(dbRecord.smokeFree),
+      asbestos: Boolean(dbRecord.asbestos),
     },
     /*rooms: // activate when rooms are implemented
       dbRecord.rooms?.map((room: any) => ({
