@@ -10,72 +10,60 @@ import { RoomSchema, RoomListSchema } from '../../types/room'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 const schemas = {
-  Residence: {
-    ...zodToJsonSchema(ResidenceSchema, {
-      name: 'Residence',
-      target: 'openApi3',
-    }).definitions.Residence
-  },
-  Building: {
-    ...zodToJsonSchema(BuildingTypeSchema, {
-      name: 'Building',
-      target: 'openApi3',
-    }).definitions.Building
-  },
+  ...zodToJsonSchema(ResidenceSchema, {
+    name: 'Residence',
+    target: 'openApi3',
+  }).definitions,
+  ...zodToJsonSchema(BuildingTypeSchema, {
+    name: 'Building',
+    target: 'openApi3',
+  }).definitions,
   BuildingList: {
     type: 'array',
     items: {
-      $ref: '#/components/schemas/Building'
-    }
+      $ref: '#/components/schemas/Building',
+    },
   },
-  Component: {
-    ...zodToJsonSchema(ComponentTypeSchema, {
-      name: 'Component',
-      target: 'openApi3',
-    }).definitions.Component
-  },
+  ...zodToJsonSchema(ComponentTypeSchema, {
+    name: 'Component',
+    target: 'openApi3',
+  }).definitions,
   ComponentList: {
     type: 'array',
     items: {
-      $ref: '#/components/schemas/Component'
-    }
+      $ref: '#/components/schemas/Component',
+    },
   },
-  Property: {
-    ...zodToJsonSchema(PropertyTypeSchema, {
-      name: 'Property',
-      target: 'openApi3',
-    }).definitions.Property
-  },
+  ...zodToJsonSchema(PropertyTypeSchema, {
+    name: 'Property',
+    target: 'openApi3',
+  }).definitions,
   PropertyList: {
     type: 'array',
     items: {
-      $ref: '#/components/schemas/Property'
-    }
+      $ref: '#/components/schemas/Property',
+    },
   },
-  Staircase: {
-    ...zodToJsonSchema(StaircaseSchema, {
-      name: 'Staircase',
-      target: 'openApi3',
-    }).definitions.Staircase
-  },
+  ...zodToJsonSchema(StaircaseSchema, {
+    name: 'Staircase',
+    target: 'openApi3',
+  }).definitions,
   StaircaseList: {
     type: 'array',
     items: {
-      $ref: '#/components/schemas/Staircase'
-    }
+      $ref: '#/components/schemas/Staircase',
+    },
   },
-  Room: {
-    ...zodToJsonSchema(RoomSchema, {
-      name: 'Room',
-      target: 'openApi3',
-    }).definitions.Room
-  },
+  ...zodToJsonSchema(RoomSchema, {
+    name: 'Room',
+    target: 'openApi3',
+  }).definitions,
   RoomList: {
     type: 'array',
     items: {
-      $ref: '#/components/schemas/Room'
-    }
-  }
+      $ref: '#/components/schemas/Room',
+    },
+  },
 }
 
 swaggerSpec.definition.components = {
