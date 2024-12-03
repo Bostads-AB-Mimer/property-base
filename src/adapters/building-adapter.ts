@@ -9,7 +9,7 @@ const prisma = new PrismaClient({
 const getBuildings = async (propertyCode: string) => {
   const result = await prisma.property.findMany({
     where: {
-      code: propertyCode,
+      propertyCode,
     },
     include: {
       propertyDesignation: {
