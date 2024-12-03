@@ -42,9 +42,7 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               oneOf:
-   *                 - $ref: '#/components/schemas/Building'
-   *                 - $ref: '#/components/schemas/BuildingList'
+   *               $ref: '#/components/schemas/BuildingList'
    */
   router.get('(.*)/buildings/:propertyCode/', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
