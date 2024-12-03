@@ -12,9 +12,23 @@ export const RoomTypeSchema = z.object({
 })
 
 export const RoomSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string().nullable(),
+  id: z.string().describe('Unique identifier for the room'),
+  code: z.string().describe('Room code used in the system'),
+  name: z.string().nullable().describe('Display name of the room'),
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the room resource'),
+    }),
+    building: z.object({
+      href: z.string().describe('URI to the associated building'),
+    }),
+    residence: z.object({
+      href: z.string().describe('URI to the associated residence'),
+    }),
+    staircase: z.object({
+      href: z.string().describe('URI to the associated staircase'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
   usage: z.object({
     shared: z.boolean(),
     allowPeriodicWorks: z.boolean(),

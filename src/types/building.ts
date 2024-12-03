@@ -1,9 +1,23 @@
 import { z } from 'zod'
 
 export const BuildingSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string(),
+  id: z.string().describe('Unique identifier for the building'),
+  code: z.string().describe('Building code used in the system'),
+  name: z.string().describe('Display name of the building'),
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the building resource'),
+    }),
+    property: z.object({
+      href: z.string().describe('URI to the associated property'),
+    }),
+    residences: z.object({
+      href: z.string().describe('URI to list all residences in this building'),
+    }),
+    staircases: z.object({
+      href: z.string().describe('URI to list all staircases in this building'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
   buildingType: z.object({
     id: z.string(),
     code: z.string(),

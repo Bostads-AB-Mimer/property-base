@@ -1,9 +1,20 @@
 import { z } from 'zod'
 
 export const ComponentSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string(),
+  id: z.string().describe('Unique identifier for the component'),
+  code: z.string().describe('Component code used in the system'),
+  name: z.string().describe('Display name of the component'),
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the component resource'),
+    }),
+    maintenanceUnit: z.object({
+      href: z.string().describe('URI to the associated maintenance unit'),
+    }),
+    componentType: z.object({
+      href: z.string().describe('URI to the component type definition'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
   details: z.object({
     manufacturer: z.string().nullable(),
     typeDesignation: z.string().nullable(),
