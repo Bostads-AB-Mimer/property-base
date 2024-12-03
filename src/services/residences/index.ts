@@ -35,6 +35,14 @@ export const routes = (router: KoaRouter) => {
    *       200:
    *         description: Successfully retrieved residences data.
    *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Residence'
    */
 
   router.get('(.*)/residences/', async (ctx) => {
