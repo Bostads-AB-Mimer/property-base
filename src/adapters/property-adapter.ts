@@ -8,8 +8,8 @@ export type PropertyWithObject = Prisma.PropertyGetPayload<{
 
 export type PropertyBasicInfo = Prisma.PropertyGetPayload<{
   select: {
-    propertyId: true
-    propertyCode: true
+    id: true
+    code: true
     tract: true
     propertyDesignation: true
   }
@@ -24,7 +24,7 @@ const getPropertyById = async (
 ): Promise<PropertyWithObject | null> => {
   const response = await prisma.property.findUnique({
     where: {
-      propertyId: propertyId,
+      id: propertyId,
     },
     include: {
       propertyObject: {
@@ -57,8 +57,8 @@ const getProperties = async (
     return prisma.property.findMany({
       where: { tract },
       select: {
-        propertyId: true,
-        propertyCode: true,
+        id: true,
+        code: true,
         tract: true,
         propertyDesignation: true,
       },
@@ -66,8 +66,8 @@ const getProperties = async (
   }
   return prisma.property.findMany({
     select: {
-      propertyId: true,
-      propertyCode: true,
+      id: true,
+      code: true,
       tract: true,
       propertyDesignation: true,
     },

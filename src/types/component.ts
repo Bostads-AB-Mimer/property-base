@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const ComponentTypeSchema = z.object({
+export const ComponentSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
@@ -31,7 +31,4 @@ export const ComponentTypeSchema = z.object({
   ),
 })
 
-export const ComponentListSchema = z.array(ComponentTypeSchema)
-
-export type Component = z.infer<typeof ComponentTypeSchema>
-export type ComponentList = z.infer<typeof ComponentListSchema>
+export type Component = z.infer<typeof ComponentSchema>

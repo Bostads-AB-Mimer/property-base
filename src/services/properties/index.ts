@@ -54,7 +54,7 @@ export const routes = (router: KoaRouter) => {
       ...metadata,
       _links: generateMetaLinks(ctx, '/properties', {
         id: ctx.params.id,
-        buildings: response?.propertyCode || '',
+        buildings: response?.code || '',
       }),
     }
   })
@@ -102,7 +102,7 @@ export const routes = (router: KoaRouter) => {
         ...property,
         _links: {
           self: {
-            href: `/properties/${property.propertyId}`,
+            href: `/properties/${property.id}`,
           },
         },
       })),

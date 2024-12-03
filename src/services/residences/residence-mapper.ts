@@ -4,7 +4,7 @@ import { ResidenceSchema, Residence } from '../../types/residence'
 export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
   if (!dbRecord) return {} as Residence
   return ResidenceSchema.parse({
-    id: dbRecord.residenceId.trim(),
+    id: dbRecord.id.trim(),
     code: dbRecord.code,
     name: dbRecord.name,
     accessibility: {
@@ -112,7 +112,7 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       property: dbRecord.propertyObject?.property?.code,
       _links: {
         self: {
-          href: `/residences/${dbRecord.residenceId.trim()}`,
+          href: `/residences/${dbRecord.id.trim()}`,
         },
         building: dbRecord.propertyObject?.building?.buildingCode
           ? {

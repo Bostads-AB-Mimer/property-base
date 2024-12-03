@@ -2,11 +2,11 @@ import KoaRouter from '@koa/router'
 import swaggerJsdoc from 'swagger-jsdoc'
 import { swaggerSpec } from '../../swagger'
 import { ResidenceSchema } from '../../types/residence'
-import { BuildingTypeSchema, BuildingListSchema } from '../../types/building'
-import { ComponentTypeSchema, ComponentListSchema } from '../../types/component'
-import { PropertyTypeSchema, PropertyListSchema } from '../../types/property'
-import { StaircaseSchema, StaircaseListSchema } from '../../types/staircase'
-import { RoomSchema, RoomListSchema } from '../../types/room'
+import { BuildingSchema } from '../../types/building'
+import { ComponentSchema } from '../../types/component'
+import { PropertySchema } from '../../types/property'
+import { StaircaseSchema } from '../../types/staircase'
+import { RoomSchema } from '../../types/room'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 const schemas = {
@@ -14,15 +14,15 @@ const schemas = {
     name: 'Residence',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(BuildingTypeSchema, {
+  ...zodToJsonSchema(BuildingSchema, {
     name: 'Building',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ComponentTypeSchema, {
+  ...zodToJsonSchema(ComponentSchema, {
     name: 'Component',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(PropertyTypeSchema, {
+  ...zodToJsonSchema(PropertySchema, {
     name: 'Property',
     target: 'openApi3',
   }).definitions,
