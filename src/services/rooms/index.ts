@@ -40,6 +40,10 @@ export const routes = (router: KoaRouter) => {
    *       responses:
    *         200:
    *           description: Successfully retrieved the rooms.
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 $ref: '#/components/schemas/RoomList'
    */
 
   router.get(

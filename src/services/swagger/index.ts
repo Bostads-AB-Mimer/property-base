@@ -5,6 +5,8 @@ import { ResidenceSchema } from '../../types/residence'
 import { BuildingTypeSchema, BuildingListSchema } from '../../types/building'
 import { ComponentTypeSchema, ComponentListSchema } from '../../types/component'
 import { PropertyTypeSchema, PropertyListSchema } from '../../types/property'
+import { StaircaseSchema, StaircaseListSchema } from '../../types/staircase'
+import { RoomSchema, RoomListSchema } from '../../types/room'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 const schemas = {
@@ -48,6 +50,30 @@ const schemas = {
     type: 'array',
     items: {
       $ref: '#/components/schemas/Property'
+    }
+  },
+  Staircase: {
+    ...zodToJsonSchema(StaircaseSchema, {
+      name: 'Staircase',
+      target: 'openApi3',
+    }).definitions.Staircase
+  },
+  StaircaseList: {
+    type: 'array',
+    items: {
+      $ref: '#/components/schemas/Staircase'
+    }
+  },
+  Room: {
+    ...zodToJsonSchema(RoomSchema, {
+      name: 'Room',
+      target: 'openApi3',
+    }).definitions.Room
+  },
+  RoomList: {
+    type: 'array',
+    items: {
+      $ref: '#/components/schemas/Room'
     }
   }
 }
