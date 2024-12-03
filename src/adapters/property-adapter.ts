@@ -1,4 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client'
+const prisma = new PrismaClient({
+  log: ['query'],
+})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
   include: {
@@ -14,10 +17,6 @@ export type PropertyBasicInfo = Prisma.PropertyGetPayload<{
     propertyDesignation: true
   }
 }>
-
-const prisma = new PrismaClient({
-  log: ['query'],
-})
 
 const getPropertyById = async (
   propertyId: string
