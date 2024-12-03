@@ -100,6 +100,9 @@ describe('API Navigation Tests', () => {
       const buildingsResponse = await axios.get(`${API_BASE}${buildingsLink}`)
       expect(buildingsResponse.status).toBe(200)
       expect(buildingsResponse.data.content).toBeDefined()
+    } catch (error) {
+      console.error('Failed to fetch buildings:', error)
+      throw error
     }
   })
 })
