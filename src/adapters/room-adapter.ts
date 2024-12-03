@@ -1,4 +1,5 @@
-import { Prisma, PrismaClient, Room } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
+import { mapDbToRoom } from '../services/rooms/room-mapper'
 import { map } from 'lodash'
 
 const prisma = new PrismaClient({
@@ -23,10 +24,12 @@ export const getRooms = async (
         roomId: null,
       },
       localeId: null,
-    },
+    }
   })
 
-  return prisma.room.findMany({
+  return rooms.map(mapDbToRoom)
+
+  const rooms = await prisma.room.findMany({
     where: {
       propertyObjectId: {
         in: map(propertyStructures, 'objectId'),
@@ -56,32 +59,5 @@ export const getRooms = async (
       timestamp: true,
       roomType: true,
     },
-    transform: (room: Room) => ({
-      id: room.roomId,
-      code: room.roomCode,
-      name: room.name?.trim(),
-      usage: {
-        shared: Boolean(room.sharedUse),
-        allowPeriodicWorks: Boolean(room.allowPeriodicWorks),
-        spaceType: room.spaceType,
-      },
-      features: {
-        hasToilet: Boolean(room.hasToilet),
-        isHeated: Boolean(room.isHeated),
-        hasThermostatValve: Boolean(room.hasThermostatValve),
-        orientation: room.orientation,
-      },
-      dates: {
-        installation: room.installationDate,
-        from: room.fromDate,
-        to: room.toDate,
-        availableFrom: room.availableFrom,
-        availableTo: room.availableTo,
-      },
-      sortingOrder: room.sortingOrder,
-      deleted: Boolean(room.deleteMark),
-      timestamp: room.timestamp,
-      roomType: room.roomTypeId,
-    }),
   })
 }
