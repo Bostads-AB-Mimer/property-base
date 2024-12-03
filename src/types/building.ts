@@ -1,15 +1,23 @@
 import { z } from 'zod'
 
 export const BuildingTypeSchema = z.object({
-  buildingCode: z.string(),
+  id: z.string(),
+  code: z.string(),
   name: z.string(),
-  constructionYear: z.number().nullable(),
-  renovationYear: z.number().nullable(),
-  valueYear: z.number().nullable(),
-  heating: z.string().nullable(),
-  fireRating: z.string().nullable(),
-  insuranceClass: z.string().nullable(),
-  insuranceValue: z.number().nullable(),
+  construction: z.object({
+    constructionYear: z.number().nullable(),
+    renovationYear: z.number().nullable(),
+    valueYear: z.number().nullable(),
+  }),
+  features: z.object({
+    heating: z.string().nullable(),
+    fireRating: z.string().nullable(),
+  }),
+  insurance: z.object({
+    class: z.string().nullable(),
+    value: z.number().nullable(),
+  }),
+  deleted: z.boolean(),
 })
 
 export const BuildingListSchema = z.array(BuildingTypeSchema)
