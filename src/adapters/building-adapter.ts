@@ -1,5 +1,6 @@
 import { map } from 'lodash'
 import { PrismaClient } from '@prisma/client'
+import { mapDbToBuilding } from '../services/buildings/building-mapper'
 
 const prisma = new PrismaClient({
   log: ['query'],
@@ -18,7 +19,7 @@ const getBuildings = async (propertyCode: string) => {
     },
   })
 
-  return prisma.building.findMany({
+  const buildings = await prisma.building.findMany({
     where: {
       objectId: {
         in: map(propertyStructures, 'objectId'),
@@ -31,6 +32,8 @@ const getBuildings = async (propertyCode: string) => {
       propertyDesignation: true,
     },
   })
+  
+  return buildings.map(mapDbToBuilding)
 }
 
 //todo: remove this endpoint?

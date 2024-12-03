@@ -50,7 +50,13 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /buildings/:propertyId/', metadata)
     const response = await getBuildings(ctx.params.propertyCode)
-    ctx.body = { content: response, ...metadata }
+    ctx.body = { 
+      content: response, 
+      ...metadata,
+      _links: generateMetaLinks(ctx, '/buildings', {
+        propertyCode: ctx.params.propertyCode
+      })
+    }
   })
 
   /**
@@ -105,6 +111,9 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: response,
         ...metadata,
+        _links: generateMetaLinks(ctx, '/buildings', {
+          buildingCode: parsedBuildingCode
+        })
       }
     } catch (error) {
       logger.error('Error fetching building by code:', error)
