@@ -32,51 +32,6 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       smokeFree: Boolean(dbRecord.smokeFree),
       asbestos: Boolean(dbRecord.asbestos),
     },
-    /*rooms: // activate when rooms are implemented
-      dbRecord.rooms?.map((room: any) => ({
-        id: room.id,
-        code: room.code,
-        name: room.name,
-        usage: {
-          shared: room.shared === 1,
-          allowPeriodicWorks: room.allowPeriodicWorks === 1,
-        },
-        fromDate: new Date(room.fromDate),
-        toDate: new Date(room.toDate),
-        availableFrom: room.availableFrom
-          ? new Date(room.availableFrom)
-          : undefined,
-        availableTo: room.availableTo
-          ? new Date(room.availableTo)
-          : undefined,
-        dates: {
-          installation: room.installationDate
-            ? new Date(room.installationDate)
-            : undefined,
-          from: new Date(room.fromDate),
-          to: new Date(room.toDate),
-          availableFrom: room.availableFrom
-            ? new Date(room.availableFrom)
-            : undefined,
-          availableTo: room.availableTo
-            ? new Date(room.availableTo)
-            : undefined,
-        },
-        specifications: {
-          spaceType: room.spaceType,
-          hasToilet: room.hasToilet === 1,
-          isHeated: room.isHeated,
-          hasThermostatValve: room.hasThermostatValve === 1,
-          orientation: room.orientation,
-        },
-        dates: {
-          installation: room.installationDate
-            ? new Date(room.installationDate)
-            : undefined,
-        },
-        deleteMark: room.deleteMark === 1,
-        timestamp: room.timestamp,
-      })) || [],*/
     entrance: dbRecord.entrance,
     partNo: dbRecord.partNo || 0,
     part: dbRecord.part || '',

@@ -2,9 +2,7 @@ import { map } from 'lodash'
 import { PrismaClient } from '@prisma/client'
 import { mapDbToStaircase } from '../services/staircases/staircase-mapper'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 async function getStaircasesByBuildingCode(buildingCode: string) {
   const propertyStructures = await prisma.propertyStructure.findMany({

@@ -2,9 +2,7 @@ import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
 import { mapDbToRoom } from '../services/rooms/room-mapper'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 export type RoomWithRelations = Prisma.RoomGetPayload<{
   include: {
@@ -40,7 +38,7 @@ export const getRooms = async (
       },
     },
     include: {
-      roomType: true
+      roomType: true,
     },
   })
 }

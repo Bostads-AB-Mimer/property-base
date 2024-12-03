@@ -9,6 +9,7 @@ import {
   getBuildingByCode,
   getBuildings,
 } from '../../adapters/building-adapter'
+import { generateMetaLinks } from '../../utils/links'
 
 /**
  * @swagger
@@ -50,12 +51,12 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /buildings/:propertyId/', metadata)
     const response = await getBuildings(ctx.params.propertyCode)
-    ctx.body = { 
-      content: response, 
+    ctx.body = {
+      content: response,
       ...metadata,
       _links: generateMetaLinks(ctx, '/buildings', {
-        propertyCode: ctx.params.propertyCode
-      })
+        propertyCode: ctx.params.propertyCode,
+      }),
     }
   })
 
@@ -112,8 +113,8 @@ export const routes = (router: KoaRouter) => {
         content: response,
         ...metadata,
         _links: generateMetaLinks(ctx, '/buildings', {
-          buildingCode: parsedBuildingCode
-        })
+          buildingCode: parsedBuildingCode,
+        }),
       }
     } catch (error) {
       logger.error('Error fetching building by code:', error)

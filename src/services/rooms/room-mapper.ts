@@ -30,10 +30,10 @@ export function mapDbToRoom(dbRecord: RoomWithRelations) {
     sortingOrder: dbRecord.sortingOrder,
     deleted: toBoolean(dbRecord.deleteMark),
     timestamp: dbRecord.timestamp,
-    roomType: dbRecord.roomTypeId
+    roomType: dbRecord.roomType
       ? {
           roomTypeId: dbRecord.roomType.roomTypeId,
-          roomTypeCode: dbRecord.roomType.code,
+          roomTypeCode: dbRecord.roomType.roomTypeCode,
           name: dbRecord.roomType.name?.trim() || '',
           use: dbRecord.roomType.use,
           optionAllowed: dbRecord.roomType.optionAllowed,
