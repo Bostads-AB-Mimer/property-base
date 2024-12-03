@@ -28,12 +28,6 @@ const schemas = {
     name: 'Component',
     target: 'openApi3',
   }).definitions,
-  ComponentList: {
-    type: 'array',
-    items: {
-      $ref: '#/components/schemas/Component',
-    },
-  },
   ...zodToJsonSchema(PropertyTypeSchema, {
     name: 'Property',
     target: 'openApi3',
