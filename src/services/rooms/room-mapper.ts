@@ -30,15 +30,18 @@ export function mapDbToRoom(dbRecord: Room) {
     sortingOrder: dbRecord.sortingOrder,
     deleted: toBoolean(dbRecord.deleteMark),
     timestamp: dbRecord.timestamp,
-    roomType: dbRecord.roomType ? {
-      roomTypeId: dbRecord.roomType.roomTypeId,
-      roomTypeCode: dbRecord.roomType.code,
-      name: dbRecord.roomType.name?.trim() || '',
-      use: dbRecord.roomType.use,
-      optionAllowed: dbRecord.roomType.optionAllowed,
-      isSystemStandard: dbRecord.roomType.isSystemStandard,
-      allowSmallRoomsInValuation: dbRecord.roomType.allowSmallRoomsInValuation,
-      timestamp: dbRecord.roomType.timestamp
-    } : null
+    roomType: dbRecord.roomTypeId
+      ? {
+          roomTypeId: dbRecord.roomType.roomTypeId,
+          roomTypeCode: dbRecord.roomType.code,
+          name: dbRecord.roomType.name?.trim() || '',
+          use: dbRecord.roomType.use,
+          optionAllowed: dbRecord.roomType.optionAllowed,
+          isSystemStandard: dbRecord.roomType.isSystemStandard,
+          allowSmallRoomsInValuation:
+            dbRecord.roomType.allowSmallRoomsInValuation,
+          timestamp: dbRecord.roomType.timestamp,
+        }
+      : null,
   })
 }

@@ -54,6 +54,5 @@ export const getRooms = async (
       timestamp: true,
       roomType: true,
     },
-    transform: (room) => mapDbToRoom(room),
   })
 }
