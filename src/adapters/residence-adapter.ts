@@ -21,14 +21,14 @@ export const getLatestResidences = async (propertyCode?: string) => {
       timestamp: 'desc',
     },
     select: {
-      id: true,
+      residenceId: true,
       objectId: true,
       propertyObject: {
         select: {
           property: {
             select: {
               propertyId: true,
-              code: true,
+              propertyCode: true,
             },
           },
           building: {
