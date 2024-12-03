@@ -1,6 +1,6 @@
 import { map } from 'lodash'
 import { PrismaClient } from '@prisma/client'
-import { toBoolean } from '../utils/data-conversion'
+import { mapDbToStaircase } from '../services/staircases/staircase-mapper'
 
 const prisma = new PrismaClient({
   log: ['query'],
@@ -28,21 +28,7 @@ async function getStaircasesByBuildingCode(buildingCode: string) {
     },
   })
 
-  return staircases.map((staircase) => ({
-    id: staircase.id,
-    code: staircase.code,
-    name: staircase.name,
-    features: {
-      floorPlan: staircase.floorPlan,
-      accessibleByElevator: toBoolean(staircase.accessibleByElevator),
-    },
-    dates: {
-      from: staircase.fromDate,
-      to: staircase.toDate,
-    },
-    deleted: toBoolean(staircase.deleteMark),
-    timestamp: staircase.timestamp,
-  }))
+  return staircases.map(mapDbToStaircase)
 }
 
 export { getStaircasesByBuildingCode }
