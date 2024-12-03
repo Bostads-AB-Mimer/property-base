@@ -4,11 +4,15 @@ export const StaircaseSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string().nullable(),
-  floorPlan: z.string().nullable(),
-  accessibleByElevator: z.number(),
-  deleteMark: z.number(),
-  fromDate: z.date(),
-  toDate: z.date(),
+  features: z.object({
+    floorPlan: z.string().nullable(),
+    accessibleByElevator: z.boolean(),
+  }),
+  dates: z.object({
+    from: z.date(),
+    to: z.date(),
+  }),
+  deleted: z.boolean(),
   timestamp: z.string(),
 })
 
