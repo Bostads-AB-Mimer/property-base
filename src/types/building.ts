@@ -4,6 +4,11 @@ export const BuildingSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
+  buildingType: z.object({
+    id: z.string(),
+    code: z.string(),
+    name: z.string(),
+  }),
   construction: z.object({
     constructionYear: z.number().nullable(),
     renovationYear: z.number().nullable(),
