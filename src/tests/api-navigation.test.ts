@@ -44,7 +44,7 @@ describe('API Navigation Tests', () => {
     const property = propertiesResponse.data.content[0]
 
     const propertyDetailsResponse = await axios.get(
-      `${API_BASE}/properties/${property.propertyId}/`
+      `${API_BASE}/properties/${property.id}/`
     )
     expect(propertyDetailsResponse.status).toBe(200)
     expect(propertyDetailsResponse.data.content).toBeDefined()
@@ -83,8 +83,8 @@ describe('API Navigation Tests', () => {
       expect(residence.id).toBeDefined()
       expect(residence.code).toBeDefined()
       expect(residence.name).toBeDefined()
-      expect(residence._links).toBeDefined()
-      expect(residence.propertyObject?.property?.code).toBe(property.code)
+      expect(residence.links).toBeDefined()
+      expect(residence.links.property).toBe(property.code)
     }
   })
 
@@ -95,13 +95,8 @@ describe('API Navigation Tests', () => {
     )
     const property = propertiesResponse.data.content[0]
 
-    const propertyDetailsResponse = await axios.get(
-      `${API_BASE}/properties/${property.propertyId}/`
-    )
-    const propertyDetails = propertyDetailsResponse.data.content
-
-    if (propertyDetails.code) {
-      const buildingsLink = `/buildings/${propertyDetails.code}/`
+    const buildingsLink = `/buildings/${property.code}/`
+    try {
       const buildingsResponse = await axios.get(`${API_BASE}${buildingsLink}`)
       expect(buildingsResponse.status).toBe(200)
       expect(buildingsResponse.data.content).toBeDefined()
