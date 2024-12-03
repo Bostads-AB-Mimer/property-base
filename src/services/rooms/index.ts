@@ -1,6 +1,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getRooms } from '../../adapters/room-adapter'
+import { generateMetaLinks } from '../../utils/links'
 
 /**
  * @swagger
@@ -75,7 +76,15 @@ export const routes = (router: KoaRouter) => {
           floorCode,
           residenceCode
         )
-        ctx.body = { content: response, ...metadata }
+        ctx.body = { 
+          content: response, 
+          ...metadata,
+          _links: generateMetaLinks(ctx, '/rooms', {
+            buildingCode: parsedBuildingCode,
+            floorCode,
+            residenceCode
+          })
+        }
       } catch (err) {
         ctx.status = 500
         const errorMessage =

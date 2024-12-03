@@ -1,21 +1,23 @@
 import { Room } from '@prisma/client'
+import { RoomSchema } from '../../types/room'
+import { toBoolean } from '../../utils/data-conversion'
 
 export function mapDbToRoom(dbRecord: Room) {
   if (!dbRecord) return null
-  
-  return {
+
+  return RoomSchema.parse({
     id: dbRecord.roomId,
     code: dbRecord.roomCode,
     name: dbRecord.name?.trim(),
     usage: {
-      shared: Boolean(dbRecord.sharedUse),
-      allowPeriodicWorks: Boolean(dbRecord.allowPeriodicWorks),
+      shared: toBoolean(dbRecord.sharedUse),
+      allowPeriodicWorks: toBoolean(dbRecord.allowPeriodicWorks),
       spaceType: dbRecord.spaceType,
     },
     features: {
-      hasToilet: Boolean(dbRecord.hasToilet),
-      isHeated: Boolean(dbRecord.isHeated),
-      hasThermostatValve: Boolean(dbRecord.hasThermostatValve),
+      hasToilet: toBoolean(dbRecord.hasToilet),
+      isHeated: toBoolean(dbRecord.isHeated),
+      hasThermostatValve: toBoolean(dbRecord.hasThermostatValve),
       orientation: dbRecord.orientation,
     },
     dates: {
@@ -26,8 +28,17 @@ export function mapDbToRoom(dbRecord: Room) {
       availableTo: dbRecord.availableTo,
     },
     sortingOrder: dbRecord.sortingOrder,
-    deleted: Boolean(dbRecord.deleteMark),
+    deleted: toBoolean(dbRecord.deleteMark),
     timestamp: dbRecord.timestamp,
-    roomType: dbRecord.roomTypeId,
-  }
+    roomType: dbRecord.roomType ? {
+      roomTypeId: dbRecord.roomType.roomTypeId,
+      roomTypeCode: dbRecord.roomType.code,
+      name: dbRecord.roomType.name,
+      use: dbRecord.roomType.use,
+      optionAllowed: dbRecord.roomType.optionAllowed,
+      isSystemStandard: dbRecord.roomType.isSystemStandard,
+      allowSmallRoomsInValuation: dbRecord.roomType.allowSmallRoomsInValuation,
+      timestamp: dbRecord.roomType.timestamp
+    } : null
+  })
 }
