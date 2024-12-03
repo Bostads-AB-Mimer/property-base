@@ -43,7 +43,9 @@ export const routes = (router: KoaRouter) => {
    *           content:
    *             application/json:
    *               schema:
-   *                 $ref: '#/components/schemas/RoomList'
+   *                 type: array
+   *                 items:
+   *                   $ref: '#/components/schemas/Room'
    */
 
   router.get(
