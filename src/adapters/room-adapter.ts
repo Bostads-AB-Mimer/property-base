@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
-import { mapDbToRoom } from '../services/rooms/room-mapper'
 
 const prisma = new PrismaClient({})
 

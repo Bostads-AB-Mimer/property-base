@@ -2,9 +2,7 @@ import { map } from 'lodash'
 import { Prisma, PrismaClient } from '@prisma/client'
 import { mapDbToBuilding } from '../services/buildings/building-mapper'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 export type BuildingWithRelations = Prisma.BuildingGetPayload<{
   include: {
@@ -41,7 +39,7 @@ const getBuildings = async (propertyCode: string) => {
       propertyDesignation: true,
     },
   })
-  
+
   return buildings.map(mapDbToBuilding)
 }
 
