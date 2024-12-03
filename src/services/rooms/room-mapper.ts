@@ -1,8 +1,8 @@
-import { Room } from '@prisma/client'
+import { RoomWithRelations } from '../../adapters/room-adapter'
 import { RoomSchema } from '../../types/room'
 import { toBoolean } from '../../utils/data-conversion'
 
-export function mapDbToRoom(dbRecord: Room) {
+export function mapDbToRoom(dbRecord: RoomWithRelations) {
   if (!dbRecord) return null
 
   return RoomSchema.parse({

@@ -1,10 +1,16 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
 import { mapDbToRoom } from '../services/rooms/room-mapper'
 
 const prisma = new PrismaClient({
   log: ['query'],
 })
+
+export type RoomWithRelations = Prisma.RoomGetPayload<{
+  include: {
+    roomType: true
+  }
+}>
 
 export const getRooms = async (
   buildingCode: string,
@@ -33,26 +39,8 @@ export const getRooms = async (
         in: map(propertyStructures, 'objectId'),
       },
     },
-    select: {
-      roomId: true,
-      roomCode: true,
-      name: true,
-      sharedUse: true,
-      sortingOrder: true,
-      allowPeriodicWorks: true,
-      spaceType: true,
-      hasToilet: true,
-      isHeated: true,
-      hasThermostatValve: true,
-      orientation: true,
-      installationDate: true,
-      deleteMark: true,
-      fromDate: true,
-      toDate: true,
-      availableFrom: true,
-      availableTo: true,
-      timestamp: true,
-      roomType: true,
+    include: {
+      roomType: true
     },
   })
 }
