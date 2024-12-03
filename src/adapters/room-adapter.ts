@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
 
 const prisma = new PrismaClient({
@@ -56,7 +56,7 @@ export const getRooms = async (
       timestamp: true,
       roomType: true,
     },
-    transform: (room) => ({
+    transform: (room: Room) => ({
       id: room.roomId,
       code: room.roomCode,
       name: room.name?.trim(),
@@ -81,7 +81,7 @@ export const getRooms = async (
       sortingOrder: room.sortingOrder,
       deleted: Boolean(room.deleteMark),
       timestamp: room.timestamp,
-      roomType: room.roomType,
+      roomType: room.roomTypeId,
     }),
   })
 }
