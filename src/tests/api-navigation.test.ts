@@ -29,9 +29,10 @@ describe('API Navigation Tests', () => {
     expect(propertiesResponse.data._links.self.href).toBeDefined()
 
     // Verify property structure
+    expect(propertiesResponse.data.content).toHaveLength(1)
     const property = propertiesResponse.data.content[0]
-    expect(property.propertyId).toBeDefined()
-    expect(property.propertyCode).toBeDefined()
+    expect(property.id).toBeDefined()
+    expect(property.code).toBeDefined()
     expect(property.tract).toBe(testTract)
   })
 
@@ -50,8 +51,8 @@ describe('API Navigation Tests', () => {
 
     // Verify property details structure
     const propertyDetails = propertyDetailsResponse.data.content
-    expect(propertyDetails.propertyId).toBe(property.propertyId)
-    expect(propertyDetails.propertyCode).toBe(property.propertyCode)
+    expect(propertyDetails.id).toBe(property.id)
+    expect(propertyDetails.code).toBe(property.code)
     expect(propertyDetails.tract).toBe(testTract)
 
     // Verify HATEOAS links are present
@@ -82,8 +83,8 @@ describe('API Navigation Tests', () => {
       expect(residence.id).toBeDefined()
       expect(residence.code).toBeDefined()
       expect(residence.name).toBeDefined()
-      expect(residence.links).toBeDefined()
-      expect(residence.links.property).toBe(property.propertyCode)
+      expect(residence._links).toBeDefined()
+      expect(residence.propertyObject?.property?.code).toBe(property.code)
     }
   })
 
@@ -99,8 +100,8 @@ describe('API Navigation Tests', () => {
     )
     const propertyDetails = propertyDetailsResponse.data.content
 
-    if (propertyDetails.propertyCode) {
-      const buildingsLink = `/buildings/${propertyDetails.propertyCode}/`
+    if (propertyDetails.code) {
+      const buildingsLink = `/buildings/${propertyDetails.code}/`
       const buildingsResponse = await axios.get(`${API_BASE}${buildingsLink}`)
       expect(buildingsResponse.status).toBe(200)
       expect(buildingsResponse.data.content).toBeDefined()
