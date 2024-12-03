@@ -170,6 +170,15 @@ export const routes = (router: KoaRouter) => {
    *       responses:
    *         200:
    *           description: Successfully retrieved the residences.
+   *           content:
+   *             application/json:
+   *               schema:
+   *                 type: object
+   *                 properties:
+   *                   content:
+   *                     type: array
+   *                     items:
+   *                       $ref: '#/components/schemas/Residence'
    */
   router.get(
     '(.*)/residences/buildingCode/:buildingCode/staircase/:floorCode',
