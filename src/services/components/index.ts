@@ -6,6 +6,8 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
+import { mapDbToComponent } from './component-mapper'
+import { generateMetaLinks } from '../../utils/links'
 
 /**
  * @swagger
@@ -58,9 +60,18 @@ export const routes = (router: KoaRouter) => {
   router.get('(.*)/components/:maintenanceUnitCode/', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /components/:maintenanceUnitCode/', metadata)
-    const response = await getComponentByMaintenanceUnitCode(
-      ctx.params.maintenanceUnit
+    const dbRecords = await getComponentByMaintenanceUnitCode(
+      ctx.params.maintenanceUnitCode
     )
-    ctx.body = { content: response, ...metadata }
+    const response = dbRecords
+      .map(mapDbToComponent)
+      .filter((c): c is NonNullable<typeof c> => c !== null)
+    ctx.body = { 
+      content: response, 
+      ...metadata,
+      _links: generateMetaLinks(ctx, '/components', {
+        maintenanceUnitCode: ctx.params.maintenanceUnitCode
+      })
+    }
   })
 }
