@@ -5,6 +5,7 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
+import { mapDbToProperty } from './property-mapper'
 import { getProperties, getPropertyById } from '../../adapters/property-adapter'
 import { generateMetaLinks } from '../../utils/links'
 
@@ -48,14 +49,15 @@ export const routes = (router: KoaRouter) => {
   router.get(['(.*)/properties/:id', '(.*)/properties/:id/'], async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /properties/:id/', metadata)
-    const response = await getPropertyById(ctx.params.id)
+    const dbRecord = await getPropertyById(ctx.params.id)
+    if (!dbRecord) {
+      ctx.status = 404
+      return
+    }
+    const response = mapDbToProperty(dbRecord)
     ctx.body = {
       content: response,
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/properties', {
-        id: ctx.params.id,
-        buildings: response?.code || '',
-      }),
+      ...metadata
     }
   })
 
@@ -96,18 +98,11 @@ export const routes = (router: KoaRouter) => {
 
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /properties', metadata)
-    const response = await getProperties(query)
+    const dbRecords = await getProperties(query)
+    const response = dbRecords.map(mapDbToProperty).filter((p): p is NonNullable<typeof p> => p !== null)
     ctx.body = {
-      content: response.map((property) => ({
-        ...property,
-        _links: {
-          self: {
-            href: `/properties/${property.id}`,
-          },
-        },
-      })),
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/properties'),
+      content: response,
+      ...metadata
     }
   })
 }
