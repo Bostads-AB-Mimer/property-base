@@ -63,20 +63,19 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       },
     },
     _links: {
-        self: {
-          href: `/residences/${dbRecord.id.trim()}`,
-        },
-        building: dbRecord.propertyObject?.building?.buildingCode
-          ? {
-              href: `/buildings/byCode/${dbRecord.propertyObject.building?.buildingCode}`,
-            }
-          : undefined,
-        property: dbRecord.propertyObject?.property?.code
-          ? {
-              href: `/properties/${dbRecord.propertyObject.property?.code}`,
-            }
-          : undefined,
+      self: {
+        href: `/residences/${dbRecord.id.trim()}`,
       },
+      building: dbRecord.propertyObject?.building?.buildingCode
+        ? {
+            href: `/buildings/byCode/${dbRecord.propertyObject.building?.buildingCode}`,
+          }
+        : undefined,
+      property: dbRecord.propertyObject?.property?.code
+        ? {
+            href: `/properties/${dbRecord.propertyObject.property?.code}`,
+          }
+        : undefined,
     },
     links: {
       building: dbRecord.propertyObject?.building?.buildingCode || null,
