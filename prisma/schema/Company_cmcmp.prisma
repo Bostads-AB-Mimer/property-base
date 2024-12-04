@@ -1,3 +1,4 @@
+//todo: refactor namings to match other models (cmobj naming convention etc)
 model Company {
   id                                      String    @id(map: "pkcmcmp") @map("keycmcmp") @db.Char(15)
   systemCompanyId                         String    @map("keysycmp") @db.Char(15)

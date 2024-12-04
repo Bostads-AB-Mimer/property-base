@@ -45,23 +45,27 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/Property'
    */
-  router.get(['(.*)/properties/:id', '(.*)/properties/:id/'], async (ctx) => {
-    const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /properties/:id/', metadata)
-    const response = await getPropertyById(ctx.params.id)
-    ctx.body = {
-      content: response,
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/properties', {
-        id: ctx.params.id,
-        buildings: response?.code || '',
-      }),
+  //todo: refactor to use propertyCode
+  router.get(
+    ['(.*)/properties/by/id/:id', '(.*)/properties/byId/:id/'],
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      logger.info('GET /properties/:id/', metadata)
+      const response = await getPropertyById(ctx.params.id)
+      ctx.body = {
+        content: response,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/properties', {
+          id: ctx.params.id,
+          buildings: response?.code || '',
+        }),
+      }
     }
-  })
+  )
 
   /**
    * @swagger
-   * /properties/:
+   * /properties/{companyCode}:
    *   get:
    *     summary: Get a list of all real estate properties
    *     description: |
@@ -71,14 +75,20 @@ export const routes = (router: KoaRouter) => {
    *     tags:
    *       - Properties
    *     parameters:
+   *       - in: path
+   *         name: companyCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The code of the company that owns the properties.
    *       - in: query
    *         name: tract
    *         schema:
    *           type: string
-   *         description: Optional filter to get properties in a specific tract
+   *         description: Optional filter to get properties in a specific tract.
    *     responses:
    *       200:
-   *         description: Successfully retrieved list of properties
+   *         description: Successfully retrieved list of properties.
    *         content:
    *           application/json:
    *             schema:
@@ -89,14 +99,15 @@ export const routes = (router: KoaRouter) => {
    *                   items:
    *                     $ref: '#/components/schemas/Property'
    *       500:
-   *         description: Internal server error
+   *         description: Internal server error.
    */
-  router.get(['(.*)/properties', '(.*)/properties/'], async (ctx) => {
+  router.get('(.*)/properties/:companyCode', async (ctx) => {
     let query = ctx.query.tract?.toString()
 
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /properties', metadata)
-    const response = await getProperties(query)
+    const response = await getProperties(ctx.params.companyCode, query)
+    console.log('properties length: ', response.length)
     ctx.body = {
       content: response.map((property) => ({
         ...property,
