@@ -4,6 +4,7 @@ const prisma = new PrismaClient({})
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
   include: {
     propertyObject: true
+    propertyDesignation: true
   }
 }>
 

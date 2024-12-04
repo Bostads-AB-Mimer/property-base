@@ -6,42 +6,47 @@ export function mapDbToProperty(dbRecord: PropertyWithObject) {
   if (!dbRecord) return null
 
   return PropertySchema.parse({
-    id: dbRecord.id,
-    code: dbRecord.code,
-    tract: dbRecord.tract,
-    propertyDesignation: {
-      propertyDesignationId: dbRecord.propertyDesignation.propertyDesignationId,
-      code: dbRecord.propertyDesignation.code,
-      name: dbRecord.propertyDesignation.name,
-      timestamp: dbRecord.propertyDesignation.timestamp
+    id: dbRecord.id?.trim() || '',
+    code: dbRecord.code?.trim() || '',
+    tract: dbRecord.tract?.trim() || '',
+    propertyDesignation: dbRecord.propertyDesignation && {
+      propertyDesignationId: dbRecord.propertyDesignation.id?.trim() || '',
+      code: dbRecord.propertyDesignation.code?.trim() || '',
+      name: dbRecord.propertyDesignation.name?.trim() || '',
+      timestamp: dbRecord.propertyDesignation.timestamp,
     },
-    propertyObject: dbRecord.propertyObject ? {
-      deleted: toBoolean(dbRecord.propertyObject.deleteMark),
-      timestamp: dbRecord.propertyObject.timestamp,
-      objectType: dbRecord.propertyObject.objectTypeId ? {
-        id: dbRecord.propertyObject.objectTypeId,
-        code: dbRecord.propertyObject.objectTypeId,
-        name: null
-      } : null,
-      condition: dbRecord.propertyObject.condition,
-      conditionInspectionDate: dbRecord.propertyObject.conditionInspectionDate,
-      energy: {
-        class: dbRecord.propertyObject.energyClass,
-        registered: dbRecord.propertyObject.energyRegistered,
-        received: dbRecord.propertyObject.energyReceived,
-        index: dbRecord.propertyObject.energyIndex
-      }
-    } : null,
+    propertyObject: dbRecord.propertyObject
+      ? {
+          deleted: toBoolean(dbRecord.propertyObject.deleteMark),
+          timestamp: dbRecord.propertyObject.timestamp,
+          objectType: dbRecord.propertyObject.objectTypeId
+            ? {
+                id: dbRecord.propertyObject.objectTypeId,
+                code: dbRecord.propertyObject.objectTypeId,
+                name: null,
+              }
+            : null,
+          condition: dbRecord.propertyObject.condition,
+          conditionInspectionDate:
+            dbRecord.propertyObject.conditionInspectionDate,
+          energy: {
+            class: dbRecord.propertyObject.energyClass,
+            registered: dbRecord.propertyObject.energyRegistered,
+            received: dbRecord.propertyObject.energyReceived,
+            index: dbRecord.propertyObject.energyIndex,
+          },
+        }
+      : null,
     _links: {
       self: {
-        href: `/properties/${dbRecord.id}`
+        href: `/properties/${dbRecord.id?.trim() || ''}`,
       },
       buildings: {
-        href: `/buildings/${dbRecord.code}`
+        href: `/buildings/${dbRecord.code?.trim() || ''}`,
       },
       residences: {
-        href: `/residences?propertyCode=${dbRecord.code}`
-      }
-    }
+        href: `/residences?propertyCode=${dbRecord.code?.trim() || ''}`,
+      },
+    },
   })
 }
