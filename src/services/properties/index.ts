@@ -18,7 +18,7 @@ import { generateMetaLinks } from '../../utils/links'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /properties/{id}/:
+   * /properties/byId/{id}/:
    *   get:
    *     summary: Get detailed information about a specific property
    *     description: |
@@ -33,7 +33,7 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The ID of the rental property.
+   *         description: The ID of the property.
    *     responses:
    *       200:
    *         description: Successfully retrieved the property.
@@ -47,10 +47,10 @@ export const routes = (router: KoaRouter) => {
    */
   //todo: refactor to use propertyCode
   router.get(
-    ['(.*)/properties/by/id/:id', '(.*)/properties/byId/:id/'],
+    ['(.*)/properties/byId/:id', '(.*)/properties/byId/:id/'],
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
-      logger.info('GET /properties/:id/', metadata)
+      logger.info('GET /properties/by/:id/', metadata)
       const response = await getPropertyById(ctx.params.id)
       ctx.body = {
         content: response,

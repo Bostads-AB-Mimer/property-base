@@ -16,16 +16,17 @@ export type PropertyBasicInfo = Prisma.PropertyStructureGetPayload<{
     companyName: true
     name: true
     code: true
+    propertyId: true //this is a cmobj pointing to bafst. you would join on keycmobj in bafst to get actual property data.
   }
 }>
 
-//todo: rewrite this to use property code instead of id
 const getPropertyById = async (
   propertyId: string
 ): Promise<PropertyWithObject | null> => {
+  // we could use code instead of propertyObjectId but code is not unique so we would have to use findMany
   const response = await prisma.property.findUnique({
     where: {
-      id: propertyId,
+      propertyObjectId: propertyId,
     },
     include: {
       propertyObject: {
@@ -51,20 +52,6 @@ const getPropertyById = async (
   return response
 }
 
-//todo: we should not be able to get all properties without querying on company
-//todo: find company row in babuf based on result from /companies
-// select * from babuf where keycmobj = '_0U70NM2T8' -- find company row in babuf
-// select * from cmcmp where keycmobj = '_0U70NM2T8' -- find actual company in cmcmp
-
-//query to get all properties for a company based on company primary key
-// select * from babuf where cmpcode = '001' and
-// keyobjfst is not null and
-// keyobjbyg is null and
-// keyobjfen is null and
-// keyobjyta is null and
-// keyobjrum is null and
-// keyobjuhe is null and
-// keyobjsys is null
 const getProperties = async (
   companyCode: string,
   tract: string | undefined
@@ -92,6 +79,7 @@ const getProperties = async (
         companyName: true,
         name: true,
         code: true,
+        propertyId: true,
       },
     })
   }
@@ -112,6 +100,7 @@ const getProperties = async (
       companyName: true,
       name: true,
       code: true,
+      propertyId: true,
     },
   })
 }
