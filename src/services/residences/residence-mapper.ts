@@ -79,8 +79,8 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       },
     },
     links: {
-      building: dbRecord.propertyObject?.building?.buildingCode,
-      property: dbRecord.propertyObject?.property?.code
+      building: dbRecord.propertyObject?.building?.buildingCode || null,
+      property: dbRecord.propertyObject?.property?.code || null
     }
   })
 }
