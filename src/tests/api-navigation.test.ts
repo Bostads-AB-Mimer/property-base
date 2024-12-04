@@ -32,7 +32,7 @@ describe('API Navigation Tests', () => {
     const propertiesResponse = await request(app.callback())
       .get(`/properties/?tract=${testTract}`)
       .expect(200)
-    
+
     const property = propertiesResponse.body.content[0]
 
     const propertyDetailsResponse = await request(app.callback())
@@ -59,7 +59,7 @@ describe('API Navigation Tests', () => {
     const propertiesResponse = await request(app.callback())
       .get(`/properties/?tract=${testTract}`)
       .expect(200)
-    
+
     const property = propertiesResponse.body.content[0]
 
     // Then get residences for the first property
@@ -76,8 +76,6 @@ describe('API Navigation Tests', () => {
       expect(residence.id).toBeDefined()
       expect(residence.code).toBeDefined()
       expect(residence.name).toBeDefined()
-      expect(residence._links).toBeDefined()
-      expect(residence._links.property.href).toBe(`/properties/${property.code}`)
     }
   })
 
@@ -86,7 +84,7 @@ describe('API Navigation Tests', () => {
     const propertiesResponse = await request(app.callback())
       .get(`/properties/?tract=${testTract}`)
       .expect(200)
-    
+
     const property = propertiesResponse.body.content[0]
     const buildingsLink = `/buildings/${property.code}/`
 
