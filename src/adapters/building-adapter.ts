@@ -33,7 +33,6 @@ const getBuildings = async (propertyCode: string) => {
   })
 }
 
-//todo: remove this endpoint?
 const getBuildingByCode = async (buildingCode: string) => {
   return prisma.building.findFirst({
     where: {

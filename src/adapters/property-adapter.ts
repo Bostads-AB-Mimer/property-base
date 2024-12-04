@@ -49,6 +49,10 @@ const getPropertyById = async (
   return response
 }
 
+//todo: we should not be able to get all properties without querying on company
+//todo: find company row in babuf based on result from /companies
+// select * from babuf where keycmobj = '_0U70NM2T8' -- find company row in babuf
+// select * from cmcmp where keycmobj = '_0U70NM2T8' -- find actual company in cmcmp
 const getProperties = async (
   tract: string | undefined
 ): Promise<PropertyBasicInfo[]> => {
