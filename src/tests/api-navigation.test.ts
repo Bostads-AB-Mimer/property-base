@@ -64,7 +64,7 @@ describe('API Navigation Tests', () => {
 
     // Then get residences for the first property
     const residencesResponse = await request(app.callback())
-      .get(`/residences/?propertyCode=${property.propertyCode}`)
+      .get(`/residences/?propertyCode=${property.code}`)
       .expect(200)
 
     expect(residencesResponse.body.content).toBeDefined()
@@ -77,7 +77,7 @@ describe('API Navigation Tests', () => {
       expect(residence.code).toBeDefined()
       expect(residence.name).toBeDefined()
       expect(residence._links).toBeDefined()
-      expect(residence._links.property.href).toBe(`/properties/${property.propertyCode || ''}`)
+      expect(residence._links.property.href).toBe(`/properties/${property.code}`)
     }
   })
 

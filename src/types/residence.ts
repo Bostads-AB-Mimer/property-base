@@ -4,10 +4,17 @@ export const ResidenceSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
-  links: z.object({
-    building: z.string().nullable(),
-    property: z.string().nullable(),
-  }),
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the residence resource'),
+    }),
+    building: z.object({
+      href: z.string().describe('URI to the associated building'),
+    }),
+    property: z.object({
+      href: z.string().describe('URI to the associated property'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
   location: z.string().optional(),
   accessibility: z.object({
     wheelchairAccessible: z.boolean(),
