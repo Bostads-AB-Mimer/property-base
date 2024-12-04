@@ -4,8 +4,8 @@ import { ResidenceSchema, Residence } from '../../types/residence'
 export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
   if (!dbRecord) return {} as Residence
   return ResidenceSchema.parse({
-    id: dbRecord.id.trim(),
-    code: dbRecord.code,
+    id: dbRecord.id?.trim() || '',
+    code: dbRecord.code?.trim() || '',
     name: dbRecord.name?.trim() || '',
     accessibility: {
       wheelchairAccessible: Boolean(dbRecord.wheelchairAccessible),

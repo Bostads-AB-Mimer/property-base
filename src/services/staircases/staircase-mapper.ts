@@ -6,8 +6,8 @@ export function mapDbToStaircase(dbRecord: Staircase) {
   if (!dbRecord) return null
 
   return StaircaseSchema.parse({
-    id: dbRecord.id,
-    code: dbRecord.code,
+    id: dbRecord.id?.trim() || '',
+    code: dbRecord.code?.trim() || '',
     name: dbRecord.name?.trim() || '',
     features: {
       floorPlan: dbRecord.floorPlan,
