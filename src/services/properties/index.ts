@@ -103,11 +103,11 @@ export const routes = (router: KoaRouter) => {
    */
   router.get('(.*)/properties/:companyCode', async (ctx) => {
     let query = ctx.query.tract?.toString()
+    const { companyCode } = ctx.params
 
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /properties', metadata)
-    const response = await getProperties(ctx.params.companyCode, query)
-    console.log('properties length: ', response.length)
+    logger.info(`GET /properties/${companyCode}`, metadata)
+    const response = await getProperties(companyCode, query)
     ctx.body = {
       content: response.map((property) => ({
         ...property,
