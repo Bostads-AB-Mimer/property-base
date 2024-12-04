@@ -51,18 +51,9 @@ const getPropertyById = async (
 const getProperties = async (
   tract: string | undefined
 ): Promise<PropertyBasicInfo[]> => {
-  if (tract) {
-    return prisma.property.findMany({
-      where: { tract },
-      select: {
-        id: true,
-        code: true,
-        tract: true,
-        propertyDesignation: true,
-      },
-    })
-  }
+  const where = tract ? { tract } : undefined
   return prisma.property.findMany({
+    where,
     select: {
       id: true,
       code: true,
