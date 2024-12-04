@@ -1,20 +1,27 @@
-import { PropertyWithObject } from '../../adapters/property-adapter'
+import {
+  PropertyBasicInfo,
+  PropertyWithObject,
+} from '../../adapters/property-adapter'
 import { PropertySchema } from '../../types/property'
 import { toBoolean } from '../../utils/data-conversion'
 
-export function mapDbToProperty(dbRecord: PropertyWithObject) {
+export function mapDbToProperty(
+  dbRecord: PropertyWithObject | PropertyBasicInfo
+) {
   if (!dbRecord) return null
 
   return PropertySchema.parse({
     id: dbRecord.id?.trim() || '',
     code: dbRecord.code?.trim() || '',
     tract: dbRecord.tract?.trim() || '',
-    propertyDesignation: dbRecord.propertyDesignation ? {
-      propertyDesignationId: dbRecord.propertyDesignation.id?.trim() || '',
-      code: dbRecord.propertyDesignation.code?.trim() || '',
-      name: dbRecord.propertyDesignation.name?.trim() || '',
-      timestamp: dbRecord.propertyDesignation.timestamp,
-    } : null,
+    propertyDesignation: dbRecord.propertyDesignation
+      ? {
+          propertyDesignationId: dbRecord.propertyDesignation.id?.trim() || '',
+          code: dbRecord.propertyDesignation.code?.trim() || '',
+          name: dbRecord.propertyDesignation.name?.trim() || '',
+          timestamp: dbRecord.propertyDesignation.timestamp,
+        }
+      : null,
     propertyObject: dbRecord.propertyObject
       ? {
           deleted: toBoolean(dbRecord.propertyObject.deleteMark),
