@@ -43,6 +43,7 @@ const getPropertyById = async (
           heatingNature: true,
         },
       },
+      propertyDesignation: true,
     },
   })
   return response
