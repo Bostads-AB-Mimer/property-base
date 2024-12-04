@@ -66,16 +66,12 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
       self: {
         href: `/residences/${dbRecord.id.trim()}`,
       },
-      building: dbRecord.propertyObject?.building?.buildingCode
-        ? {
-            href: `/buildings/byCode/${dbRecord.propertyObject.building?.buildingCode}`,
-          }
-        : undefined,
-      property: dbRecord.propertyObject?.property?.code
-        ? {
-            href: `/properties/${dbRecord.propertyObject.property?.code}`,
-          }
-        : undefined,
+      building: {
+        href: `/buildings/byCode/${dbRecord.propertyObject?.building?.buildingCode || ''}`,
+      },
+      property: {
+        href: `/properties/${dbRecord.propertyObject?.property?.code || ''}`,
+      }
     },
     links: {
       building: dbRecord.propertyObject?.building?.buildingCode || null,
