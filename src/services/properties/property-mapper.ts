@@ -9,12 +9,12 @@ export function mapDbToProperty(dbRecord: PropertyWithObject) {
     id: dbRecord.id?.trim() || '',
     code: dbRecord.code?.trim() || '',
     tract: dbRecord.tract?.trim() || '',
-    propertyDesignation: dbRecord.propertyDesignation && {
+    propertyDesignation: dbRecord.propertyDesignation ? {
       propertyDesignationId: dbRecord.propertyDesignation.id?.trim() || '',
       code: dbRecord.propertyDesignation.code?.trim() || '',
       name: dbRecord.propertyDesignation.name?.trim() || '',
       timestamp: dbRecord.propertyDesignation.timestamp,
-    },
+    } : null,
     propertyObject: dbRecord.propertyObject
       ? {
           deleted: toBoolean(dbRecord.propertyObject.deleteMark),

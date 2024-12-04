@@ -11,7 +11,7 @@ export const PropertySchema = z.object({
   id: z.string().describe('Unique identifier for the property'),
   code: z.string().describe('Property code used in the system'),
   tract: z.string().describe('Tract identifier'),
-  propertyDesignation: PropertyDesignationSchema,
+  propertyDesignation: PropertyDesignationSchema.nullable(),
   propertyObject: z.object({
     deleted: z.boolean(),
     timestamp: z.string(),
