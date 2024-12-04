@@ -93,5 +93,60 @@ describe('API Navigation Tests', () => {
       .expect(200)
 
     expect(buildingsResponse.body.content).toBeDefined()
+
+    // Verify building structure if any exist
+    if (buildingsResponse.body.content.length > 0) {
+      const building = buildingsResponse.body.content[0]
+      expect(building.id).toBeDefined()
+      expect(building.code).toBeDefined()
+      expect(building.name).toBeDefined()
+      expect(building._links).toBeDefined()
+      expect(building._links.self.href).toMatch(/^\/buildings\//)
+      expect(building._links.property.href).toMatch(/^\/properties\//)
+      expect(building._links.residences.href).toMatch(/^\/residences\/buildingCode\//)
+      expect(building._links.staircases.href).toMatch(/^\/staircases\//)
+    }
+  })
+
+  it('should get staircases associated with a building', async () => {
+    const testTract = 'BÄVERN'
+    // First get properties in the test tract
+    const propertiesResponse = await request(app.callback())
+      .get(`/properties/?tract=${testTract}`)
+      .expect(200)
+
+    const property = propertiesResponse.body.content[0]
+
+    // Then get buildings for the property
+    const buildingsResponse = await request(app.callback())
+      .get(`/buildings/${property.code}/`)
+      .expect(200)
+
+    expect(buildingsResponse.body.content).toBeDefined()
+    const building = buildingsResponse.body.content[0]
+
+    if (building) {
+      // Finally get staircases for the building
+      const staircasesResponse = await request(app.callback())
+        .get(`/staircases/${building.code}/`)
+        .expect(200)
+
+      expect(staircasesResponse.body.content).toBeDefined()
+      expect(Array.isArray(staircasesResponse.body.content)).toBe(true)
+
+      // Verify staircase structure if any exist
+      if (staircasesResponse.body.content.length > 0) {
+        const staircase = staircasesResponse.body.content[0]
+        expect(staircase.id).toBeDefined()
+        expect(staircase.code).toBeDefined()
+        expect(staircase.name).toBeDefined()
+        expect(staircase.features).toBeDefined()
+        expect(staircase.features.floorPlan).toBeDefined()
+        expect(staircase.features.accessibleByElevator).toBeDefined()
+        expect(staircase.dates).toBeDefined()
+        expect(staircase.dates.from).toBeDefined()
+        expect(staircase.dates.to).toBeDefined()
+      }
+    }
   })
 })
