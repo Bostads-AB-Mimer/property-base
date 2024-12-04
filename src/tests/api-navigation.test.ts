@@ -76,8 +76,8 @@ describe('API Navigation Tests', () => {
       expect(residence.id).toBeDefined()
       expect(residence.code).toBeDefined()
       expect(residence.name).toBeDefined()
-      expect(residence.links).toBeDefined()
-      expect(residence.links.property).toBe(property.code)
+      expect(residence._links).toBeDefined()
+      expect(residence.links?.property).toBe(property.code)
     }
   })
 

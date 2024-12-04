@@ -30,5 +30,19 @@ export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
       value: dbRecord.insuranceValue,
     },
     deleted: toBoolean(dbRecord.deleteMark),
+    _links: {
+      self: {
+        href: `/buildings/${dbRecord.id}`,
+      },
+      property: {
+        href: `/properties/${dbRecord.propertyDesignation?.code || ''}`,
+      },
+      residences: {
+        href: `/residences/buildingCode/${dbRecord.buildingCode}`,
+      },
+      staircases: {
+        href: `/staircases/${dbRecord.buildingCode}`,
+      },
+    },
   })
 }

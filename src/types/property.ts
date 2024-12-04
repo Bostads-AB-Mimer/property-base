@@ -20,7 +20,7 @@ export const PropertySchema = z.object({
       code: z.string(),
       name: z.string().nullable()
     }).nullable(),
-    condition: z.string().nullable(),
+    condition: z.union([z.string(), z.number()]).nullable(),
     conditionInspectionDate: z.date().nullable(),
     energy: z.object({
       class: z.number().nullable(),

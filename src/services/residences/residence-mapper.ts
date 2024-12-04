@@ -62,10 +62,7 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
         // .. add more fields when needed
       },
     },
-    links: {
-      building: dbRecord.propertyObject?.building?.buildingCode,
-      property: dbRecord.propertyObject?.property?.code,
-      _links: {
+    _links: {
         self: {
           href: `/residences/${dbRecord.id.trim()}`,
         },
@@ -81,5 +78,9 @@ export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
           : undefined,
       },
     },
+    links: {
+      building: dbRecord.propertyObject?.building?.buildingCode,
+      property: dbRecord.propertyObject?.property?.code
+    }
   })
 }
