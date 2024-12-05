@@ -13,9 +13,6 @@ export function mapDbToRoom(dbRecord: RoomWithRelations) {
       self: {
         href: `/rooms/${dbRecord.roomId}`,
       },
-      details: {
-        href: `/rooms/${dbRecord.roomId}/details`,
-      },
       building: {
         href: `/buildings/${dbRecord.buildingCode || ''}`,
       },
