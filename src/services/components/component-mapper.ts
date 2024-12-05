@@ -33,17 +33,20 @@ export function mapDbToComponent(dbRecord: any) {
     })) || [],
     _links: {
       self: {
-        href: `/components/${dbRecord.id}`
+        href: `/components/${dbRecord.id}`,
       },
       details: {
-        href: `/components/${dbRecord.id}/details`
+        href: `/components/${dbRecord.id}/details`,
       },
       maintenanceUnit: {
-        href: `/maintenanceUnits/${dbRecord.code}`
+        href: `/maintenanceUnits/${dbRecord.code}`,
       },
       componentType: {
-        href: `/componentTypes/${dbRecord.componentType?.componentTypeCode || ''}`
-      }
+        href: `/componentTypes/${dbRecord.componentType?.componentTypeCode || ''}`,
+      },
+      building: {
+        href: `/buildings/${dbRecord.buildingCode || ''}`,
+      },
     }
   })
 }

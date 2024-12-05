@@ -16,6 +16,9 @@ export function mapDbToStaircase(dbRecord: Staircase) {
       details: {
         href: `/staircases/${dbRecord.id}/details`,
       },
+      building: {
+        href: `/buildings/${dbRecord.buildingCode || ''}`,
+      },
     },
     features: {
       floorPlan: dbRecord.floorPlan,

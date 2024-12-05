@@ -9,6 +9,23 @@ export function mapDbToRoom(dbRecord: RoomWithRelations) {
     id: dbRecord.roomId || '',
     code: dbRecord.roomCode || '',
     name: dbRecord.name,
+    _links: {
+      self: {
+        href: `/rooms/${dbRecord.roomId}`,
+      },
+      details: {
+        href: `/rooms/${dbRecord.roomId}/details`,
+      },
+      building: {
+        href: `/buildings/${dbRecord.buildingCode || ''}`,
+      },
+      residence: {
+        href: `/residences/${dbRecord.residenceCode || ''}`,
+      },
+      staircase: {
+        href: `/staircases/${dbRecord.floorCode || ''}`,
+      },
+    },
     usage: {
       shared: toBoolean(dbRecord.sharedUse),
       allowPeriodicWorks: toBoolean(dbRecord.allowPeriodicWorks),
