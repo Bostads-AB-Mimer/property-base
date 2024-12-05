@@ -5,6 +5,8 @@ const prisma = new PrismaClient({
   log: ['query'],
 })
 
+//todo: add types
+
 const getBuildings = async (propertyCode: string) => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {

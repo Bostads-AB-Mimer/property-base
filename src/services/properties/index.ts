@@ -43,7 +43,7 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/Property'
+   *                   $ref: '#/components/schemas/PropertyDetails'
    */
   router.get(
     ['(.*)/properties/byId/:id', '(.*)/properties/byId/:id/'],
@@ -66,9 +66,9 @@ export const routes = (router: KoaRouter) => {
    * @swagger
    * /properties/{companyCode}:
    *   get:
-   *     summary: Get a list of all real estate properties
+   *     summary: Get a list of all properties belonging to a company
    *     description: |
-   *       Retrieves a list of all real estate properties in the system.
+   *       Retrieves a list of all real estate properties belonging to a specific company.
    *       Can be filtered by tract if provided. Returns basic property information
    *       including property ID, code, tract, and designation.
    *     tags:
