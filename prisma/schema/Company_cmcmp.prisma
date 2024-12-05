@@ -1,4 +1,3 @@
-//todo: refactor namings to match other models (cmobj naming convention etc)
 model Company {
   id                                      String    @id(map: "pkcmcmp") @map("keycmcmp") @db.Char(15)
   systemCompanyId                         String    @map("keysycmp") @db.Char(15)
@@ -74,12 +73,12 @@ model Company {
   // relatedProjects prprj[]
 
   // Indexes
-  // @@index([keycmart], map: "fkcmcmpcmart")
-  // @@index([keycmart2], map: "fkcmcmpcmart2")
-  // @@index([keycmart3], map: "fkcmcmpcmart3")
-  // @@index([keycmctc], map: "fkcmcmpcmctc")
-  // @@index([keycmctc2], map: "fkcmcmpcmctc2")
-  // @@index([keycmctc3], map: "fkcmcmpcmctc3")
+  @@index([articleForPledgeRegistrationFeeId], map: "fkcmcmpcmart")
+  @@index([articleForTransferFeeId], map: "fkcmcmpcmart2")
+  @@index([articleForSubletFeeId], map: "fkcmcmpcmart3")
+  @@index([contactId], map: "fkcmcmpcmctc")
+  @@index([collectedContact1Id], map: "fkcmcmpcmctc2")
+  @@index([collectedContact2Id], map: "fkcmcmpcmctc3")
   @@index([propertyObjectId], map: "fkcmcmpcmobj") // TODO: Verify if this needs renaming
   @@index([databaseId], map: "fkcmcmpdbdbs")
   @@index([systemCompanyId], map: "fkcmcmpsycmp")
