@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 export const BuildingSchema = z.object({
-  id: z.string().describe('Unique identifier for the building'),
-  code: z.string().describe('Building code used in the system'),
-  name: z.string().describe('Display name of the building'),
+  id: z.string().trim().describe('Unique identifier for the building'),
+  code: z.string().trim().describe('Building code used in the system'),
+  name: z.string().trim().describe('Display name of the building'),
   _links: z.object({
     self: z.object({
       href: z.string().describe('URI to the building resource'),

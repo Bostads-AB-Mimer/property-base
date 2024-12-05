@@ -5,9 +5,9 @@ export function mapDbToComponent(dbRecord: any) {
   if (!dbRecord) return null
 
   return ComponentSchema.parse({
-    id: trimString(dbRecord.id) || '',
-    code: trimString(dbRecord.code) || '',
-    name: trimString(dbRecord.name) || '',
+    id: dbRecord.id || '',
+    code: dbRecord.code || '',
+    name: dbRecord.name || '',
     details: {
       manufacturer: dbRecord.manufacturer,
       typeDesignation: dbRecord.typeDesignation,

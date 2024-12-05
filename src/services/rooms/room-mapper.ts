@@ -6,9 +6,9 @@ export function mapDbToRoom(dbRecord: RoomWithRelations) {
   if (!dbRecord) return null
 
   return RoomSchema.parse({
-    id: trimString(dbRecord.roomId) || '',
-    code: trimString(dbRecord.roomCode) || '',
-    name: trimString(dbRecord.name),
+    id: dbRecord.roomId || '',
+    code: dbRecord.roomCode || '',
+    name: dbRecord.name,
     usage: {
       shared: toBoolean(dbRecord.sharedUse),
       allowPeriodicWorks: toBoolean(dbRecord.allowPeriodicWorks),

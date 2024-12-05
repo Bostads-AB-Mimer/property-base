@@ -12,9 +12,9 @@ export const RoomTypeSchema = z.object({
 })
 
 export const RoomSchema = z.object({
-  id: z.string().describe('Unique identifier for the room'),
-  code: z.string().describe('Room code used in the system'),
-  name: z.string().nullable().describe('Display name of the room'),
+  id: z.string().trim().describe('Unique identifier for the room'),
+  code: z.string().trim().describe('Room code used in the system'),
+  name: z.string().trim().nullable().describe('Display name of the room'),
   _links: z.object({
     self: z.object({
       href: z.string().describe('URI to the room resource'),

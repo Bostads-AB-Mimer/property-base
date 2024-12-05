@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 export const StaircaseSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string().nullable(),
+  id: z.string().trim(),
+  code: z.string().trim(),
+  name: z.string().trim().nullable(),
   features: z.object({
     floorPlan: z.string().nullable(),
     accessibleByElevator: z.boolean(),

@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
 export const ComponentSchema = z.object({
-  id: z.string().describe('Unique identifier for the component'),
-  code: z.string().describe('Component code used in the system'),
-  name: z.string().describe('Display name of the component'),
+  id: z.string().trim().describe('Unique identifier for the component'),
+  code: z.string().trim().describe('Component code used in the system'),
+  name: z.string().trim().describe('Display name of the component'),
   _links: z.object({
     self: z.object({
       href: z.string().describe('URI to the component resource'),
