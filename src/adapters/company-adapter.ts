@@ -5,8 +5,23 @@ const prisma = new PrismaClient({
   log: ['query'],
 })
 
-const getCompanies = async () => {
+export const getCompanies = async () => {
   return prisma.company.findMany({
+    select: {
+      id: true,
+      propertyObjectId: true,
+      code: true,
+      name: true,
+      organizationNumber: true,
+    },
+  })
+}
+
+export const getCompany = async (id: string) => {
+  return prisma.company.findUnique({
+    where: {
+      id: id,
+    },
     select: {
       id: true,
       systemCompanyId: true,
@@ -16,6 +31,7 @@ const getCompanies = async () => {
       name: true,
       organizationNumber: true,
       internalExternal: true,
+      phone: true,
       fTax: true,
       cooperativeHousingAssociation: true,
       differentiatedAdditionalCapital: true,
@@ -40,5 +56,3 @@ const getCompanies = async () => {
 
   //todo: return with mapper?
 }
-
-export { getCompanies }

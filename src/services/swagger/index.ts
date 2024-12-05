@@ -7,7 +7,7 @@ import { ComponentSchema } from '../../types/component'
 import { PropertySchema } from '../../types/property'
 import { StaircaseSchema } from '../../types/staircase'
 import { RoomSchema } from '../../types/room'
-import { CompanySchema } from '../../types/company'
+import { CompanySchema, CompanyDetailsSchema } from '../../types/company'
 import zodToJsonSchema from 'zod-to-json-schema'
 
 const schemas = {
@@ -37,6 +37,10 @@ const schemas = {
   }).definitions,
   ...zodToJsonSchema(CompanySchema, {
     name: 'Company',
+    target: 'openApi3',
+  }).definitions,
+  ...zodToJsonSchema(CompanyDetailsSchema, {
+    name: 'CompanyDetails',
     target: 'openApi3',
   }).definitions,
 }

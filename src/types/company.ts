@@ -1,7 +1,14 @@
 import { z } from 'zod'
-import { BuildingSchema } from './building'
 
 export const CompanySchema = z.object({
+  id: z.string(),
+  propertyObjectId: z.string(),
+  code: z.string(),
+  name: z.string(),
+  organizationNumber: z.string().nullable(),
+})
+
+export const CompanyDetailsSchema = z.object({
   id: z.string(),
   systemCompanyId: z.string(),
   databaseId: z.string(),

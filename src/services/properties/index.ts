@@ -45,7 +45,6 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/Property'
    */
-  //todo: refactor to use propertyCode
   router.get(
     ['(.*)/properties/byId/:id', '(.*)/properties/byId/:id/'],
     async (ctx) => {
@@ -113,7 +112,7 @@ export const routes = (router: KoaRouter) => {
         ...property,
         _links: {
           self: {
-            href: `/properties/${property.id}`,
+            href: `/properties/byId/${property.id}`,
           },
         },
       })),
