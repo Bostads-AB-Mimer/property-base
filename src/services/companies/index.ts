@@ -73,7 +73,6 @@ export const routes = (router: KoaRouter) => {
    *     summary: Get detailed information about a specific company
    *     description: |
    *       Retrieves comprehensive information about a company using its unique identifier.
-   *       Returns detailed property information
    *     tags:
    *       - Companies
    *     parameters:

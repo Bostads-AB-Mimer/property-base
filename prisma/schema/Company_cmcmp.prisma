@@ -2,7 +2,7 @@ model Company {
   id                                      String    @id(map: "pkcmcmp") @map("keycmcmp") @db.Char(15)
   systemCompanyId                         String    @map("keysycmp") @db.Char(15)
   databaseId                              String    @map("keydbdbs") @db.Char(15)
-  propertyObjectId                        String?   @unique(map: "akcmcmpkeycmobj") @map("keycmobj") @db.Char(15) // TODO: May need renaming based on domain
+  propertyObjectId                        String?   @unique(map: "akcmcmpkeycmobj") @map("keycmobj") @db.Char(15)
   regionId                                String?   @map("keycmrgn") @db.Char(15)
   serviceAreaId                           String?   @map("keycmsom") @db.Char(15)
   contactId                               String?   @map("keycmctc") @db.Char(15)
@@ -62,7 +62,7 @@ model Company {
   // contact cmctc? @relation("cmcmp_keycmctcTocmctc", fields: [keycmctc], references: [keycmctc], onDelete: NoAction, onUpdate: NoAction, map: "fkcmcmpkeycmctc")
   // creditHandler cmctc? @relation("cmcmp_keycmctc2Tocmctc", fields: [keycmctc2], references: [keycmctc], onDelete: NoAction, onUpdate: NoAction, map: "fkcmcmpkeycmctc2")
   // creditResponsible cmctc? @relation("cmcmp_keycmctc3Tocmctc", fields: [keycmctc3], references: [keycmctc], onDelete: NoAction, onUpdate: NoAction, map: "fkcmcmpkeycmctc3")
-  // propertyObject cmobj? @relation(fields: [propertyObjectId], references: [propertyObjectId], onDelete: Cascade, map: "fkcmcmpkeycmobj") // TODO: Determine if propertyObjectId is the correct reference field
+  // propertyObject cmobj? @relation(fields: [propertyObjectId], references: [propertyObjectId], onDelete: Cascade, map: "fkcmcmpkeycmobj")
   // invoiceDetails faprn[]
   // rentalAdvices hyavi[]
   // rentalContracts hyobj_hyobj_keycmcmpTocmcmp[] @relation("hyobj_keycmcmpTocmcmp")
@@ -79,7 +79,7 @@ model Company {
   @@index([contactId], map: "fkcmcmpcmctc")
   @@index([collectedContact1Id], map: "fkcmcmpcmctc2")
   @@index([collectedContact2Id], map: "fkcmcmpcmctc3")
-  @@index([propertyObjectId], map: "fkcmcmpcmobj") // TODO: Verify if this needs renaming
+  @@index([propertyObjectId], map: "fkcmcmpcmobj")
   @@index([databaseId], map: "fkcmcmpdbdbs")
   @@index([systemCompanyId], map: "fkcmcmpsycmp")
   @@index([code], map: "incmcmp_2HK0JJ50M")
