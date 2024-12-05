@@ -35,6 +35,9 @@ export function mapDbToComponent(dbRecord: any) {
       self: {
         href: `/components/${dbRecord.id}`
       },
+      details: {
+        href: `/components/${dbRecord.id}/details`
+      },
       maintenanceUnit: {
         href: `/maintenanceUnits/${dbRecord.code}`
       },

@@ -21,5 +21,12 @@ export const BaseBasicSchema = z.object({
   id: z.string().trim(),
   code: z.string().trim(),
   name: z.string().trim(),
-  _links: LinksSchema,
+  _links: z.object({
+    self: z.object({
+      href: z.string().trim().describe('URI to the resource'),
+    }),
+    details: z.object({
+      href: z.string().trim().describe('URI to detailed version of this resource'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
 })

@@ -26,6 +26,9 @@ export function mapDbToProperty(dbRecord: PropertyWithObject | PropertyBasicInfo
       self: {
         href: `/properties/${dbRecord.id?.trim() || ''}`,
       },
+      details: {
+        href: `/properties/${dbRecord.id?.trim() || ''}/details`,
+      },
       buildings: {
         href: `/buildings/${dbRecord.code?.trim() || ''}`,
       },

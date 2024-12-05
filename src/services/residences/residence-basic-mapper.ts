@@ -12,6 +12,9 @@ export function mapDbToResidenceBasicInfo(dbRecord: ResidenceWithBasicInfo): Res
       self: {
         href: `/residences/${dbRecord.id?.trim() || ''}`,
       },
+      details: {
+        href: `/residences/${dbRecord.id?.trim() || ''}/details`,
+      },
     },
   })
 }

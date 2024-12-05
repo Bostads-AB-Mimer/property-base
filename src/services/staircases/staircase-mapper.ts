@@ -9,6 +9,14 @@ export function mapDbToStaircase(dbRecord: Staircase) {
     id: dbRecord.id || '',
     code: dbRecord.code || '',
     name: dbRecord.name || '',
+    _links: {
+      self: {
+        href: `/staircases/${dbRecord.id}`,
+      },
+      details: {
+        href: `/staircases/${dbRecord.id}/details`,
+      },
+    },
     features: {
       floorPlan: dbRecord.floorPlan,
       accessibleByElevator: toBoolean(dbRecord.accessibleByElevator),
