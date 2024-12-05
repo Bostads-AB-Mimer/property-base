@@ -11,6 +11,9 @@ export const BuildingSchema = BuildingBasicSchema.extend({
     self: z.object({
       href: z.string().describe('URI to the building resource'),
     }),
+    details: z.object({
+      href: z.string().describe('URI to detailed version of this resource'),
+    }),
     property: z.object({
       href: z.string().describe('URI to the associated property'),
     }),

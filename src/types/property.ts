@@ -38,6 +38,9 @@ export const PropertySchema = PropertyBasicSchema.extend({
     self: z.object({
       href: z.string().describe('URI to the property resource'),
     }),
+    details: z.object({
+      href: z.string().describe('URI to detailed version of this resource'),
+    }),
     buildings: z.object({
       href: z.string().describe('URI to list buildings in this property'),
     }),

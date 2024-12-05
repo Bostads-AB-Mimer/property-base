@@ -22,6 +22,9 @@ export const RoomSchema = z.object({
     self: z.object({
       href: z.string().describe('URI to the room resource'),
     }),
+    details: z.object({
+      href: z.string().describe('URI to detailed version of this resource'),
+    }),
     building: z.object({
       href: z.string().describe('URI to the associated building'),
     }),
