@@ -1,58 +1,67 @@
-import { map } from 'lodash'
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+import { PropertyBasicInfo } from './property-adapter'
 
 const prisma = new PrismaClient({
   log: ['query'],
 })
 
-export const getCompanies = async () => {
+export type CompanyBasicInfo = Prisma.CompanyGetPayload<{
+  select: typeof companyBasicInfoSelect
+}>
+
+const companyBasicInfoSelect = {
+  id: true,
+  propertyObjectId: true,
+  code: true,
+  name: true,
+  organizationNumber: true,
+}
+
+export const getCompanies = async (): Promise<CompanyBasicInfo[] | null> => {
   return prisma.company.findMany({
-    select: {
-      id: true,
-      propertyObjectId: true,
-      code: true,
-      name: true,
-      organizationNumber: true,
-    },
+    select: companyBasicInfoSelect,
   })
 }
 
-export const getCompany = async (id: string) => {
-  return prisma.company.findUnique({
-    where: {
-      id: id,
-    },
-    select: {
-      id: true,
-      systemCompanyId: true,
-      databaseId: true,
-      propertyObjectId: true,
-      code: true,
-      name: true,
-      organizationNumber: true,
-      internalExternal: true,
-      phone: true,
-      fTax: true,
-      cooperativeHousingAssociation: true,
-      differentiatedAdditionalCapital: true,
-      rentAdministered: true,
-      blocked: true,
-      rentDaysPerMonth: true,
-      economicPlanApproved: true,
-      vatObligationPercent: true,
-      vatRegistered: true,
-      energyOptimization: true,
-      ownedCompany: true,
-      interestInvoice: true,
-      errorReportAdministration: true,
-      mediaBilling: true,
-      ownResponsibilityForInternalMaintenance: true,
-      subletPercentage: true,
-      subletFeeAmount: true,
-      disableQuantitiesBelowCompany: true,
-      timestamp: true,
-    },
-  })
+export type CompanyDetails = Prisma.CompanyGetPayload<{
+  select: typeof companyDetailsSelect
+}>
 
-  //todo: return with mapper?
+const companyDetailsSelect = {
+  id: true,
+  propertyObjectId: true,
+  code: true,
+  name: true,
+  organizationNumber: true,
+  phone: true,
+  fax: true,
+  internalExternal: true,
+  fTax: true,
+  cooperativeHousingAssociation: true,
+  differentiatedAdditionalCapital: true,
+  rentAdministered: true,
+  blocked: true,
+  rentDaysPerMonth: true,
+  economicPlanApproved: true,
+  vatObligationPercent: true,
+  vatRegistered: true,
+  energyOptimization: true,
+  ownedCompany: true,
+  interestInvoice: true,
+  errorReportAdministration: true,
+  mediaBilling: true,
+  ownResponsibilityForInternalMaintenance: true,
+  subletPercentage: true,
+  subletFeeAmount: true,
+  disableQuantitiesBelowCompany: true,
+  timestamp: true,
+}
+
+export const getCompany = async (
+  id: string
+): Promise<CompanyDetails | null> => {
+  return prisma.company.findUnique({
+    where: { id },
+    select: companyDetailsSelect,
+  })
 }

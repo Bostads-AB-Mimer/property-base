@@ -5,9 +5,9 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getProperties, getPropertyById } from '../../adapters/property-adapter'
 import { generateMetaLinks } from '../../utils/links'
 import { getCompanies, getCompany } from '../../adapters/company-adapter'
+import { HttpStatusCode } from 'axios'
 
 /**
  * @swagger
@@ -47,12 +47,17 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /companies', metadata)
     const response = await getCompanies()
+
+    if (response === null) {
+      return (ctx.status = HttpStatusCode.NotFound)
+    }
+
     ctx.body = {
       content: response.map((company) => ({
         ...company,
         _links: {
           self: {
-            href: `/companies/byId/${company.id}`, //todo: create route
+            href: `/companies/byId/${company.id}`,
           },
         },
       })),
@@ -77,10 +82,10 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The ID of the property.
+   *         description: The ID of the company.
    *     responses:
    *       200:
-   *         description: Successfully retrieved the property.
+   *         description: Successfully retrieved the company.
    *         content:
    *           application/json:
    *             schema:
@@ -95,13 +100,13 @@ export const routes = (router: KoaRouter) => {
       const metadata = generateRouteMetadata(ctx)
       logger.info('GET /companies/by/:id/', metadata)
       const response = await getCompany(ctx.params.id)
+      console.log(response)
       ctx.body = {
         content: response,
         ...metadata,
         _links: generateMetaLinks(ctx, '/properties', {
-          //todo: fix link
-          id: ctx.params.id,
-          buildings: response?.code || '',
+          id: ctx.params.response,
+          properties: response?.code || '',
         }),
       }
     }

@@ -10,8 +10,6 @@ export const CompanySchema = z.object({
 
 export const CompanyDetailsSchema = z.object({
   id: z.string(),
-  systemCompanyId: z.string(),
-  databaseId: z.string(),
   propertyObjectId: z.string(),
   code: z.string(),
   name: z.string(),
