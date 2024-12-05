@@ -7,6 +7,7 @@ import {
   getResidencesByBuildingCodeAndFloorCode,
 } from '../../adapters/residence-adapter'
 import { mapDbToResidence } from './residence-mapper'
+import { mapDbToResidenceBasicInfo } from './residence-basic-mapper'
 
 /**
  * @swagger
@@ -49,8 +50,8 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /residences/', metadata)
     const propertyCode = ctx.query.propertyCode?.toString()
-    const dbRecords = await getLatestResidences(propertyCode)
-    const response = dbRecords.map(mapDbToResidence)
+    const dbRecords = await getLatestResidences(propertyCode) 
+    const response = dbRecords.map(mapDbToResidenceBasicInfo)
     ctx.body = { content: response, ...metadata }
   })
 

@@ -104,5 +104,17 @@ export const ResidenceSchema = z.object({
   }),
 })
 
-export type ExternalResidence = z.infer<typeof ResidenceSchema>
-export type Residence = ExternalResidence
+export type Residence = z.infer<typeof ResidenceSchema>
+
+export const ResidenceBasicInfoSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string(),
+  _links: z.object({
+    self: z.object({
+      href: z.string(),
+    }),
+  }),
+})
+
+export type ResidenceBasicInfo = z.infer<typeof ResidenceBasicInfoSchema>

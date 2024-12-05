@@ -25,6 +25,8 @@ const getBuildings = async (propertyCode: string) => {
       floorId: null,
     },
   })
+  
+  return building ? mapDbToBuilding(building) : null
 
   const buildings = await prisma.building.findMany({
     where: {
@@ -40,12 +42,14 @@ const getBuildings = async (propertyCode: string) => {
     },
   })
 
-  return buildings.map(mapDbToBuilding)
+  return buildings
+    .map(mapDbToBuilding)
+    .filter((b): b is NonNullable<typeof b> => b !== null)
 }
 
 //todo: remove this endpoint?
 const getBuildingByCode = async (buildingCode: string) => {
-  return prisma.building.findFirst({
+  const building = await prisma.building.findFirst({
     where: {
       buildingCode: {
         contains: buildingCode,

@@ -3,7 +3,15 @@ import { map } from 'lodash'
 
 const prisma = new PrismaClient({})
 
-export const getLatestResidences = async (propertyCode?: string) => {
+export type ResidenceWithBasicInfo = Prisma.ResidenceGetPayload<{
+  select: {
+    id: true
+    code: true
+    name: true
+  }
+}>
+
+export const getLatestResidences = async (propertyCode?: string): Promise<ResidenceWithBasicInfo[]> => {
   const where = propertyCode
     ? {
         propertyObject: {
