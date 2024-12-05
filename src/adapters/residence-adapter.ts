@@ -172,6 +172,24 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
         in: map(propertyStructures, 'objectId'),
       },
     },
+    include: {
+      residenceType: true,
+      propertyObject: {
+        include: {
+          property: true,
+          building: true,
+        },
+      },
+    },
+    include: {
+      residenceType: true,
+      propertyObject: {
+        include: {
+          property: true,
+          building: true,
+        },
+      },
+    },
   })
 }
 
