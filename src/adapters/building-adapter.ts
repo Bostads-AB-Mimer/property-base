@@ -26,8 +26,6 @@ const getBuildings = async (propertyCode: string) => {
     },
   })
   
-  return building ? mapDbToBuilding(building) : null
-
   const buildings = await prisma.building.findMany({
     where: {
       objectId: {

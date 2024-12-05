@@ -29,8 +29,10 @@ export const getRooms = async (
       localeId: null,
     },
   })
+  
+  return rooms.map(mapDbToRoom).filter((r): r is NonNullable<typeof r> => r !== null)
 
-  return prisma.room.findMany({
+  const rooms = await prisma.room.findMany({
     where: {
       propertyObjectId: {
         in: map(propertyStructures, 'objectId'),

@@ -1,14 +1,14 @@
 import { RoomWithRelations } from '../../adapters/room-adapter'
 import { RoomSchema } from '../../types/room'
-import { toBoolean } from '../../utils/data-conversion'
+import { toBoolean, trimString } from '../../utils/data-conversion'
 
 export function mapDbToRoom(dbRecord: RoomWithRelations) {
   if (!dbRecord) return null
 
   return RoomSchema.parse({
-    id: dbRecord.roomId?.trim() || '',
-    code: dbRecord.roomCode?.trim() || '',
-    name: dbRecord.name?.trim() || null,
+    id: trimString(dbRecord.roomId) || '',
+    code: trimString(dbRecord.roomCode) || '',
+    name: trimString(dbRecord.name),
     usage: {
       shared: toBoolean(dbRecord.sharedUse),
       allowPeriodicWorks: toBoolean(dbRecord.allowPeriodicWorks),

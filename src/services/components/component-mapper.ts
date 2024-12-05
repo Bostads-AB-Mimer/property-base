@@ -1,12 +1,13 @@
 import { ComponentSchema } from '../../types/component'
+import { trimString } from '../../utils/data-conversion'
 
 export function mapDbToComponent(dbRecord: any) {
   if (!dbRecord) return null
 
   return ComponentSchema.parse({
-    id: dbRecord.id?.trim() || '',
-    code: dbRecord.code?.trim() || '',
-    name: dbRecord.name?.trim() || '',
+    id: trimString(dbRecord.id) || '',
+    code: trimString(dbRecord.code) || '',
+    name: trimString(dbRecord.name) || '',
     details: {
       manufacturer: dbRecord.manufacturer,
       typeDesignation: dbRecord.typeDesignation,

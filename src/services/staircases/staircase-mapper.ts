@@ -1,14 +1,14 @@
 import { Staircase } from '@prisma/client'
 import { StaircaseSchema } from '../../types/staircase'
-import { toBoolean } from '../../utils/data-conversion'
+import { toBoolean, trimString } from '../../utils/data-conversion'
 
 export function mapDbToStaircase(dbRecord: Staircase) {
   if (!dbRecord) return null
 
   return StaircaseSchema.parse({
-    id: dbRecord.id?.trim() || '',
-    code: dbRecord.code?.trim() || '',
-    name: dbRecord.name?.trim() || '',
+    id: trimString(dbRecord.id) || '',
+    code: trimString(dbRecord.code) || '',
+    name: trimString(dbRecord.name) || '',
     features: {
       floorPlan: dbRecord.floorPlan,
       accessibleByElevator: toBoolean(dbRecord.accessibleByElevator),
