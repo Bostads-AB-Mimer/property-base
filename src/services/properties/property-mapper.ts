@@ -5,15 +5,9 @@ import {
 import { PropertySchema } from '../../types/property'
 import { toBoolean } from '../../utils/data-conversion'
 
-function isPropertyWithObject(
-  dbRecord: PropertyWithObject | PropertyBasicInfo
-): dbRecord is PropertyWithObject {
-  return 'propertyObject' in dbRecord
-}
-
-export function mapDbToProperty(
-  dbRecord: PropertyWithObject | PropertyBasicInfo
-) {
+export function mapDbToProperty(dbRecord: PropertyWithObject): ReturnType<typeof PropertySchema.parse>
+export function mapDbToProperty(dbRecord: PropertyBasicInfo): ReturnType<typeof PropertySchema.parse>
+export function mapDbToProperty(dbRecord: PropertyWithObject | PropertyBasicInfo) {
   if (!dbRecord) return null
 
   const baseProperty = {
@@ -41,7 +35,7 @@ export function mapDbToProperty(
     },
   }
 
-  if (isPropertyWithObject(dbRecord)) {
+  if ('propertyObject' in dbRecord) {
     return PropertySchema.parse({
       ...baseProperty,
       propertyObject: dbRecord.propertyObject
