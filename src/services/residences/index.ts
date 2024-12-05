@@ -49,7 +49,8 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /residences/', metadata)
     const propertyCode = ctx.query.propertyCode?.toString()
-    const response = await getLatestResidences(propertyCode)
+    const dbRecords = await getLatestResidences(propertyCode)
+    const response = dbRecords.map(mapDbToResidence)
     ctx.body = { content: response, ...metadata }
   })
 
@@ -86,7 +87,6 @@ export const routes = (router: KoaRouter) => {
       ctx.status = 404
       return
     }
-    console.log('dbRecord', dbRecord)
     const response = mapDbToResidence(dbRecord)
     ctx.body = { content: response, ...metadata }
   })
@@ -137,7 +137,8 @@ export const routes = (router: KoaRouter) => {
     const parsedBuildingCode = buildingCode.slice(0, 7)
 
     try {
-      const response = await getResidencesByBuildingCode(parsedBuildingCode)
+      const dbRecords = await getResidencesByBuildingCode(parsedBuildingCode)
+      const response = dbRecords.map(mapDbToResidence)
       ctx.body = { content: response, ...metadata }
     } catch (err) {
       ctx.status = 500
@@ -199,10 +200,11 @@ export const routes = (router: KoaRouter) => {
       const parsedBuildingCode = buildingCode.slice(0, 7)
 
       try {
-        const response = await getResidencesByBuildingCodeAndFloorCode(
+        const dbRecords = await getResidencesByBuildingCodeAndFloorCode(
           parsedBuildingCode,
           floorCode
         )
+        const response = dbRecords.map(mapDbToResidence)
         ctx.body = { content: response, ...metadata }
       } catch (err) {
         ctx.status = 500
