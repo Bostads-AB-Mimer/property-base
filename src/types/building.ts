@@ -1,6 +1,9 @@
 import { z } from 'zod'
+import { BaseBasicSchema, TimestampSchema } from './shared'
 
-export const BuildingSchema = z.object({
+export const BuildingBasicSchema = BaseBasicSchema.extend({})
+
+export const BuildingSchema = BuildingBasicSchema.extend({
   id: z.string().trim().describe('Unique identifier for the building'),
   code: z.string().trim().describe('Building code used in the system'),
   name: z.string().trim().describe('Display name of the building'),

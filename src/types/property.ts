@@ -1,13 +1,18 @@
 import { z } from 'zod'
+import { BaseBasicSchema, TimestampSchema } from './shared'
 
 export const PropertyDesignationSchema = z.object({
-  propertyDesignationId: z.string(),
-  code: z.string(),
-  name: z.string().nullable(),
-  timestamp: z.string()
+  propertyDesignationId: z.string().trim(),
+  code: z.string().trim(),
+  name: z.string().trim().nullable(),
+}).merge(TimestampSchema)
+
+export const PropertyBasicSchema = BaseBasicSchema.extend({
+  tract: z.string().trim().describe('Tract identifier'),
+  propertyDesignation: PropertyDesignationSchema.nullable(),
 })
 
-export const PropertySchema = z.object({
+export const PropertySchema = PropertyBasicSchema.extend({
   id: z.string().trim().describe('Unique identifier for the property'),
   code: z.string().trim().describe('Property code used in the system'),
   tract: z.string().trim().describe('Tract identifier'),

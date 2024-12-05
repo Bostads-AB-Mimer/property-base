@@ -1,6 +1,9 @@
 import { z } from 'zod'
+import { BaseBasicSchema, TimestampSchema } from './shared'
 
-export const ComponentSchema = z.object({
+export const ComponentBasicSchema = BaseBasicSchema.extend({})
+
+export const ComponentSchema = ComponentBasicSchema.extend({
   id: z.string().trim().describe('Unique identifier for the component'),
   code: z.string().trim().describe('Component code used in the system'),
   name: z.string().trim().describe('Display name of the component'),

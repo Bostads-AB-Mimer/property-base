@@ -1,6 +1,9 @@
 import { z } from 'zod'
+import { BaseBasicSchema, TimestampSchema, ValidityPeriodSchema } from './shared'
 
-export const ResidenceSchema = z.object({
+export const ResidenceBasicSchema = BaseBasicSchema.extend({})
+
+export const ResidenceSchema = ResidenceBasicSchema.extend({
   id: z.string().trim(),
   code: z.string().trim(),
   name: z.string().trim(),
