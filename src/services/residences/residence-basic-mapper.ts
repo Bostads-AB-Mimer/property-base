@@ -5,9 +5,9 @@ export function mapDbToResidenceBasicInfo(dbRecord: ResidenceWithBasicInfo): Res
   if (!dbRecord) return null
 
   return ResidenceBasicInfoSchema.parse({
-    id: dbRecord.id?.trim() || '',
-    code: dbRecord.code?.trim() || '',
-    name: dbRecord.name?.trim() || '',
+    id: dbRecord.id || '',
+    code: dbRecord.code || '',
+    name: dbRecord.name || '',
     _links: {
       self: {
         href: `/residences/${dbRecord.id?.trim() || ''}`,

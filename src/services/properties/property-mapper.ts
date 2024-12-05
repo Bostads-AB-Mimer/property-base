@@ -11,14 +11,14 @@ export function mapDbToProperty(dbRecord: PropertyWithObject | PropertyBasicInfo
   if (!dbRecord) return null
 
   const baseProperty = {
-    id: dbRecord.id?.trim() || '',
-    code: dbRecord.code?.trim() || '',
-    tract: dbRecord.tract?.trim() || '',
+    id: dbRecord.id || '',
+    code: dbRecord.code || '',
+    tract: dbRecord.tract || '',
     propertyDesignation: dbRecord.propertyDesignation
       ? {
-          propertyDesignationId: dbRecord.propertyDesignation.id?.trim() || '',
-          code: dbRecord.propertyDesignation.code?.trim() || '',
-          name: dbRecord.propertyDesignation.name?.trim() || '',
+          propertyDesignationId: dbRecord.propertyDesignation.id || '',
+          code: dbRecord.propertyDesignation.code || '',
+          name: dbRecord.propertyDesignation.name || '',
           timestamp: dbRecord.propertyDesignation.timestamp,
         }
       : null,

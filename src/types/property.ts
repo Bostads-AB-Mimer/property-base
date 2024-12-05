@@ -8,9 +8,9 @@ export const PropertyDesignationSchema = z.object({
 })
 
 export const PropertySchema = z.object({
-  id: z.string().describe('Unique identifier for the property'),
-  code: z.string().describe('Property code used in the system'),
-  tract: z.string().describe('Tract identifier'),
+  id: z.string().trim().describe('Unique identifier for the property'),
+  code: z.string().trim().describe('Property code used in the system'),
+  tract: z.string().trim().describe('Tract identifier'),
   propertyDesignation: PropertyDesignationSchema.nullable(),
   propertyObject: z.object({
     deleted: z.boolean(),

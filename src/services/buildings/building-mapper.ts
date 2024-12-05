@@ -6,9 +6,9 @@ export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({
-    id: dbRecord.id?.trim() || '',
-    code: dbRecord.buildingCode?.trim() || '',
-    name: dbRecord.name?.trim() || '',
+    id: dbRecord.id || '',
+    code: dbRecord.buildingCode || '',
+    name: dbRecord.name || '',
     buildingType: dbRecord.buildingType
       ? {
           id: dbRecord.buildingType.id,

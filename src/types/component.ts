@@ -35,9 +35,9 @@ export const ComponentSchema = z.object({
   }),
   maintenanceUnits: z.array(
     z.object({
-      id: z.string(),
-      code: z.string(),
-      name: z.string(),
+      id: z.string().trim(),
+      code: z.string().trim(),
+      name: z.string().trim(),
     })
   ),
 })
