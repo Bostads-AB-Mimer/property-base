@@ -1,21 +1,23 @@
 import { z } from 'zod'
 
 export const ResidenceSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string(),
-  _links: z.object({
-    self: z.object({
-      href: z.string().describe('URI to the residence resource'),
-    }),
-    building: z.object({
-      href: z.string().describe('URI to the associated building'),
-    }),
-    property: z.object({
-      href: z.string().describe('URI to the associated property'),
-    }),
-  }).describe('HATEOAS links for resource navigation'),
-  location: z.string().optional(),
+  id: z.string().trim(),
+  code: z.string().trim(),
+  name: z.string().trim(),
+  _links: z
+    .object({
+      self: z.object({
+        href: z.string().trim().describe('URI to the residence resource'),
+      }),
+      building: z.object({
+        href: z.string().trim().describe('URI to the associated building'),
+      }),
+      property: z.object({
+        href: z.string().trim().describe('URI to the associated property'),
+      }),
+    })
+    .describe('HATEOAS links for resource navigation'),
+  location: z.string().trim().optional(),
   accessibility: z.object({
     wheelchairAccessible: z.boolean(),
     residenceAdapted: z.boolean(),
@@ -24,18 +26,18 @@ export const ResidenceSchema = z.object({
   features: z.object({
     balcony1: z
       .object({
-        location: z.string(),
-        type: z.string(),
+        location: z.string().trim(),
+        type: z.string().trim(),
       })
       .optional(),
     balcony2: z
       .object({
-        location: z.string(),
-        type: z.string(),
+        location: z.string().trim(),
+        type: z.string().trim(),
       })
       .optional(),
-    patioLocation: z.string().optional(),
-    hygieneFacility: z.string(),
+    patioLocation: z.string().trim().optional(),
+    hygieneFacility: z.string().trim(),
     sauna: z.boolean(),
     extraToilet: z.boolean(),
     sharedKitchen: z.boolean(),
@@ -49,9 +51,9 @@ export const ResidenceSchema = z.object({
   rooms: z
     .array(
       z.object({
-        roomId: z.string(),
-        roomCode: z.string(),
-        name: z.string().optional(),
+        roomId: z.string().trim(),
+        roomCode: z.string().trim(),
+        name: z.string().trim().optional(),
         sharedUse: z.boolean(),
         sortingOrder: z.number(),
         allowPeriodicWorks: z.boolean(),
@@ -66,33 +68,33 @@ export const ResidenceSchema = z.object({
         toDate: z.date(),
         availableFrom: z.date().optional(),
         availableTo: z.date().optional(),
-        timestamp: z.string(),
+        timestamp: z.string().trim(),
       })
     )
     .optional()
     .default([]),
-  entrance: z.string(),
+  entrance: z.string().trim(),
   partNo: z.number().optional().nullable(),
-  part: z.string().optional().nullable(),
+  part: z.string().trim().optional().nullable(),
   deleted: z.boolean(),
   validityPeriod: z.object({
     fromDate: z.date(),
     toDate: z.date(),
   }),
   residenceType: z.object({
-    residenceTypeId: z.string(),
-    code: z.string(),
-    name: z.string().nullable(),
+    residenceTypeId: z.string().trim(),
+    code: z.string().trim(),
+    name: z.string().trim().nullable(),
     roomCount: z.number().nullable(),
     kitchen: z.number(),
     systemStandard: z.number(),
-    checklistId: z.string().nullable(),
-    componentTypeActionId: z.string().nullable(),
-    statisticsGroupSCBId: z.string().nullable(),
-    statisticsGroup2Id: z.string().nullable(),
-    statisticsGroup3Id: z.string().nullable(),
-    statisticsGroup4Id: z.string().nullable(),
-    timestamp: z.string(),
+    checklistId: z.string().trim().nullable(),
+    componentTypeActionId: z.string().trim().nullable(),
+    statisticsGroupSCBId: z.string().trim().nullable(),
+    statisticsGroup2Id: z.string().trim().nullable(),
+    statisticsGroup3Id: z.string().trim().nullable(),
+    statisticsGroup4Id: z.string().trim().nullable(),
+    timestamp: z.string().trim(),
   }),
   propertyObject: z.object({
     energy: z.object({
@@ -107,12 +109,12 @@ export const ResidenceSchema = z.object({
 export type Residence = z.infer<typeof ResidenceSchema>
 
 export const ResidenceBasicInfoSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string(),
+  id: z.string().trim(),
+  code: z.string().trim(),
+  name: z.string().trim(),
   _links: z.object({
     self: z.object({
-      href: z.string(),
+      href: z.string().trim(),
     }),
   }),
 })
