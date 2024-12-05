@@ -18,7 +18,7 @@ import { generateMetaLinks } from '../../utils/links'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /properties/byId/{id}/:
+   * /properties/Id/{id}/:
    *   get:
    *     summary: Get detailed information about a specific property
    *     description: |
@@ -46,7 +46,7 @@ export const routes = (router: KoaRouter) => {
    *                   $ref: '#/components/schemas/PropertyDetails'
    */
   router.get(
-    ['(.*)/properties/byId/:id', '(.*)/properties/byId/:id/'],
+    ['(.*)/properties/Id/:id', '(.*)/properties/Id/:id/'],
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
       logger.info('GET /properties/by/:id/', metadata)
@@ -112,7 +112,7 @@ export const routes = (router: KoaRouter) => {
         ...property,
         _links: {
           self: {
-            href: `/properties/byId/${property.id}`,
+            href: `/properties/Id/${property.id}`,
           },
         },
       })),

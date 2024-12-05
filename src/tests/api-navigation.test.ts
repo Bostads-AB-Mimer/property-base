@@ -66,7 +66,7 @@ describe('API Navigation Tests', () => {
     const property = propertiesResponse.data.content[0]
 
     const propertyDetailsResponse = await axios.get(
-      `${API_BASE}/properties/byId/${property.propertyId}/`
+      `${API_BASE}/properties/Id/${property.propertyId}/`
     )
     expect(propertyDetailsResponse.status).toBe(200)
     expect(propertyDetailsResponse.data.content).toBeDefined()
@@ -125,7 +125,7 @@ describe('API Navigation Tests', () => {
     const property = propertiesResponse.data.content[0]
 
     const propertyDetailsResponse = await axios.get(
-      `${API_BASE}/properties/byId/${property.propertyId}/`
+      `${API_BASE}/properties/Id/${property.propertyId}/`
     )
     const propertyDetails = propertyDetailsResponse.data.content
 

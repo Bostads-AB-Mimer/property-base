@@ -57,7 +57,7 @@ export const routes = (router: KoaRouter) => {
         ...company,
         _links: {
           self: {
-            href: `/companies/byId/${company.id}`,
+            href: `/companies/Id/${company.id}`,
           },
         },
       })),
@@ -68,7 +68,7 @@ export const routes = (router: KoaRouter) => {
 
   /**
    * @swagger
-   * /companies/byId/{id}/:
+   * /companies/Id/{id}/:
    *   get:
    *     summary: Get detailed information about a specific company
    *     description: |
@@ -94,7 +94,7 @@ export const routes = (router: KoaRouter) => {
    *                   $ref: '#/components/schemas/CompanyDetails'
    */
   router.get(
-    ['(.*)/companies/byId/:id', '(.*)/companies/byId/:id/'],
+    ['(.*)/companies/Id/:id', '(.*)/companies/Id/:id/'],
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
       logger.info('GET /companies/by/:id/', metadata)
