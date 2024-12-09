@@ -23,7 +23,8 @@ export type PropertyBasicInfo = Prisma.PropertyStructureGetPayload<{
 const getPropertyById = async (
   propertyId: string
 ): Promise<PropertyWithObject | null> => {
-  // we could use code instead of propertyObjectId but code is not unique so we would have to use findMany
+  //todo: we could use code instead of propertyObjectId but code is not unique so we would have to use findMany
+  //todo: make this clear in endpoint or implement above?
   const response = await prisma.property.findUnique({
     where: {
       propertyObjectId: propertyId,

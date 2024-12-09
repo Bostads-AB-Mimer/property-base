@@ -6,7 +6,7 @@ import {
   getResidencesByBuildingCodeAndFloorCode,
 } from '../../adapters/residence-adapter'
 import { mapDbToResidence } from './residence-mapper'
-import { z } from 'zod'
+import { residencesQueryParamsSchema } from '../../types/residence'
 
 /**
  * @swagger
@@ -54,15 +54,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error.
    */
-
-  //todo: move to a separate file
-  const residencesQueryParamsSchema = z.object({
-    buildingCode: z
-      .string()
-      .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
-    floorCode: z.string().optional(),
-  })
-
   router.get(['(.*)/residences', '(.*)/residences/'], async (ctx) => {
     const queryParams = residencesQueryParamsSchema.safeParse(ctx.query)
 

@@ -6,7 +6,6 @@ const prisma = new PrismaClient({
 })
 
 //todo: add types
-//todo: refactor endpoints and remove redudant ones
 
 export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
   include: {

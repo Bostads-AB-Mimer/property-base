@@ -6,7 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getStaircasesByBuildingCode } from '../../adapters/staircase-adapter'
-import { z } from 'zod'
+import { staircasesQueryParamsSchema } from '../../types/staircase'
 
 /**
  * @swagger
@@ -49,14 +49,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error.
    */
-
-  //todo: move to a separate file
-  const staircasesQueryParamsSchema = z.object({
-    buildingCode: z
-      .string()
-      .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
-  })
-
   router.get(['(.*)/staircases', '(.*)/staircases/'], async (ctx) => {
     const queryParams = staircasesQueryParamsSchema.safeParse(ctx.query)
 
@@ -79,5 +71,5 @@ export const routes = (router: KoaRouter) => {
   })
 
   //todo: add staircases details GET
-  //todo: the details data will be identical to the one in the list GET
+  //todo: the details data will be quote identical to the one in the list GET because of the data model
 }

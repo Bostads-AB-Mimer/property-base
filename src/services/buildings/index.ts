@@ -5,11 +5,8 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import {
-  getBuildingByCode,
-  getBuildings,
-} from '../../adapters/building-adapter'
-import { z } from 'zod'
+import { getBuildingById, getBuildings } from '../../adapters/building-adapter'
+import { buildingsQueryParamsSchema } from '../../types/building'
 
 /**
  * @swagger
@@ -54,13 +51,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error.
    */
-  //todo: move to a separate file
-  const buildingsQueryParamsSchema = z.object({
-    propertyCode: z.string().min(1, {
-      message: 'propertyCode is required and must be a non-empty string.',
-    }),
-  })
-
   router.get(['(.*)/buildings', '(.*)/buildings/'], async (ctx) => {
     const queryParams = buildingsQueryParamsSchema.safeParse(ctx.query)
 
@@ -126,8 +116,7 @@ export const routes = (router: KoaRouter) => {
     logger.info(`GET /buildings/${id}`, metadata)
 
     try {
-      //todo: refactor adapter function to take id instead of code
-      const response = await getBuildingByCode(id)
+      const response = await getBuildingById(id)
       ctx.body = {
         content: response,
         ...metadata,

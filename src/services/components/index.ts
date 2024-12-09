@@ -6,7 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
-import { z } from 'zod'
+import { componentsQueryParamsSchema } from '../../types/component'
 
 /**
  * @swagger
@@ -56,13 +56,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
-  //todo: move to a separate file
-  const componentsQueryParamsSchema = z.object({
-    maintenanceUnit: z
-      .string()
-      .min(1, { message: 'maintenanceUnit is required and cannot be empty.' }),
-  })
-
   router.get('(.*)/components', async (ctx) => {
     // Validate the query parameters with Zod
     const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)

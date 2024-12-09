@@ -1,7 +1,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getRooms } from '../../adapters/room-adapter'
-import { z } from 'zod'
+import { roomsQueryParamsSchema } from '../../types/room'
 
 /**
  * @swagger
@@ -55,16 +55,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error.
    */
-
-  //todo: move to a separate file
-  const roomsQueryParamsSchema = z.object({
-    buildingCode: z
-      .string()
-      .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
-    floorCode: z.string().min(1, { message: 'floorCode is required.' }),
-    residenceCode: z.string().min(1, { message: 'residenceCode is required.' }),
-  })
-
   router.get(['(.*)/rooms', '(.*)/rooms/'], async (ctx) => {
     const queryParams = roomsQueryParamsSchema.safeParse(ctx.query)
 

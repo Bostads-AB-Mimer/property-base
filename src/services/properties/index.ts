@@ -7,7 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getProperties, getPropertyById } from '../../adapters/property-adapter'
 import { generateMetaLinks } from '../../utils/links'
-import { z } from 'zod'
+import { propertiesQueryParamsSchema } from '../../types/property'
 
 /**
  * @swagger
@@ -57,14 +57,6 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error.
    */
-  //todo: move to a separate file
-  const propertiesQueryParamsSchema = z.object({
-    companyCode: z.string().min(3, {
-      message: 'companyCode is required and must be a non-empty string.',
-    }),
-    tract: z.string().optional(),
-  })
-
   router.get('(.*)/properties', async (ctx) => {
     const queryParams = propertiesQueryParamsSchema.safeParse(ctx.query)
 
