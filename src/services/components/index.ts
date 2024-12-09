@@ -57,7 +57,6 @@ export const routes = (router: KoaRouter) => {
    *         description: Internal server error
    */
   router.get('(.*)/components', async (ctx) => {
-    // Validate the query parameters with Zod
     const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
 
     if (!queryParams.success) {
