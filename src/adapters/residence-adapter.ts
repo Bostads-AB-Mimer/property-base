@@ -11,7 +11,9 @@ export type ResidenceWithBasicInfo = Prisma.ResidenceGetPayload<{
   }
 }>
 
-export const getLatestResidences = async (propertyCode?: string): Promise<ResidenceWithBasicInfo[]> => {
+export const getLatestResidences = async (
+  propertyCode?: string
+): Promise<ResidenceWithBasicInfo[]> => {
   const where = propertyCode
     ? {
         propertyObject: {
@@ -170,15 +172,6 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
     where: {
       objectId: {
         in: map(propertyStructures, 'objectId'),
-      },
-    },
-    include: {
-      residenceType: true,
-      propertyObject: {
-        include: {
-          property: true,
-          building: true,
-        },
       },
     },
     include: {
