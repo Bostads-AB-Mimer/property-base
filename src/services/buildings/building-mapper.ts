@@ -6,14 +6,14 @@ export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({
-    id: dbRecord.id || '',
-    code: dbRecord.buildingCode || '',
-    name: dbRecord.name || '',
+    id: dbRecord.id,
+    code: dbRecord.buildingCode,
+    name: dbRecord.name,
     buildingType: dbRecord.buildingType
       ? {
           id: dbRecord.buildingType.id,
           code: dbRecord.buildingType.buildingTypeCode,
-          name: dbRecord.buildingType.buildingTypeName?.trim() || '',
+          name: dbRecord.buildingType.buildingTypeName,
         }
       : null,
     construction: {
@@ -35,7 +35,7 @@ export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
         href: `/buildings/${dbRecord.id}`,
       },
       property: {
-        href: `/properties/${dbRecord.propertyDesignation?.code || ''}`,
+        href: `/properties/${dbRecord.propertyDesignation?.code}`,
       },
       residences: {
         href: `/residences/buildingCode/${dbRecord.buildingCode}`,

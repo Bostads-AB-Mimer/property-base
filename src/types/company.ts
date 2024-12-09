@@ -4,7 +4,7 @@ export const CompanySchema = z.object({
   id: z.string(),
   propertyObjectId: z.string(),
   code: z.string(),
-  name: z.string(),
+  name: z.string().trim(),
   organizationNumber: z.string().nullable(),
 })
 
@@ -12,7 +12,7 @@ export const CompanyDetailsSchema = z.object({
   id: z.string(),
   propertyObjectId: z.string(),
   code: z.string(),
-  name: z.string(),
+  name: z.string().trim(),
   organizationNumber: z.string().nullable(),
   phone: z.string().nullable(),
   fax: z.string().nullable(),
