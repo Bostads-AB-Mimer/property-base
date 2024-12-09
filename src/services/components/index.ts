@@ -6,6 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
+import { z } from 'zod'
 
 /**
  * @swagger
@@ -17,7 +18,7 @@ import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adap
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /components/:
+   * /components:
    *   get:
    *     summary: Gets a list of components for a maintenance unit
    *     description: |
@@ -33,7 +34,7 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The unique code identifying the maintenance unit
+   *         description: The unique code identifying the maintenance unit.
    *     responses:
    *       200:
    *         description: |
@@ -55,12 +56,35 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
-  router.get('(.*)/components/:maintenanceUnitCode/', async (ctx) => {
+  //todo: move to a separate file
+  const componentsQueryParamsSchema = z.object({
+    maintenanceUnit: z
+      .string()
+      .min(1, { message: 'maintenanceUnit is required and cannot be empty.' }),
+  })
+
+  router.get('(.*)/components', async (ctx) => {
+    // Validate the query parameters with Zod
+    const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
+
+    if (!queryParams.success) {
+      ctx.status = 400
+      ctx.body = { errors: queryParams.error.errors }
+      return
+    }
+
+    const { maintenanceUnit } = queryParams.data
+
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /components/:maintenanceUnitCode/', metadata)
-    const response = await getComponentByMaintenanceUnitCode(
-      ctx.params.maintenanceUnit
-    )
-    ctx.body = { content: response, ...metadata }
+    logger.info(`GET /components?maintenanceUnit=${maintenanceUnit}`, metadata)
+
+    try {
+      const response = await getComponentByMaintenanceUnitCode(maintenanceUnit)
+      ctx.body = { content: response, ...metadata }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
   })
 }
