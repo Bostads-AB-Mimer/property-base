@@ -13,6 +13,8 @@ export type BuildingWithRelations = Prisma.BuildingGetPayload<{
   }
 }>
 
+//todo: add types
+
 const getBuildings = async (propertyCode: string) => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
@@ -45,7 +47,6 @@ const getBuildings = async (propertyCode: string) => {
     .filter((b): b is NonNullable<typeof b> => b !== null)
 }
 
-//todo: remove this endpoint?
 const getBuildingByCode = async (buildingCode: string) => {
   const building = await prisma.building.findFirst({
     where: {

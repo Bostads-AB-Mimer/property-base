@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient({})
 
+//todo: add types
+
 export const getComponentByMaintenanceUnitCode = async (
   maintenanceUnitCode: string
 ) => {

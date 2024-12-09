@@ -9,6 +9,8 @@ export type RoomWithRelations = Prisma.RoomGetPayload<{
   }
 }>
 
+//todo: add types
+
 export const getRooms = async (
   buildingCode: string,
   floorCode: string,

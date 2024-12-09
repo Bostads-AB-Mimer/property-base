@@ -2,53 +2,99 @@ import { z } from 'zod'
 import { BaseBasicSchema, TimestampSchema } from './shared'
 
 export const PropertyDesignationSchema = z.object({
-  propertyDesignationId: z.string().trim(),
-  code: z.string().trim(),
-  name: z.string().trim().nullable(),
-}).merge(TimestampSchema)
-
-export const PropertyBasicSchema = BaseBasicSchema.extend({
-  tract: z.string().trim().describe('Tract identifier'),
-  propertyDesignation: PropertyDesignationSchema.nullable(),
+  propertyDesignationId: z.string(),
+  code: z.string(),
+  name: z.string().nullable(),
+  timestamp: z.string(),
 })
 
-export const PropertySchema = PropertyBasicSchema.extend({
-  id: z.string().trim().describe('Unique identifier for the property'),
-  code: z.string().trim().describe('Property code used in the system'),
-  tract: z.string().trim().describe('Tract identifier'),
-  propertyDesignation: PropertyDesignationSchema.nullable(),
-  propertyObject: z.object({
-    deleted: z.boolean(),
-    timestamp: z.string(),
-    objectType: z.object({
-      id: z.string(),
-      code: z.string(),
-      name: z.string().nullable()
-    }).nullable(),
-    condition: z.union([z.string(), z.number()]).nullable(),
-    conditionInspectionDate: z.date().nullable(),
-    energy: z.object({
-      class: z.number().nullable(),
-      registered: z.date().nullable(),
-      received: z.date().nullable(),
-      index: z.number().nullable(),
+export const PropertySchema = z.object<z.ZodRawShape>({
+  id: z.string(),
+  companyId: z.string(),
+  companyName: z.string(),
+  name: z.string(),
+  code: z.string(),
+  propertyId: z.string(),
+  _links: z
+    .object({
+      self: z.object({
+        href: z.string().describe('URI to the property resource'),
+      }),
+      details: z.object({
+        href: z.string().describe('URI to detailed version of this resource'),
+      }),
+      buildings: z.object({
+        href: z.string().describe('URI to list buildings in this property'),
+      }),
+      residences: z.object({
+        href: z.string().describe('URI to list residences in this property'),
+      }),
     })
-  }).nullable(),
+    .describe('HATEOAS links for resource navigation'),
+})
+
+export const PropertyDetailsSchema = z.object({
+  id: z.string().trim(),
+  propertyObjectId: z.string().trim(),
+  marketAreaId: z.string().trim(),
+  districtId: z.string().trim(),
+  propertyDesignationId: z.string().trim(),
+  valueAreaId: z.string().nullable(),
+  code: z.string(),
+  designation: z.string(),
+  municipality: z.string(),
+  tract: z.string(),
+  block: z.string(),
+  sector: z.string().nullable(),
+  propertyIndexNumber: z.string().nullable(),
+  congregation: z.string(),
+  builtStatus: z.number().int(),
+  separateAssessmentUnit: z.number().int(),
+  consolidationNumber: z.string(),
+  ownershipType: z.string(),
+  registrationDate: z.string().nullable(),
+  acquisitionDate: z.string().nullable(),
+  isLeasehold: z.number().int(),
+  leaseholdTerminationDate: z.string().nullable(),
+  area: z.string().nullable(),
+  purpose: z.string().nullable(),
+  buildingType: z.string().nullable(),
+  propertyTaxNumber: z.string().nullable(),
+  mainPartAssessedValue: z.number().int(),
+  includeInAssessedValue: z.number().int(),
+  grading: z.number().int(),
+  deleteMark: z.number().int(),
+  fromDate: z.string(),
+  toDate: z.string(),
+  timestamp: z.string(),
+  propertyObject: z.object({
+    propertyObjectId: z.string().trim(),
+    deleteMark: z.number().int(),
+    timestamp: z.string(),
+    objectTypeId: z.string().trim(),
+    barcode: z.string().nullable(),
+    barcodeType: z.number().int(),
+    condition: z.number().int(),
+    conditionInspectionDate: z.string().nullable(),
+    vatAdjustmentPrinciple: z.number().int(),
+    energyClass: z.number().int(),
+    energyRegistered: z.string().nullable(),
+    energyReceived: z.string().nullable(),
+    energyIndex: z.string().nullable(),
+    heatingNature: z.number().int(),
+  }),
   _links: z.object({
     self: z.object({
-      href: z.string().describe('URI to the property resource'),
-    }),
-    details: z.object({
-      href: z.string().describe('URI to detailed version of this resource'),
+      href: z.string(),
     }),
     buildings: z.object({
-      href: z.string().describe('URI to list buildings in this property'),
+      href: z.string(),
     }),
-    residences: z.object({
-      href: z.string().describe('URI to list residences in this property'),
-    }),
-  }).describe('HATEOAS links for resource navigation'),
+  }),
 })
 
 export type PropertyDesignation = z.infer<typeof PropertyDesignationSchema>
+
+export type PropertyDetails = z.infer<typeof PropertyDetailsSchema>
+
 export type Property = z.infer<typeof PropertySchema>

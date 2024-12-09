@@ -4,6 +4,8 @@ import { mapDbToStaircase } from '../services/staircases/staircase-mapper'
 
 const prisma = new PrismaClient({})
 
+//todo: add types
+
 async function getStaircasesByBuildingCode(buildingCode: string) {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {

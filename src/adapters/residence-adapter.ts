@@ -3,17 +3,10 @@ import { map } from 'lodash'
 
 const prisma = new PrismaClient({})
 
-export type ResidenceWithBasicInfo = Prisma.ResidenceGetPayload<{
-  select: {
-    id: true
-    code: true
-    name: true
-  }
-}>
+//todo: add types
+//todo: refactor endpoints and remove redudant ones
 
-export const getLatestResidences = async (
-  propertyCode?: string
-): Promise<ResidenceWithBasicInfo[]> => {
+export const getLatestResidences = async (propertyCode?: string) => {
   const where = propertyCode
     ? {
         propertyObject: {

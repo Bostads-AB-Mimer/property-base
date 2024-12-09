@@ -19,7 +19,7 @@ import { generateMetaLinks } from '../../utils/links'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /properties/{id}/:
+   * /properties/Id/{id}/:
    *   get:
    *     summary: Get detailed information about a specific property
    *     description: |
@@ -34,7 +34,7 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The ID of the rental property.
+   *         description: The ID of the property.
    *     responses:
    *       200:
    *         description: Successfully retrieved the property.
@@ -44,43 +44,51 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/Property'
+   *                   $ref: '#/components/schemas/PropertyDetails'
    */
-  router.get(['(.*)/properties/:id', '(.*)/properties/:id/'], async (ctx) => {
-    const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /properties/:id/', metadata)
-    const dbRecord = await getPropertyById(ctx.params.id)
-    if (!dbRecord) {
-      ctx.status = 404
-      return
+  router.get(
+    ['(.*)/properties/Id/:id', '(.*)/properties/Id/:id/'],
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      logger.info('GET /properties/by/:id/', metadata)
+      const response = await getPropertyById(ctx.params.id)
+      ctx.body = {
+        content: response,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/properties', {
+          id: ctx.params.id,
+          buildings: response?.code || '',
+        }),
+      }
     }
-    const response = mapDbToProperty(dbRecord)
-    ctx.body = {
-      content: response,
-      ...metadata
-    }
-  })
+  )
 
   /**
    * @swagger
-   * /properties/:
+   * /properties/{companyCode}:
    *   get:
-   *     summary: Get a list of all real estate properties
+   *     summary: Get a list of all properties belonging to a company
    *     description: |
-   *       Retrieves a list of all real estate properties in the system.
+   *       Retrieves a list of all real estate properties belonging to a specific company.
    *       Can be filtered by tract if provided. Returns basic property information
    *       including property ID, code, tract, and designation.
    *     tags:
    *       - Properties
    *     parameters:
+   *       - in: path
+   *         name: companyCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The code of the company that owns the properties.
    *       - in: query
    *         name: tract
    *         schema:
    *           type: string
-   *         description: Optional filter to get properties in a specific tract
+   *         description: Optional filter to get properties in a specific tract.
    *     responses:
    *       200:
-   *         description: Successfully retrieved list of properties
+   *         description: Successfully retrieved list of properties.
    *         content:
    *           application/json:
    *             schema:
@@ -91,18 +99,26 @@ export const routes = (router: KoaRouter) => {
    *                   items:
    *                     $ref: '#/components/schemas/Property'
    *       500:
-   *         description: Internal server error
+   *         description: Internal server error.
    */
-  router.get(['(.*)/properties', '(.*)/properties/'], async (ctx) => {
+  router.get('(.*)/properties/:companyCode', async (ctx) => {
     let query = ctx.query.tract?.toString()
+    const { companyCode } = ctx.params
 
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /properties', metadata)
-    const dbRecords = await getProperties(query)
-    const response = dbRecords.map(mapDbToProperty).filter((p): p is NonNullable<typeof p> => p !== null)
+    logger.info(`GET /properties/${companyCode}`, metadata)
+    const response = await getProperties(companyCode, query)
     ctx.body = {
-      content: response,
-      ...metadata
+      content: response.map((property) => ({
+        ...property,
+        _links: {
+          self: {
+            href: `/properties/Id/${property.id}`,
+          },
+        },
+      })),
+      ...metadata,
+      _links: generateMetaLinks(ctx, '/properties'),
     }
   })
 }

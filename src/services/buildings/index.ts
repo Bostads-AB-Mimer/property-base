@@ -43,22 +43,23 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Building'
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Building'
    */
-  router.get('(.*)/buildings/:propertyCode/', async (ctx) => {
-    const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /buildings/:propertyId/', metadata)
-    const response = await getBuildings(ctx.params.propertyCode)
-    ctx.body = {
-      content: response,
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/buildings', {
-        propertyCode: ctx.params.propertyCode,
-      }),
+
+  router.get(
+    ['(.*)/buildings/:propertyCode/', '(.*)/buildings/:propertyCode'],
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      logger.info('GET /buildings/:propertyId/', metadata)
+      const response = await getBuildings(ctx.params.propertyCode)
+      ctx.body = { content: response, ...metadata }
     }
-  })
+  )
 
   /**
    * @swagger
@@ -85,7 +86,10 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Building'
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   $ref: '#/components/schemas/Building'
    *       400:
    *         description: Invalid building code format
    *       404:
@@ -93,6 +97,7 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
+
   router.get('(.*)/buildings/buildingCode/:buildingCode/', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /buildings/buildingCode/:buildingCode/', metadata)
