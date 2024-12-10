@@ -125,13 +125,20 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /residences/${id}`, metadata)
-    const residence = await getResidenceById(id)
-    if (!residence) {
-      ctx.status = 404
-      return
-    }
 
-    //todo: add room link
-    ctx.body = { content: residence, ...metadata }
+    try {
+      const residence = await getResidenceById(id)
+      if (!residence) {
+        ctx.status = 404
+        return
+      }
+
+      //todo: add room link
+      ctx.body = { content: residence, ...metadata }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
   })
 }

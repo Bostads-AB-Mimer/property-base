@@ -45,23 +45,30 @@ export const routes = (router: KoaRouter) => {
   router.get(['(.*)/companies', '(.*)/companies/'], async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /companies', metadata)
-    const companies = await getCompanies()
 
-    if (companies === null) {
-      return (ctx.status = HttpStatusCode.NotFound)
-    }
+    try {
+      const companies = await getCompanies()
 
-    ctx.body = {
-      content: companies.map((company) => ({
-        ...company,
-        _links: {
-          self: {
-            href: `/companies/Id/${company.id}`,
+      if (companies === null) {
+        return (ctx.status = HttpStatusCode.NotFound)
+      }
+
+      ctx.body = {
+        content: companies.map((company) => ({
+          ...company,
+          _links: {
+            self: {
+              href: `/companies/Id/${company.id}`,
+            },
           },
-        },
-      })),
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/companies'),
+        })),
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/companies'),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 
@@ -96,20 +103,27 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /companies/${id}`, metadata)
-    const company = await getCompany(ctx.params.id)
 
-    if (!company) {
-      ctx.status = 404
-      return
-    }
+    try {
+      const company = await getCompany(ctx.params.id)
 
-    ctx.body = {
-      content: company,
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/properties', {
-        id: ctx.params.response,
-        properties: company?.code || '',
-      }),
+      if (!company) {
+        ctx.status = 404
+        return
+      }
+
+      ctx.body = {
+        content: company,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/properties', {
+          id: ctx.params.response,
+          properties: company?.code || '',
+        }),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 }

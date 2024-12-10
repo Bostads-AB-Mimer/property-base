@@ -74,19 +74,25 @@ export const routes = (router: KoaRouter) => {
       metadata
     )
 
-    const properties = await getProperties(companyCode, tract)
+    try {
+      const properties = await getProperties(companyCode, tract)
 
-    ctx.body = {
-      content: properties.map((property) => ({
-        ...property,
-        _links: {
-          self: {
-            href: `/properties/Id/${property.id}`,
+      ctx.body = {
+        content: properties.map((property) => ({
+          ...property,
+          _links: {
+            self: {
+              href: `/properties/Id/${property.id}`,
+            },
           },
-        },
-      })),
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/properties'),
+        })),
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/properties'),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 
@@ -125,20 +131,28 @@ export const routes = (router: KoaRouter) => {
       const metadata = generateRouteMetadata(ctx)
       const id = ctx.params.id
       logger.info(`GET /properties/${id}`, metadata)
-      const property = await getPropertyById(id)
 
-      if (!property) {
-        ctx.status = 404
-        return
-      }
+      try {
+        const property = await getPropertyById(id)
 
-      ctx.body = {
-        content: property,
-        ...metadata,
-        _links: generateMetaLinks(ctx, '/properties', {
-          id: ctx.params.id,
-          buildings: property?.code || '',
-        }),
+        if (!property) {
+          ctx.status = 404
+          return
+        }
+
+        ctx.body = {
+          content: property,
+          ...metadata,
+          _links: generateMetaLinks(ctx, '/properties', {
+            id: ctx.params.id,
+            buildings: property?.code || '',
+          }),
+        }
+      } catch (err) {
+        ctx.status = 500
+        const errorMessage =
+          err instanceof Error ? err.message : 'unknown error'
+        ctx.body = { reason: errorMessage, ...metadata }
       }
     }
   )

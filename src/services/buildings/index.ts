@@ -65,11 +65,17 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info(`GET /buildings?propertyCode=${propertyCode}`, metadata)
 
-    const buildings = await getBuildings(propertyCode)
+    try {
+      const buildings = await getBuildings(propertyCode)
 
-    ctx.body = {
-      content: buildings,
-      ...metadata,
+      ctx.body = {
+        content: buildings,
+        ...metadata,
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 
@@ -127,10 +133,10 @@ export const routes = (router: KoaRouter) => {
         content: building,
         ...metadata,
       }
-    } catch (error) {
-      logger.error('Error fetching building by code:', error)
+    } catch (err) {
       ctx.status = 500
-      ctx.body = { content: 'Internal server error', ...metadata }
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 }

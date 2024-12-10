@@ -115,18 +115,25 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /rooms/${id}`, metadata)
-    const room = await getRoomById(id)
-    if (!room) {
-      ctx.status = 404
-      return
-    }
 
-    ctx.body = {
-      content: room,
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/rooms', {
-        id: ctx.params.response,
-      }),
+    try {
+      const room = await getRoomById(id)
+      if (!room) {
+        ctx.status = 404
+        return
+      }
+
+      ctx.body = {
+        content: room,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/rooms', {
+          id: ctx.params.response,
+        }),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 }
