@@ -65,10 +65,10 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info(`GET /buildings?propertyCode=${propertyCode}`, metadata)
 
-    const response = await getBuildings(propertyCode)
+    const buildings = await getBuildings(propertyCode)
 
     ctx.body = {
-      content: response,
+      content: buildings,
       ...metadata,
     }
   })
@@ -116,9 +116,15 @@ export const routes = (router: KoaRouter) => {
     logger.info(`GET /buildings/${id}`, metadata)
 
     try {
-      const response = await getBuildingById(id)
+      const building = await getBuildingById(id)
+
+      if (!building) {
+        ctx.status = 404
+        return
+      }
+
       ctx.body = {
-        content: response,
+        content: building,
         ...metadata,
       }
     } catch (error) {

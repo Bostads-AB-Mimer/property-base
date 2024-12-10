@@ -74,10 +74,10 @@ export const routes = (router: KoaRouter) => {
       metadata
     )
 
-    const response = await getProperties(companyCode, tract)
+    const properties = await getProperties(companyCode, tract)
 
     ctx.body = {
-      content: response.map((property) => ({
+      content: properties.map((property) => ({
         ...property,
         _links: {
           self: {
@@ -125,13 +125,19 @@ export const routes = (router: KoaRouter) => {
       const metadata = generateRouteMetadata(ctx)
       const id = ctx.params.id
       logger.info(`GET /properties/${id}`, metadata)
-      const response = await getPropertyById(id)
+      const property = await getPropertyById(id)
+
+      if (!property) {
+        ctx.status = 404
+        return
+      }
+
       ctx.body = {
-        content: response,
+        content: property,
         ...metadata,
         _links: generateMetaLinks(ctx, '/properties', {
           id: ctx.params.id,
-          buildings: response?.code || '',
+          buildings: property?.code || '',
         }),
       }
     }

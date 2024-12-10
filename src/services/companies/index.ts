@@ -45,14 +45,14 @@ export const routes = (router: KoaRouter) => {
   router.get(['(.*)/companies', '(.*)/companies/'], async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /companies', metadata)
-    const response = await getCompanies()
+    const companies = await getCompanies()
 
-    if (response === null) {
+    if (companies === null) {
       return (ctx.status = HttpStatusCode.NotFound)
     }
 
     ctx.body = {
-      content: response.map((company) => ({
+      content: companies.map((company) => ({
         ...company,
         _links: {
           self: {
@@ -96,13 +96,19 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /companies/${id}`, metadata)
-    const response = await getCompany(ctx.params.id)
+    const company = await getCompany(ctx.params.id)
+
+    if (!company) {
+      ctx.status = 404
+      return
+    }
+
     ctx.body = {
-      content: response,
+      content: company,
       ...metadata,
       _links: generateMetaLinks(ctx, '/properties', {
         id: ctx.params.response,
-        properties: response?.code || '',
+        properties: company?.code || '',
       }),
     }
   })

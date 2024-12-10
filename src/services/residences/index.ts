@@ -74,19 +74,19 @@ export const routes = (router: KoaRouter) => {
     )
 
     try {
-      let response
+      let residences
 
       if (floorCode) {
-        response = await getResidencesByBuildingCodeAndFloorCode(
+        residences = await getResidencesByBuildingCodeAndFloorCode(
           buildingCode,
           floorCode
         )
       } else {
-        response = await getResidencesByBuildingCode(buildingCode)
+        residences = await getResidencesByBuildingCode(buildingCode)
       }
 
       ctx.body = {
-        content: response,
+        content: residences,
         ...metadata,
       }
     } catch (err) {
@@ -125,13 +125,13 @@ export const routes = (router: KoaRouter) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /residences/${id}`, metadata)
-    const dbRecord = await getResidenceById(id)
-    if (!dbRecord) {
+    const residence = await getResidenceById(id)
+    if (!residence) {
       ctx.status = 404
       return
     }
-    console.log('dbRecord', dbRecord)
-    const response = mapDbToResidence(dbRecord)
-    ctx.body = { content: response, ...metadata }
+
+    //todo: add room link
+    ctx.body = { content: residence, ...metadata }
   })
 }
