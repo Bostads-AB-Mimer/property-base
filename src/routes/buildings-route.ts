@@ -6,7 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getBuildingById, getBuildings } from '../adapters/building-adapter'
-import { buildingsQueryParamsSchema } from '../types/building'
+import { buildingsQueryParamsSchema, BuildingSchema } from '../types/building'
 
 /**
  * @swagger
@@ -68,8 +68,8 @@ export const routes = (router: KoaRouter) => {
     try {
       const buildings = await getBuildings(propertyCode)
 
-      ctx.body = {
-        content: buildings.map((building) => ({
+      const responseContent = buildings.map((building) => {
+        const parsedBuilding = BuildingSchema.parse({
           ...building,
           _links: {
             self: {
@@ -88,7 +88,12 @@ export const routes = (router: KoaRouter) => {
               href: `/properties/${propertyCode}`,
             },
           },
-        })),
+        })
+        return parsedBuilding
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
@@ -147,8 +152,29 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
+      const parsedBuilding = BuildingSchema.parse({
+        ...building,
+        _links: {
+          self: {
+            href: `/buildings/${building.id}`,
+          },
+          property: {
+            href: `/properties/${building.propertyCode}`,
+          },
+          residences: {
+            href: `/residences?buildingCode=${building.id}`,
+          },
+          staircases: {
+            href: `/staircases?buildingCode=${building.id}`,
+          },
+          parent: {
+            href: `/properties/${building.propertyCode}`,
+          },
+        },
+      })
+
       ctx.body = {
-        content: building,
+        content: parsedBuilding,
         ...metadata,
       }
     } catch (err) {
