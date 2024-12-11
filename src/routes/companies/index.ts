@@ -58,7 +58,7 @@ export const routes = (router: KoaRouter) => {
           ...company,
           _links: {
             self: {
-              href: `/companies/Id/${company.id}`,
+              href: `/companies/${company.id}`
             },
             properties: {
               href: `/properties?companyCode=${company.code}`

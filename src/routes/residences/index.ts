@@ -99,21 +99,21 @@ export const routes = (router: KoaRouter) => {
             self: {
               href: `/residences/${residence.id}`
             },
-            building: residence.links?.building ? {
+            building: {
               href: `/buildings/${residence.links.building}`
-            } : undefined,
-            property: residence.links?.property ? {
+            },
+            property: {
               href: `/properties/${residence.links.property}`
-            } : undefined,
+            },
             rooms: {
-              href: `/rooms?residenceCode=${residence.code}`
+              href: `/rooms?buildingCode=${residence.links.building}&residenceCode=${residence.code}`
             },
             components: {
               href: `/components?residenceCode=${residence.code}`
             },
-            parent: residence.links?.building ? {
+            parent: {
               href: `/buildings/${residence.links.building}`
-            } : undefined
+            }
           }
         })),
         ...metadata,
