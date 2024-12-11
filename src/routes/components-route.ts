@@ -6,7 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentByMaintenanceUnitCode } from '../adapters/component-adapter'
-import { componentsQueryParamsSchema } from '../types/component'
+import { componentsQueryParamsSchema, ComponentSchema } from '../types/component'
 
 /**
  * @swagger
@@ -79,8 +79,8 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      ctx.body = {
-        content: components.map((component) => ({
+      const responseContent = components.map((component) => {
+        const parsedComponent = ComponentSchema.parse({
           ...component,
           _links: {
             self: {
@@ -90,7 +90,12 @@ export const routes = (router: KoaRouter) => {
               href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}`,
             },
           },
-        })),
+        })
+        return parsedComponent
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
