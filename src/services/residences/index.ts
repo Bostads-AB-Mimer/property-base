@@ -7,8 +7,8 @@ import {
 } from '../../adapters/residence-adapter'
 import { residencesQueryParamsSchema } from '../../types/residence'
 import { generateMetaLinks } from '../../utils/links'
-import { Residence } from '@prisma/client'
-import { mapDbToResidence } from './residence-mapper'
+import { Residence } from '../../types/residence'
+import { mapDbToResidence } from '../residences/residence-mapper'
 
 /**
  * @swagger
@@ -88,9 +88,7 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: residences
-          .map(mapDbToResidence)
-          .filter((r): r is Residence => r !== null),
+        content: residences.map(mapDbToResidence).filter(Boolean),
         ...metadata,
         _links: generateMetaLinks(ctx, '/residences', {
           buildingCode,
