@@ -74,6 +74,12 @@ export const routes = (router: KoaRouter) => {
             },
             building: {
               href: `/buildings/${staircase.buildingCode}`
+            },
+            residences: {
+              href: `/residences?buildingCode=${staircase.buildingCode}`
+            },
+            parent: {
+              href: `/buildings/${staircase.buildingCode}`
             }
           }
         })),
