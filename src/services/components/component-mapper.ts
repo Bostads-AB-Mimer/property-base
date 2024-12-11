@@ -1,13 +1,26 @@
+import { Component, ComponentType, ComponentCategory, PropertyStructure, MaintenanceUnit, Prisma } from '@prisma/client'
 import { ComponentSchema } from '../../types/component'
 import { trimString } from '../../utils/data-conversion'
 
-export function mapDbToComponent(dbRecord: any) {
+type ComponentWithRelations = Prisma.ComponentGetPayload<{
+  include: {
+    componentType: true
+    componentCategory: true
+    propertyStructures: {
+      include: {
+        maintenanceUnitByCode: true
+      }
+    }
+  }
+}>
+
+export function mapDbToComponent(dbRecord: ComponentWithRelations) {
   if (!dbRecord) return null
 
   return ComponentSchema.parse({
-    id: dbRecord.id || '',
-    code: dbRecord.code || '',
-    name: dbRecord.name || '',
+    id: trimString(dbRecord.id),
+    code: trimString(dbRecord.code),
+    name: trimString(dbRecord.name),
     details: {
       manufacturer: dbRecord.manufacturer,
       typeDesignation: dbRecord.typeDesignation,
