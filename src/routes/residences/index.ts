@@ -88,7 +88,7 @@ export const routes = (router: KoaRouter) => {
         ...residence,
         links: {
           building: buildingCode,
-          property: residence.propertyCode
+          property: residence.code
         }
       }))
 
