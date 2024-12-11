@@ -7,7 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getProperties, getPropertyById } from '../adapters/property-adapter'
 import { generateMetaLinks } from '../utils/links'
-import { propertiesQueryParamsSchema } from '../types/property'
+import { propertiesQueryParamsSchema, PropertySchema, PropertyDetailsSchema } from '../types/property'
 
 /**
  * @swagger
@@ -77,8 +77,8 @@ export const routes = (router: KoaRouter) => {
     try {
       const properties = await getProperties(companyCode, tract)
 
-      ctx.body = {
-        content: properties.map((property) => ({
+      const responseContent = properties.map((property) => {
+        const parsedProperty = PropertySchema.parse({
           ...property,
           _links: {
             self: {
@@ -88,7 +88,12 @@ export const routes = (router: KoaRouter) => {
               href: `/buildings?propertyCode=${property.code}`,
             },
           },
-        })),
+        })
+        return parsedProperty
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
         _links: generateMetaLinks(ctx, '/properties'),
       }
@@ -141,13 +146,17 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      ctx.body = {
-        content: property,
-        ...metadata,
+      const parsedPropertyDetails = PropertyDetailsSchema.parse({
+        ...property,
         _links: generateMetaLinks(ctx, '/properties', {
           id: ctx.params.id,
           buildings: property?.code || '',
         }),
+      })
+
+      ctx.body = {
+        content: parsedPropertyDetails,
+        ...metadata,
       }
     } catch (err) {
       ctx.status = 500
