@@ -132,9 +132,7 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: building,
         ...metadata,
-        _links: generateMetaLinks(ctx, '/buildings', {
-          buildingCode: parsedBuildingCode,
-        }),
+        _links: generateMetaLinks(ctx, '/buildings', { id }),
       }
     } catch (err) {
       ctx.status = 500
