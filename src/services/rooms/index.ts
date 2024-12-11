@@ -125,11 +125,9 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: room,
+        content: mapDbToRoomDetails(room),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/rooms', {
-          id: ctx.params.response,
-        }),
+        _links: generateMetaLinks(ctx, '/rooms', { id: ctx.params.id })
       }
     } catch (err) {
       ctx.status = 500
