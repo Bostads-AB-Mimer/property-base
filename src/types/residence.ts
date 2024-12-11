@@ -11,7 +11,7 @@ export const ResidenceSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string(),
-  links: z
+  _links: z
     .object({
       building: z.string().optional(),
       property: z.string().optional(),
