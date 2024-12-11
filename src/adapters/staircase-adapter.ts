@@ -32,6 +32,7 @@ async function getStaircasesByBuildingCode(buildingCode: string) {
     id: staircase.id,
     code: staircase.code,
     name: staircase.name,
+    buildingCode: buildingCode,
     features: {
       floorPlan: staircase.floorPlan,
       accessibleByElevator: toBoolean(staircase.accessibleByElevator),

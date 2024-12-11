@@ -73,16 +73,24 @@ export const routes = (router: KoaRouter) => {
     )
 
     try {
-      let residences
+      let dbResidences
 
       if (floorCode) {
-        residences = await getResidencesByBuildingCodeAndFloorCode(
+        dbResidences = await getResidencesByBuildingCodeAndFloorCode(
           buildingCode,
           floorCode
         )
       } else {
-        residences = await getResidencesByBuildingCode(buildingCode)
+        dbResidences = await getResidencesByBuildingCode(buildingCode)
       }
+
+      const residences = dbResidences.map(residence => ({
+        ...residence,
+        links: {
+          building: buildingCode,
+          property: residence.propertyCode
+        }
+      }))
 
       ctx.body = {
         content: residences.map(residence => ({
