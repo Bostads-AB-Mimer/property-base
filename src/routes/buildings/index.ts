@@ -69,25 +69,25 @@ export const routes = (router: KoaRouter) => {
       const buildings = await getBuildings(propertyCode)
 
       ctx.body = {
-        content: buildings.map(building => ({
+        content: buildings.map((building) => ({
           ...building,
           _links: {
             self: {
-              href: `/buildings/${building.id}`
+              href: `/buildings/${building.id}`,
             },
             property: {
-              href: `/properties/${propertyCode}`
+              href: `/properties/${propertyCode}`,
             },
             residences: {
-              href: `/residences?buildingCode=${building.buildingCode || building.id}`
+              href: `/residences?buildingCode=${building.buildingCode}`,
             },
             staircases: {
-              href: `/staircases?buildingCode=${building.buildingCode || building.id}`
+              href: `/staircases?buildingCode=${building.buildingCode}`,
             },
             parent: {
-              href: `/properties/${propertyCode}`
-            }
-          }
+              href: `/properties/${propertyCode}`,
+            },
+          },
         })),
         ...metadata,
       }
