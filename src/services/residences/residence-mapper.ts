@@ -1,12 +1,25 @@
+import { Residence, ResidenceType, PropertyObject, Prisma } from '@prisma/client'
 import { ResidenceSchema } from '../../types/residence'
 import { toBoolean } from '../../utils/data-conversion'
 
-export function mapDbToResidence(dbRecord: any) {
+type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
+  include: {
+    residenceType: true
+    propertyObject: {
+      include: {
+        property: true
+        building: true
+      }
+    }
+  }
+}>
+
+export function mapDbToResidence(dbRecord: ResidenceWithRelations) {
   if (!dbRecord) return null
 
   return ResidenceSchema.parse({
     id: dbRecord.id,
-    code: dbRecord.code,
+    code: dbRecord.residenceCode,
     name: dbRecord.name,
     accessibility: {
       wheelchairAccessible: toBoolean(dbRecord.wheelchairAccessible),
