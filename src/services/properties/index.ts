@@ -79,16 +79,12 @@ export const routes = (router: KoaRouter) => {
       const properties = await getProperties(companyCode, tract)
 
       ctx.body = {
-        content: properties.map((property) => ({
-          ...property,
-          _links: {
-            self: {
-              href: `/properties/Id/${property.id}`,
-            },
-          },
-        })),
+        content: properties.map(mapDbToProperty),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/properties'),
+        _links: generateMetaLinks(ctx, '/properties', { 
+          companyCode: companyCode,
+          ...(tract && { tract })
+        })
       }
     } catch (err) {
       ctx.status = 500
@@ -140,12 +136,11 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: property,
+        content: mapDbToPropertyDetails(property),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/properties', {
-          id: ctx.params.id,
-          buildings: property?.code || '',
-        }),
+        _links: generateMetaLinks(ctx, '/properties', { 
+          id: ctx.params.id 
+        })
       }
     } catch (err) {
       ctx.status = 500

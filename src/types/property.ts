@@ -15,29 +15,26 @@ export const PropertyDesignationSchema = z.object({
   timestamp: z.string(),
 })
 
-export const PropertySchema = z.object<z.ZodRawShape>({
-  id: z.string(),
-  companyId: z.string(),
-  companyName: z.string(),
-  name: z.string(),
-  code: z.string(),
-  propertyId: z.string(),
-  _links: z
-    .object({
-      self: z.object({
-        href: z.string().describe('URI to the property resource'),
-      }),
-      details: z.object({
-        href: z.string().describe('URI to detailed version of this resource'),
-      }),
-      buildings: z.object({
-        href: z.string().describe('URI to list buildings in this property'),
-      }),
-      residences: z.object({
-        href: z.string().describe('URI to list residences in this property'),
-      }),
-    })
-    .describe('HATEOAS links for resource navigation'),
+export const PropertySchema = BaseBasicSchema.extend({
+  companyId: z.string().trim(),
+  companyName: z.string().trim(),
+  propertyId: z.string().trim(),
+  tract: z.string().trim().nullable(),
+  propertyDesignation: PropertyDesignationSchema.nullable(),
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the property resource'),
+    }),
+    details: z.object({
+      href: z.string().describe('URI to detailed version of this resource'),
+    }),
+    buildings: z.object({
+      href: z.string().describe('URI to list buildings in this property'),
+    }),
+    residences: z.object({
+      href: z.string().describe('URI to list residences in this property'),
+    }),
+  }).describe('HATEOAS links for resource navigation'),
 })
 
 export const PropertyDetailsSchema = z.object({
