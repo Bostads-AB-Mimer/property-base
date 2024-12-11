@@ -99,7 +99,7 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/CompanyDetails'
    */
-  router.get(['(.*)/companies/:id', '(.*)/companies/:id/'], async (ctx) => {
+  router.get('(.*)/companies/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
     logger.info(`GET /companies/${id}`, metadata)

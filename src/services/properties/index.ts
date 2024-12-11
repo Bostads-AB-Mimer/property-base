@@ -125,35 +125,31 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/PropertyDetails'
    */
-  router.get(
-    ['(.*)/properties/:id', '(.*)/properties/Id/:id/'],
-    async (ctx) => {
-      const metadata = generateRouteMetadata(ctx)
-      const id = ctx.params.id
-      logger.info(`GET /properties/${id}`, metadata)
+  router.get('(.*)/properties/:id', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const id = ctx.params.id
+    logger.info(`GET /properties/${id}`, metadata)
 
-      try {
-        const property = await getPropertyById(id)
+    try {
+      const property = await getPropertyById(id)
 
-        if (!property) {
-          ctx.status = 404
-          return
-        }
-
-        ctx.body = {
-          content: property,
-          ...metadata,
-          _links: generateMetaLinks(ctx, '/properties', {
-            id: ctx.params.id,
-            buildings: property?.code || '',
-          }),
-        }
-      } catch (err) {
-        ctx.status = 500
-        const errorMessage =
-          err instanceof Error ? err.message : 'unknown error'
-        ctx.body = { reason: errorMessage, ...metadata }
+      if (!property) {
+        ctx.status = 404
+        return
       }
+
+      ctx.body = {
+        content: property,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/properties', {
+          id: ctx.params.id,
+          buildings: property?.code || '',
+        }),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
-  )
+  })
 }

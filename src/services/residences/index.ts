@@ -5,7 +5,6 @@ import {
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndFloorCode,
 } from '../../adapters/residence-adapter'
-import { mapDbToResidence } from './residence-mapper'
 import { residencesQueryParamsSchema } from '../../types/residence'
 
 /**
