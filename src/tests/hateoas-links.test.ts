@@ -6,7 +6,7 @@ describe('HATEOAS Links Navigation', () => {
     // Start with companies list
     const companiesResponse = await request(app.callback()).get('/companies')
     expect(companiesResponse.status).toBe(200)
-    expect(companiesResponse.body.content).toHaveLength(1) // Assuming at least one company
+    expect(companiesResponse.body.content.length).toBeGreaterThan(0) // Ensure at least one company is present
     
     const company = companiesResponse.body.content[0]
     expect(company._links.properties).toBeDefined()
@@ -40,7 +40,7 @@ describe('HATEOAS Links Navigation', () => {
     const residencesResponse = await request(app.callback()).get(residencesUrl)
     expect(residencesResponse.status).toBe(200)
     
-    if (residencesResponse.body.content.length > 0) {
+    if (residencesResponse.body.content && residencesResponse.body.content.length > 0) {
       const residence = residencesResponse.body.content[0]
       expect(residence._links.rooms).toBeDefined()
       

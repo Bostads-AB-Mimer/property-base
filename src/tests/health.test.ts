@@ -1,5 +1,5 @@
 import request from 'supertest'
-import app from '../api' // Assuming your Koa app is exported from api.ts
+import app from '../app' // Ensure the correct Koa app instance is imported
 
 describe('Health Check', () => {
   it('should return healthy status', async () => {
