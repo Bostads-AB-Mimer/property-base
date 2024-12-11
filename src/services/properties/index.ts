@@ -119,21 +119,18 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/PropertyDetails'
    */
-  router.get(
-    ['(.*)/properties/:id', '(.*)/properties/Id/:id/'],
-    async (ctx) => {
-      const metadata = generateRouteMetadata(ctx)
-      const id = ctx.params.id
-      logger.info(`GET /properties/${id}`, metadata)
-      const response = await getPropertyById(id)
-      ctx.body = {
-        content: response,
-        ...metadata,
-        _links: generateMetaLinks(ctx, '/properties', {
-          id: ctx.params.id,
-          buildings: response?.code || '',
-        }),
-      }
+  router.get('(.*)/properties/:id', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const id = ctx.params.id
+    logger.info(`GET /properties/${id}`, metadata)
+    const response = await getPropertyById(id)
+    ctx.body = {
+      content: response,
+      ...metadata,
+      _links: generateMetaLinks(ctx, '/properties', {
+        id: ctx.params.id,
+        buildings: response?.code || '',
+      }),
     }
-  )
+  })
 }
