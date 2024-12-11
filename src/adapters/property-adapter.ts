@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 const prisma = new PrismaClient({})
 
-export type PropertyWithObject = Prisma.PropertyGetPayload<{
+export type PropertyDetails = Prisma.PropertyGetPayload<{
   include: {
     propertyObject: true
     propertyDesignation: true

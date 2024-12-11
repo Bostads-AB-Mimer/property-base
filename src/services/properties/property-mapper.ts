@@ -1,11 +1,11 @@
 import {
   PropertyBasicInfo,
-  PropertyWithObject,
+  PropertyDetails,
 } from '../../adapters/property-adapter'
 import { PropertySchema } from '../../types/property'
 import { toBoolean } from '../../utils/data-conversion'
 
-export function mapDbToProperty(dbRecord: PropertyWithObject | PropertyBasicInfo) {
+export function mapDbToProperty(dbRecord: PropertyDetails | PropertyBasicInfo) {
   if (!dbRecord) return null
 
   return PropertySchema.parse({
@@ -39,7 +39,7 @@ export function mapDbToProperty(dbRecord: PropertyWithObject | PropertyBasicInfo
   })
 }
 
-export function mapDbToPropertyDetails(dbRecord: PropertyWithObject) {
+export function mapDbToPropertyDetails(dbRecord: PropertyDetails) {
   if (!dbRecord) return null
 
   return PropertyDetailsSchema.parse({

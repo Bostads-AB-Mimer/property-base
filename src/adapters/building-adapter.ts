@@ -4,7 +4,7 @@ import { mapDbToBuilding } from '../services/buildings/building-mapper'
 
 const prisma = new PrismaClient({})
 
-export type BuildingWithRelations = Prisma.BuildingGetPayload<{
+export type BuildingDetails = Prisma.BuildingGetPayload<{
   include: {
     buildingType: true
     marketArea: true

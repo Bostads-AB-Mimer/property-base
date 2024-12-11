@@ -1,8 +1,8 @@
-import { BuildingWithRelations } from '../../adapters/building-adapter'
+import { BuildingDetails } from '../../adapters/building-adapter'
 import { BuildingSchema, BuildingDetailsSchema } from '../../types/building'
 import { toBoolean, trimString } from '../../utils/data-conversion'
 
-export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
+export function mapDbToBuilding(dbRecord: BuildingDetails) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({
@@ -46,7 +46,7 @@ export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   })
 }
 
-export function mapDbToBuildingDetails(dbRecord: BuildingWithRelations) {
+export function mapDbToBuildingDetails(dbRecord: BuildingDetails) {
   if (!dbRecord) return null
 
   const building = mapDbToBuilding(dbRecord)
