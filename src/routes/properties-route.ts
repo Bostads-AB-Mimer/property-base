@@ -5,9 +5,9 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getProperties, getPropertyById } from '../../adapters/property-adapter'
-import { generateMetaLinks } from '../../utils/links'
-import { propertiesQueryParamsSchema } from '../../types/property'
+import { getProperties, getPropertyById } from '../adapters/property-adapter'
+import { generateMetaLinks } from '../utils/links'
+import { propertiesQueryParamsSchema } from '../types/property'
 
 /**
  * @swagger
@@ -85,8 +85,8 @@ export const routes = (router: KoaRouter) => {
               href: `/properties/${property.id}`,
             },
             buildings: {
-              href: `/buildings?propertyCode=${property.code}`
-            }
+              href: `/buildings?propertyCode=${property.code}`,
+            },
           },
         })),
         ...metadata,

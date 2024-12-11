@@ -4,8 +4,8 @@ import {
   getResidenceById,
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndFloorCode,
-} from '../../adapters/residence-adapter'
-import { residencesQueryParamsSchema } from '../../types/residence'
+} from '../adapters/residence-adapter'
+import { residencesQueryParamsSchema } from '../types/residence'
 
 /**
  * @swagger
@@ -84,37 +84,37 @@ export const routes = (router: KoaRouter) => {
         dbResidences = await getResidencesByBuildingCode(buildingCode)
       }
 
-      const residences = dbResidences.map(residence => ({
+      const residences = dbResidences.map((residence) => ({
         ...residence,
         links: {
           building: buildingCode,
-          property: residence.code
-        }
+          property: residence.code,
+        },
       }))
 
       ctx.body = {
-        content: residences.map(residence => ({
+        content: residences.map((residence) => ({
           ...residence,
           _links: {
             self: {
-              href: `/residences/${residence.id}`
+              href: `/residences/${residence.id}`,
             },
             building: {
-              href: `/buildings/${residence.links.building}`
+              href: `/buildings/${residence.links.building}`,
             },
             property: {
-              href: `/properties/${residence.links.property}`
+              href: `/properties/${residence.links.property}`,
             },
             rooms: {
-              href: `/rooms?buildingCode=${residence.links.building}&residenceCode=${residence.code}`
+              href: `/rooms?buildingCode=${residence.links.building}&residenceCode=${residence.code}`,
             },
             components: {
-              href: `/components?residenceCode=${residence.code}`
+              href: `/components?residenceCode=${residence.code}`,
             },
             parent: {
-              href: `/buildings/${residence.links.building}`
-            }
-          }
+              href: `/buildings/${residence.links.building}`,
+            },
+          },
         })),
         ...metadata,
       }

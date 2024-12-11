@@ -5,8 +5,8 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
-import { componentsQueryParamsSchema } from '../../types/component'
+import { getComponentByMaintenanceUnitCode } from '../adapters/component-adapter'
+import { componentsQueryParamsSchema } from '../types/component'
 
 /**
  * @swagger
@@ -79,19 +79,19 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      ctx.body = { 
-        content: components.map(component => ({
+      ctx.body = {
+        content: components.map((component) => ({
           ...component,
           _links: {
             self: {
-              href: `/components/${component.id}`
+              href: `/components/${component.id}`,
             },
             maintenanceUnit: {
-              href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}`
-            }
-          }
-        })), 
-        ...metadata 
+              href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}`,
+            },
+          },
+        })),
+        ...metadata,
       }
     } catch (err) {
       ctx.status = 500

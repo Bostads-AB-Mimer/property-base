@@ -1,11 +1,11 @@
 import KoaRouter from '@koa/router'
-import { routes as componentsRoutes } from './routes/components'
-import { routes as residencesRoutes } from './routes/residences'
-import { routes as buildingsRoutes } from './routes/buildings'
-import { routes as propertiesRoutes } from './routes/properties'
-import { routes as staircasesRoutes } from './routes/staircases'
-import { routes as roomsRoutes } from './routes/rooms'
-import { routes as companiesRoutes } from './routes/companies'
+import { routes as componentsRoutes } from './routes/components-route'
+import { routes as residencesRoutes } from './routes/residences-route'
+import { routes as buildingsRoutes } from './routes/buildings-route'
+import { routes as propertiesRoutes } from './routes/properties-route'
+import { routes as staircasesRoutes } from './routes/staircases-route'
+import { routes as roomsRoutes } from './routes/rooms-route'
+import { routes as companiesRoutes } from './routes/companies-route'
 
 const router = new KoaRouter()
 
