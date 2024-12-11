@@ -84,8 +84,8 @@ export const routes = (router: KoaRouter) => {
         dbResidences = await getResidencesByBuildingCode(buildingCode)
       }
 
-      const responseContent = dbResidences.map((residence) => {
-        const parsedResidence = ResidenceSchema.parse({
+      const responseContent = dbResidences.map((residence) =>
+        ResidenceSchema.parse({
           ...residence,
           _links: {
             self: {
@@ -108,8 +108,7 @@ export const routes = (router: KoaRouter) => {
             },
           },
         })
-        return parsedResidence
-      })
+      )
 
       ctx.body = {
         content: responseContent,
