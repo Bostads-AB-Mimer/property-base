@@ -5,7 +5,7 @@ import {
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndFloorCode,
 } from '../adapters/residence-adapter'
-import { residencesQueryParamsSchema } from '../types/residence'
+import { residencesQueryParamsSchema, ResidenceSchema } from '../types/residence'
 
 /**
  * @swagger
@@ -84,8 +84,8 @@ export const routes = (router: KoaRouter) => {
         dbResidences = await getResidencesByBuildingCode(buildingCode)
       }
 
-      ctx.body = {
-        content: dbResidences.map((residence) => ({
+      const responseContent = dbResidences.map((residence) => {
+        const parsedResidence = ResidenceSchema.parse({
           ...residence,
           _links: {
             self: {
@@ -107,7 +107,12 @@ export const routes = (router: KoaRouter) => {
               href: `/buildings/${buildingCode}`,
             },
           },
-        })),
+        })
+        return parsedResidence
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
@@ -155,7 +160,31 @@ export const routes = (router: KoaRouter) => {
       }
 
       //todo: add room link
-      ctx.body = { content: residence, ...metadata }
+      const parsedResidence = ResidenceSchema.parse({
+        ...residence,
+        _links: {
+          self: {
+            href: `/residences/${residence.id}`,
+          },
+          building: {
+            href: `/buildings/${residence.buildingCode}`,
+          },
+          property: {
+            href: `/properties/${residence.code}`,
+          },
+          rooms: {
+            href: `/rooms?buildingCode=${residence.buildingCode}&residenceCode=${residence.code}`,
+          },
+          components: {
+            href: `/components?residenceCode=${residence.code}`,
+          },
+          parent: {
+            href: `/buildings/${residence.buildingCode}`,
+          },
+        },
+      })
+
+      ctx.body = { content: parsedResidence, ...metadata }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
