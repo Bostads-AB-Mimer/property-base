@@ -1,8 +1,19 @@
-import { PrismaClient } from '@prisma/client'
+import { Prisma, PrismaClient } from '@prisma/client'
+import { mapDbToComponent } from '../services/components/component-mapper'
 
 const prisma = new PrismaClient({})
 
-//todo: add types
+export type ComponentWithRelations = Prisma.ComponentGetPayload<{
+  include: {
+    componentType: true
+    componentCategory: true
+    propertyStructures: {
+      include: {
+        maintenanceUnitByCode: true
+      }
+    }
+  }
+}>
 
 export const getComponentByMaintenanceUnitCode = async (
   maintenanceUnitCode: string
