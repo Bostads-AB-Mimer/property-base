@@ -65,8 +65,8 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const response = await getStaircasesByBuildingCode(buildingCode)
-      const responseContent = response.map((staircase) => {
-        const parsedStaircase = StaircaseSchema.parse({
+      const responseContent = response.map((staircase) =>
+        StaircaseSchema.parse({
           ...staircase,
           _links: {
             self: {
@@ -83,8 +83,7 @@ export const routes = (router: KoaRouter) => {
             },
           },
         })
-        return parsedStaircase
-      })
+      )
 
       ctx.body = {
         content: responseContent,
