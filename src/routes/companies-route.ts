@@ -8,6 +8,7 @@ import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { generateMetaLinks } from '../utils/links'
 import { getCompanies, getCompany } from '../adapters/company-adapter'
 import { HttpStatusCode } from 'axios'
+import { CompanySchema, CompanyDetailsSchema } from '../types/company'
 
 /**
  * @swagger
@@ -53,8 +54,8 @@ export const routes = (router: KoaRouter) => {
         return (ctx.status = HttpStatusCode.NotFound)
       }
 
-      ctx.body = {
-        content: companies.map((company) => ({
+      const responseContent = companies.map((company) => {
+        const parsedCompany = CompanySchema.parse({
           ...company,
           _links: {
             self: {
@@ -64,7 +65,12 @@ export const routes = (router: KoaRouter) => {
               href: `/properties?companyCode=${company.code}`,
             },
           },
-        })),
+        })
+        return parsedCompany
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
         _links: generateMetaLinks(ctx, '/companies'),
       }
@@ -115,13 +121,17 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      ctx.body = {
-        content: company,
-        ...metadata,
+      const parsedCompanyDetails = CompanyDetailsSchema.parse({
+        ...company,
         _links: generateMetaLinks(ctx, '/properties', {
           id: ctx.params.response,
           properties: company?.code || '',
         }),
+      })
+
+      ctx.body = {
+        content: parsedCompanyDetails,
+        ...metadata,
       }
     } catch (err) {
       ctx.status = 500
