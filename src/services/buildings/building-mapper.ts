@@ -56,11 +56,11 @@ export function mapDbToBuildingDetails(dbRecord: BuildingDetails) {
     ...building,
     propertyObject: {
       energy: {
-        energyClass: dbRecord.energyClass || 0,
-        heatingNature: dbRecord.heatingNature || 0,
+        energyClass: dbRecord.propertyObject?.energyClass || 0,
+        heatingNature: dbRecord.propertyObject?.heatingNature || 0,
       },
-      condition: dbRecord.condition || 0,
-      conditionInspectionDate: dbRecord.conditionInspectionDate,
+      condition: dbRecord.propertyObject?.condition || 0,
+      conditionInspectionDate: dbRecord.propertyObject?.conditionInspectionDate,
     },
   })
 }
