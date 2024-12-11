@@ -85,7 +85,23 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: residences,
+        content: residences.map(residence => ({
+          ...residence,
+          _links: {
+            self: {
+              href: `/residences/${residence.id}`
+            },
+            building: residence.links?.building ? {
+              href: `/buildings/${residence.links.building}`
+            } : undefined,
+            property: residence.links?.property ? {
+              href: `/properties/${residence.links.property}`
+            } : undefined,
+            rooms: {
+              href: `/rooms?residenceCode=${residence.code}`
+            }
+          }
+        })),
         ...metadata,
       }
     } catch (err) {

@@ -79,7 +79,20 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      ctx.body = { content: components, ...metadata }
+      ctx.body = { 
+        content: components.map(component => ({
+          ...component,
+          _links: {
+            self: {
+              href: `/components/${component.id}`
+            },
+            maintenanceUnit: {
+              href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}`
+            }
+          }
+        })), 
+        ...metadata 
+      }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'

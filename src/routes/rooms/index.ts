@@ -76,7 +76,14 @@ export const routes = (router: KoaRouter) => {
     try {
       const rooms = await getRooms(buildingCode, floorCode, residenceCode)
       ctx.body = {
-        content: rooms,
+        content: rooms.map(room => ({
+          ...room,
+          _links: {
+            self: {
+              href: `/rooms/${room.id}`
+            }
+          }
+        })),
         ...metadata,
       }
     } catch (err) {
