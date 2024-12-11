@@ -6,6 +6,9 @@ import {
   getResidencesByBuildingCodeAndFloorCode,
 } from '../../adapters/residence-adapter'
 import { residencesQueryParamsSchema } from '../../types/residence'
+import { generateMetaLinks } from '../../utils/links'
+import { Residence } from '@prisma/client'
+import { mapDbToResidence } from './residence-mapper'
 
 /**
  * @swagger
@@ -85,12 +88,14 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: residences.map(mapDbToResidence).filter((r): r is Residence => r !== null),
+        content: residences
+          .map(mapDbToResidence)
+          .filter((r): r is Residence => r !== null),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/residences', { 
+        _links: generateMetaLinks(ctx, '/residences', {
           buildingCode,
-          ...(floorCode && { floorCode })
-        })
+          ...(floorCode && { floorCode }),
+        }),
       }
     } catch (err) {
       ctx.status = 500
@@ -137,10 +142,10 @@ export const routes = (router: KoaRouter) => {
       }
 
       //todo: add room link
-      ctx.body = { 
-        content: residence, 
+      ctx.body = {
+        content: residence,
         ...metadata,
-        _links: generateMetaLinks(ctx, '/residences', { id })
+        _links: generateMetaLinks(ctx, '/residences', { id }),
       }
     } catch (err) {
       ctx.status = 500
