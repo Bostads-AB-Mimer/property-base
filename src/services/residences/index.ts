@@ -137,7 +137,11 @@ export const routes = (router: KoaRouter) => {
       }
 
       //todo: add room link
-      ctx.body = { content: residence, ...metadata }
+      ctx.body = { 
+        content: residence, 
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/residences', { id })
+      }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'

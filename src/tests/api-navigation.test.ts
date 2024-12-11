@@ -46,9 +46,9 @@ describe('API Navigation Tests', () => {
     expect(propertiesResponse.data.content.length).toBeGreaterThan(0)
 
     // Check that _links are present in the response
-    expect(response.body._links).toBeDefined()
-    expect(response.body._links.self).toBeDefined()
-    expect(response.body._links.self.href).toBeDefined()
+    expect(companyResponse.data._links).toBeDefined()
+    expect(companyResponse.data._links.self).toBeDefined()
+    expect(companyResponse.data._links.self.href).toBeDefined()
 
     // Verify property structure
     const property = propertiesResponse.data.content[0]

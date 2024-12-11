@@ -116,7 +116,7 @@ export const routes = (router: KoaRouter) => {
         content: company,
         ...metadata,
         _links: generateMetaLinks(ctx, '/properties', {
-          id: ctx.params.response,
+          id: ctx.params.id,
           properties: company?.code || '',
         }),
       }
