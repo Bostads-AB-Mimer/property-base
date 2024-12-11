@@ -12,29 +12,22 @@ export const residencesQueryParamsSchema = z.object({
   floorCode: z.string().optional(),
 })
 
-export const ResidenceSchema = z.object({
-  id: z.string(),
-  code: z.string(),
-  name: z.string(),
-  links: z
-    .object({
-      self: z.object({
-        href: z.string().trim().describe('URI to the residence resource'),
-      }),
-      building: z.object({
-        href: z.string().trim().describe('URI to the associated building'),
-      }),
-      property: z.object({
-        href: z.string().trim().describe('URI to the associated property'),
-      }),
-    })
-    .describe('HATEOAS links for resource navigation'),
+// Base schema for common residence fields
+export const ResidenceBaseSchema = BaseBasicSchema.extend({
   location: z.string().trim().optional(),
+  entrance: z.string().trim(),
+  partNo: z.number().optional().nullable(),
+  part: z.string().trim().optional().nullable(),
+  deleted: z.boolean(),
+  validityPeriod: ValidityPeriodSchema,
+})
+
+export const ResidenceSchema = ResidenceBaseSchema.extend({
   accessibility: z.object({
-    wheelchairAccessible: z.boolean(),
-    residenceAdapted: z.boolean(),
-    elevator: z.boolean(),
-  }),
+    wheelchairAccessible: z.boolean().describe('Whether the residence is wheelchair accessible'),
+    residenceAdapted: z.boolean().describe('Whether the residence has been adapted for accessibility'),
+    elevator: z.boolean().describe('Whether the residence has elevator access'),
+  }).describe('Accessibility features of the residence'),
   features: z.object({
     balcony1: z
       .object({

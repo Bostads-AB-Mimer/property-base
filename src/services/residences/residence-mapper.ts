@@ -1,16 +1,34 @@
 import { ResidenceWithRelations } from '../../adapters/residence-adapter'
 import { ResidenceSchema, Residence } from '../../types/residence'
+import { toBoolean, trimString } from '../../utils/data-conversion'
 
-export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence {
-  if (!dbRecord) return {} as Residence
-  return ResidenceSchema.parse({
-    id: dbRecord.id || '',
-    code: dbRecord.code || '',
-    name: dbRecord.name || '',
+export function mapDbToResidence(dbRecord: ResidenceWithRelations): Residence | null {
+  if (!dbRecord) return null
+  const residence = ResidenceSchema.parse({
+    id: trimString(dbRecord.id) || '',
+    code: trimString(dbRecord.code) || '',
+    name: trimString(dbRecord.name) || '',
     accessibility: {
-      wheelchairAccessible: Boolean(dbRecord.wheelchairAccessible),
-      residenceAdapted: Boolean(dbRecord.residenceAdapted),
-      elevator: Boolean(dbRecord.elevator),
+      wheelchairAccessible: toBoolean(dbRecord.wheelchairAccessible),
+      residenceAdapted: toBoolean(dbRecord.residenceAdapted),
+      elevator: toBoolean(dbRecord.elevator),
+    },
+    _links: {
+      self: {
+        href: `/residences/${dbRecord.id}`,
+      },
+      details: {
+        href: `/residences/${dbRecord.id}/details`,
+      },
+      building: {
+        href: `/buildings/${dbRecord.buildingCode}`,
+      },
+      property: {
+        href: `/properties/${dbRecord.propertyCode}`,
+      },
+      rooms: {
+        href: `/rooms?residenceCode=${dbRecord.code}`,
+      }
     },
     location: dbRecord.location || undefined,
     features: {

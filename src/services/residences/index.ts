@@ -85,8 +85,12 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: residences,
+        content: residences.map(mapDbToResidence).filter((r): r is Residence => r !== null),
         ...metadata,
+        _links: generateMetaLinks(ctx, '/residences', { 
+          buildingCode,
+          ...(floorCode && { floorCode })
+        })
       }
     } catch (err) {
       ctx.status = 500
