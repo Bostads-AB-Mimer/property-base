@@ -7,6 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getBuildingById, getBuildings } from '../../adapters/building-adapter'
 import { buildingsQueryParamsSchema } from '../../types/building'
+import { generateMetaLinks } from '../../utils/links'
 
 /**
  * @swagger
