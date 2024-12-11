@@ -1,8 +1,18 @@
-import { BuildingDetails } from '../../adapters/building-adapter'
+import { Building, Prisma } from '@prisma/client'
 import { BuildingSchema, BuildingDetailsSchema } from '../../types/building'
 import { toBoolean, trimString } from '../../utils/data-conversion'
 
-export function mapDbToBuilding(dbRecord: BuildingDetails) {
+type BuildingWithRelations = Prisma.BuildingGetPayload<{
+  include: {
+    buildingType: true
+    marketArea: true
+    district: true
+    propertyDesignation: true
+    propertyObject: true
+  }
+}>
+
+export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({
@@ -46,7 +56,7 @@ export function mapDbToBuilding(dbRecord: BuildingDetails) {
   })
 }
 
-export function mapDbToBuildingDetails(dbRecord: BuildingDetails) {
+export function mapDbToBuildingDetails(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   const building = mapDbToBuilding(dbRecord)
