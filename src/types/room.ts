@@ -33,6 +33,14 @@ export const RoomSchema = z.object({
     details: z.object({
       href: z.string().describe('URI to detailed version of this resource'),
     }),
+  }).describe('HATEOAS links for resource navigation'),
+})
+
+export const RoomDetailsSchema = RoomSchema.extend({
+  _links: z.object({
+    self: z.object({
+      href: z.string().describe('URI to the room resource'),
+    }),
     building: z.object({
       href: z.string().describe('URI to the associated building'),
     }),
@@ -68,3 +76,4 @@ export const RoomSchema = z.object({
 })
 
 export type Room = z.infer<typeof RoomSchema>
+export type RoomDetails = z.infer<typeof RoomDetailsSchema>

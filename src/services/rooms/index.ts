@@ -76,8 +76,9 @@ export const routes = (router: KoaRouter) => {
     try {
       const rooms = await getRooms(buildingCode, floorCode, residenceCode)
       ctx.body = {
-        content: rooms,
+        content: rooms.map(mapDbToRoom),
         ...metadata,
+        _links: generateMetaLinks(ctx, '/rooms'),
       }
     } catch (err) {
       ctx.status = 500
