@@ -85,7 +85,7 @@ export const getComponentByMaintenanceUnitCode = async (
       maintenanceUnits: component.propertyStructures.map(ps => ({
         id: ps.maintenanceUnitByCode?.maintenanceUnitId || '',
         code: ps.maintenanceUnitByCode?.maintenanceUnitCode || '',
-        name: ps.maintenanceUnitByCode?.name
+        name: ps.maintenanceUnitByCode?.name || null
       }))
     }
     return mappedComponent
