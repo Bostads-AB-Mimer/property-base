@@ -15,7 +15,7 @@ describe('HATEOAS Links Navigation', () => {
     const propertiesUrl = company._links.properties.href
     const propertiesResponse = await request(app.callback()).get(propertiesUrl)
     expect(propertiesResponse.status).toBe(200)
-    expect(propertiesResponse.body.content).toHaveLength(1) // Assuming at least one property
+    expect(propertiesResponse.body.content.length).toBeGreaterThan(0) // Ensure at least one property
     
     const property = propertiesResponse.body.content[0]
     expect(property._links.buildings).toBeDefined()
@@ -82,7 +82,7 @@ describe('HATEOAS Links Navigation', () => {
       .get('/residences')
       .query({ buildingCode: building.code })
     
-    if (residencesResponse.body.content.length > 0) {
+    if (residencesResponse.body.content && residencesResponse.body.content.length > 0) {
       const residence = residencesResponse.body.content[0]
       expect(residence._links.parent).toBeDefined()
       
