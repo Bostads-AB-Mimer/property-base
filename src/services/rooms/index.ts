@@ -3,6 +3,7 @@ import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getRoomById, getRooms } from '../../adapters/room-adapter'
 import { roomsQueryParamsSchema } from '../../types/room'
 import { generateMetaLinks } from '../../utils/links'
+import { mapDbToRoom } from './room-mapper'
 
 /**
  * @swagger
@@ -127,7 +128,7 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: mapDbToRoomDetails(room),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/rooms', { id: ctx.params.id })
+        _links: generateMetaLinks(ctx, '/rooms', { id: ctx.params.id }),
       }
     } catch (err) {
       ctx.status = 500

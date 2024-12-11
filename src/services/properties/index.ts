@@ -81,10 +81,10 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: properties.map(mapDbToProperty),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/properties', { 
+        _links: generateMetaLinks(ctx, '/properties', {
           companyCode: companyCode,
-          ...(tract && { tract })
-        })
+          ...(tract && { tract }),
+        }),
       }
     } catch (err) {
       ctx.status = 500
@@ -138,9 +138,9 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: mapDbToPropertyDetails(property),
         ...metadata,
-        _links: generateMetaLinks(ctx, '/properties', { 
-          id: ctx.params.id 
-        })
+        _links: generateMetaLinks(ctx, '/properties', {
+          id: ctx.params.id,
+        }),
       }
     } catch (err) {
       ctx.status = 500
