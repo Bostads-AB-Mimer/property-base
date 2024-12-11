@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { BaseBasicSchema, TimestampSchema, ValidityPeriodSchema } from './shared'
 
-export const RoomBasicSchema = BaseBasicSchema.extend({})
 
 export const roomsQueryParamsSchema = z.object({
   buildingCode: z
