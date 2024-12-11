@@ -1,48 +1,66 @@
 import { BuildingWithRelations } from '../../adapters/building-adapter'
-import { BuildingSchema } from '../../types/building'
-import { toBoolean } from '../../utils/data-conversion'
+import { BuildingSchema, BuildingDetailsSchema } from '../../types/building'
+import { toBoolean, trimString } from '../../utils/data-conversion'
 
 export function mapDbToBuilding(dbRecord: BuildingWithRelations) {
   if (!dbRecord) return null
 
   return BuildingSchema.parse({
-    id: dbRecord.id,
-    code: dbRecord.buildingCode,
-    name: dbRecord.name,
-    buildingType: dbRecord.buildingType
-      ? {
-          id: dbRecord.buildingType.id,
-          code: dbRecord.buildingType.buildingTypeCode,
-          name: dbRecord.buildingType.buildingTypeName,
-        }
-      : null,
+    id: trimString(dbRecord.id),
+    code: trimString(dbRecord.buildingCode),
+    name: trimString(dbRecord.name),
+    buildingType: dbRecord.buildingType ? {
+      id: trimString(dbRecord.buildingType.id),
+      code: trimString(dbRecord.buildingType.buildingTypeCode),
+      name: trimString(dbRecord.buildingType.buildingTypeName),
+    } : null,
     construction: {
       constructionYear: dbRecord.constructionYear,
       renovationYear: dbRecord.renovationYear,
       valueYear: dbRecord.valueYear,
     },
     features: {
-      heating: dbRecord.heating,
-      fireRating: dbRecord.fireRating,
+      heating: trimString(dbRecord.heating),
+      fireRating: trimString(dbRecord.fireRating),
     },
     insurance: {
-      class: dbRecord.insuranceClass,
+      class: trimString(dbRecord.insuranceClass),
       value: dbRecord.insuranceValue,
     },
     deleted: toBoolean(dbRecord.deleteMark),
+    timestamp: dbRecord.timestamp,
     _links: {
       self: {
         href: `/buildings/${dbRecord.id}`,
       },
       property: {
-        href: `/properties/${dbRecord.propertyDesignation?.code}`,
+        href: `/properties/${dbRecord.propertyDesignation?.code || ''}`,
       },
       residences: {
-        href: `/residences/buildingCode/${dbRecord.buildingCode}`,
+        href: `/residences?buildingCode=${dbRecord.buildingCode}`,
       },
       staircases: {
-        href: `/staircases/${dbRecord.buildingCode}`,
+        href: `/staircases?buildingCode=${dbRecord.buildingCode}`,
       },
+    },
+  })
+}
+
+export function mapDbToBuildingDetails(dbRecord: BuildingWithRelations) {
+  if (!dbRecord) return null
+
+  const building = mapDbToBuilding(dbRecord)
+  if (!building) return null
+
+  return BuildingDetailsSchema.parse({
+    ...building,
+    propertyObject: {
+      energy: {
+        energyClass: dbRecord.energyClass || 0,
+        heatingNature: dbRecord.heatingNature || 0,
+      },
+      condition: dbRecord.condition || 0,
+      conditionInspectionDate: dbRecord.conditionInspectionDate,
     },
   })
 }
