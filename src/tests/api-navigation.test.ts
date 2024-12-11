@@ -115,7 +115,7 @@ describe('API Navigation Tests', () => {
     const building = buildingsResponse.body.content[0]
     const residencesResponse = await request(app.callback())
       .get('/residences')
-      .query({ buildingCode: building.code })
+      .query({ buildingCode: building.buildingCode || building.code })
     
     expect(residencesResponse.status).toBe(200)
     expect(residencesResponse.body.content).toBeDefined()
