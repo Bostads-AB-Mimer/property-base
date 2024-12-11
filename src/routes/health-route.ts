@@ -11,8 +11,13 @@ export const routes = (router: KoaRouter) => {
       ctx.body = { status: 'healthy' }
     } catch (error) {
       ctx.status = 500
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-      ctx.body = { status: 'unhealthy', error: errorMessage, message: 'Do you have the VPN running?' }
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error'
+      ctx.body = {
+        status: 'unhealthy',
+        error: errorMessage,
+        message: 'Do you have the VPN running?',
+      }
     } finally {
       await prisma.$disconnect()
     }
