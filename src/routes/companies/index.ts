@@ -60,6 +60,9 @@ export const routes = (router: KoaRouter) => {
             self: {
               href: `/companies/Id/${company.id}`,
             },
+            properties: {
+              href: `/properties?companyCode=${company.code}`
+            }
           },
         })),
         ...metadata,
