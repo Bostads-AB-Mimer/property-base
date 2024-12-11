@@ -12,7 +12,7 @@ export const getComponentByMaintenanceUnitCode = async (
       propertyStructures: {
         some: {
           maintenanceUnitByCode: {
-            maintenanceUnitCode,
+            code: maintenanceUnitCode,
           },
         },
       },
@@ -30,7 +30,7 @@ export const getComponentByMaintenanceUnitCode = async (
       warrantyEndDate: true,
       componentType: {
         select: {
-          componentTypeCode: true,
+          code: true,
           name: true,
         },
       },
@@ -44,8 +44,8 @@ export const getComponentByMaintenanceUnitCode = async (
         select: {
           maintenanceUnitByCode: {
             select: {
-              maintenanceUnitId: true,
-              maintenanceUnitCode: true,
+              id: true,
+              code: true,
               name: true,
             },
           },
@@ -54,5 +54,32 @@ export const getComponentByMaintenanceUnitCode = async (
     },
   })
 
-  return response
+  return response.map((component) => ({
+    id: component.id,
+    code: component.code,
+    name: component.name,
+    details: {
+      manufacturer: component.manufacturer,
+      typeDesignation: component.typeDesignation,
+    },
+    dates: {
+      installation: component.installationDate,
+      warrantyEnd: component.warrantyEndDate,
+    },
+    classification: {
+      componentType: {
+        code: component.componentType?.code ?? '',
+        name: component.componentType?.name ?? '',
+      },
+      category: {
+        code: component.componentCategory?.code ?? '',
+        name: component.componentCategory?.name ?? '',
+      },
+    },
+    maintenanceUnits: component.propertyStructures.map((ps) => ({
+      id: ps.maintenanceUnitByCode?.id ?? '',
+      code: ps.maintenanceUnitByCode?.code ?? '',
+      name: ps.maintenanceUnitByCode?.name ?? '',
+    })),
+  }))
 }

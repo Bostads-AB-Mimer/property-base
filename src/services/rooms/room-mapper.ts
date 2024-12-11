@@ -5,24 +5,10 @@ import { toBoolean, trimString } from '../../utils/data-conversion'
 export function mapDbToRoom(dbRecord: RoomWithRelations) {
   if (!dbRecord) return null
 
-  return RoomSchema.parse({
-    id: dbRecord.roomId || '',
-    code: dbRecord.roomCode || '',
-    name: dbRecord.name,
-    _links: {
-      self: {
-        href: `/rooms/${dbRecord.roomId}`,
-      },
-      building: {
-        href: `/buildings/${dbRecord.buildingCode || ''}`,
-      },
-      residence: {
-        href: `/residences/${dbRecord.residenceCode || ''}`,
-      },
-      staircase: {
-        href: `/staircases/${dbRecord.floorCode || ''}`,
-      },
-    },
+  return {
+    id: dbRecord.id,
+    code: dbRecord.roomCode,
+    name: dbRecord.name?.trim(),
     usage: {
       shared: toBoolean(dbRecord.sharedUse),
       allowPeriodicWorks: toBoolean(dbRecord.allowPeriodicWorks),

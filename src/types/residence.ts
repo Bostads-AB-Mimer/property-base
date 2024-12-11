@@ -1,13 +1,22 @@
 import { z } from 'zod'
-import { BaseBasicSchema, TimestampSchema, ValidityPeriodSchema } from './shared'
+import {
+  BaseBasicSchema,
+  TimestampSchema,
+  ValidityPeriodSchema,
+} from './shared'
 
-export const ResidenceBasicSchema = BaseBasicSchema.extend({})
+export const residencesQueryParamsSchema = z.object({
+  buildingCode: z
+    .string()
+    .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
+  floorCode: z.string().optional(),
+})
 
-export const ResidenceSchema = ResidenceBasicSchema.extend({
-  id: z.string().trim(),
-  code: z.string().trim(),
-  name: z.string().trim(),
-  _links: z
+export const ResidenceSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string(),
+  links: z
     .object({
       self: z.object({
         href: z.string().trim().describe('URI to the residence resource'),

@@ -5,11 +5,8 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import {
-  getBuildingByCode,
-  getBuildings,
-} from '../../adapters/building-adapter'
-import { generateMetaLinks } from '../../utils/links'
+import { getBuildingById, getBuildings } from '../../adapters/building-adapter'
+import { buildingsQueryParamsSchema } from '../../types/building'
 
 /**
  * @swagger
@@ -21,7 +18,7 @@ import { generateMetaLinks } from '../../utils/links'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /buildings/{propertyCode}/:
+   * /buildings:
    *   get:
    *     summary: Get all buildings for a specific property
    *     description: |
@@ -31,7 +28,7 @@ export const routes = (router: KoaRouter) => {
    *     tags:
    *       - Buildings
    *     parameters:
-   *       - in: path
+   *       - in: query
    *         name: propertyCode
    *         required: true
    *         schema:
@@ -49,21 +46,42 @@ export const routes = (router: KoaRouter) => {
    *                   type: array
    *                   items:
    *                     $ref: '#/components/schemas/Building'
+   *       400:
+   *         description: Invalid query parameters.
+   *       500:
+   *         description: Internal server error.
    */
+  router.get(['(.*)/buildings', '(.*)/buildings/'], async (ctx) => {
+    const queryParams = buildingsQueryParamsSchema.safeParse(ctx.query)
 
-  router.get(
-    ['(.*)/buildings/:propertyCode/', '(.*)/buildings/:propertyCode'],
-    async (ctx) => {
-      const metadata = generateRouteMetadata(ctx)
-      logger.info('GET /buildings/:propertyId/', metadata)
-      const response = await getBuildings(ctx.params.propertyCode)
-      ctx.body = { content: response, ...metadata }
+    if (!queryParams.success) {
+      ctx.status = 400
+      ctx.body = { errors: queryParams.error.errors }
+      return
     }
-  )
+
+    const { propertyCode } = queryParams.data
+
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(`GET /buildings?propertyCode=${propertyCode}`, metadata)
+
+    try {
+      const buildings = await getBuildings(propertyCode)
+
+      ctx.body = {
+        content: buildings,
+        ...metadata,
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
 
   /**
    * @swagger
-   * /buildings/buildingCode/{buildingCode}/:
+   * /buildings/{id}:
    *   get:
    *     summary: Get detailed information about a specific building
    *     description: |
@@ -74,12 +92,12 @@ export const routes = (router: KoaRouter) => {
    *       - Buildings
    *     parameters:
    *       - in: path
-   *         name: buildingCode
+   *         name: id
    *         required: true
    *         schema:
    *           type: string
    *           minLength: 7
-   *         description: The unique building code (minimum 7 characters)
+   *         description: The unique id of the building
    *     responses:
    *       200:
    *         description: Successfully retrieved building information
@@ -97,34 +115,30 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
-
-  router.get('(.*)/buildings/buildingCode/:buildingCode/', async (ctx) => {
+  router.get('(.*)/buildings/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /buildings/buildingCode/:buildingCode/', metadata)
-
-    const { buildingCode } = ctx.params
-
-    if (!buildingCode || buildingCode.length < 7) {
-      ctx.status = 400
-      ctx.body = { content: 'Invalid building code', ...metadata }
-      return
-    }
-
-    const parsedBuildingCode = buildingCode.slice(0, 7)
+    const id = ctx.params.id
+    logger.info(`GET /buildings/${id}`, metadata)
 
     try {
-      const response = await getBuildingByCode(parsedBuildingCode)
+      const building = await getBuildingById(id)
+
+      if (!building) {
+        ctx.status = 404
+        return
+      }
+
       ctx.body = {
-        content: response,
+        content: building,
         ...metadata,
         _links: generateMetaLinks(ctx, '/buildings', {
           buildingCode: parsedBuildingCode,
         }),
       }
-    } catch (error) {
-      logger.error('Error fetching building by code:', error)
+    } catch (err) {
       ctx.status = 500
-      ctx.body = { content: 'Internal server error', ...metadata }
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 }

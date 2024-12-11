@@ -1,29 +1,16 @@
 import { z } from 'zod'
 import { BaseBasicSchema, TimestampSchema } from './shared'
 
-export const BuildingBasicSchema = BaseBasicSchema.extend({})
+export const buildingsQueryParamsSchema = z.object({
+  propertyCode: z.string().min(1, {
+    message: 'propertyCode is required and must be a non-empty string.',
+  }),
+})
 
-export const BuildingSchema = BuildingBasicSchema.extend({
-  id: z.string().trim().describe('Unique identifier for the building'),
-  code: z.string().trim().describe('Building code used in the system'),
-  name: z.string().trim().describe('Display name of the building'),
-  _links: z.object({
-    self: z.object({
-      href: z.string().describe('URI to the building resource'),
-    }),
-    details: z.object({
-      href: z.string().describe('URI to detailed version of this resource'),
-    }),
-    property: z.object({
-      href: z.string().describe('URI to the associated property'),
-    }),
-    residences: z.object({
-      href: z.string().describe('URI to list all residences in this building'),
-    }),
-    staircases: z.object({
-      href: z.string().describe('URI to list all staircases in this building'),
-    }),
-  }).describe('HATEOAS links for resource navigation'),
+export const BuildingSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string(),
   buildingType: z.object({
     id: z.string(),
     code: z.string(),

@@ -6,8 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
-import { mapDbToComponent } from './component-mapper'
-import { generateMetaLinks } from '../../utils/links'
+import { componentsQueryParamsSchema } from '../../types/component'
 
 /**
  * @swagger
@@ -19,7 +18,7 @@ import { generateMetaLinks } from '../../utils/links'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /components/:
+   * /components:
    *   get:
    *     summary: Gets a list of components for a maintenance unit
    *     description: |
@@ -35,7 +34,7 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The unique code identifying the maintenance unit
+   *         description: The unique code identifying the maintenance unit.
    *     responses:
    *       200:
    *         description: |
@@ -57,21 +56,34 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
-  router.get('(.*)/components/:maintenanceUnitCode/', async (ctx) => {
+  router.get('(.*)/components', async (ctx) => {
+    const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
+
+    if (!queryParams.success) {
+      ctx.status = 400
+      ctx.body = { errors: queryParams.error.errors }
+      return
+    }
+
+    const { maintenanceUnit } = queryParams.data
+
     const metadata = generateRouteMetadata(ctx)
-    logger.info('GET /components/:maintenanceUnitCode/', metadata)
-    const dbRecords = await getComponentByMaintenanceUnitCode(
-      ctx.params.maintenanceUnitCode
-    )
-    const response = dbRecords
-      .map(mapDbToComponent)
-      .filter((c): c is NonNullable<typeof c> => c !== null)
-    ctx.body = { 
-      content: response, 
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/components', {
-        maintenanceUnitCode: ctx.params.maintenanceUnitCode
-      })
+    logger.info(`GET /components?maintenanceUnit=${maintenanceUnit}`, metadata)
+
+    try {
+      const components =
+        await getComponentByMaintenanceUnitCode(maintenanceUnit)
+
+      if (!components) {
+        ctx.status = 404
+        return
+      }
+
+      ctx.body = { content: components, ...metadata }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 }

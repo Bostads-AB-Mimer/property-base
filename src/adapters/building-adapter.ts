@@ -27,7 +27,7 @@ const getBuildings = async (propertyCode: string) => {
       floorId: null,
     },
   })
-  
+
   const buildings = await prisma.building.findMany({
     where: {
       objectId: {
@@ -47,12 +47,10 @@ const getBuildings = async (propertyCode: string) => {
     .filter((b): b is NonNullable<typeof b> => b !== null)
 }
 
-const getBuildingByCode = async (buildingCode: string) => {
-  const building = await prisma.building.findFirst({
+const getBuildingById = async (id: string) => {
+  return prisma.building.findFirst({
     where: {
-      buildingCode: {
-        contains: buildingCode,
-      },
+      id: id,
     },
     include: {
       buildingType: true,
@@ -63,4 +61,4 @@ const getBuildingByCode = async (buildingCode: string) => {
   })
 }
 
-export { getBuildings, getBuildingByCode }
+export { getBuildings, getBuildingById }

@@ -1,12 +1,20 @@
 import { z } from 'zod'
-import { BaseBasicSchema, TimestampSchema, ValidityPeriodSchema } from './shared'
+import {
+  BaseBasicSchema,
+  TimestampSchema,
+  ValidityPeriodSchema,
+} from './shared'
 
-export const StaircaseBasicSchema = BaseBasicSchema.extend({})
+export const staircasesQueryParamsSchema = z.object({
+  buildingCode: z
+    .string()
+    .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
+})
 
-export const StaircaseSchema = StaircaseBasicSchema.extend({
-  id: z.string().trim(),
-  code: z.string().trim(),
-  name: z.string().trim().nullable(),
+export const StaircaseSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string().nullable(),
   features: z.object({
     floorPlan: z.string().nullable(),
     accessibleByElevator: z.boolean(),

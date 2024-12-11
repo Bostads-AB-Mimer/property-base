@@ -1,23 +1,16 @@
 import { z } from 'zod'
 import { BaseBasicSchema, TimestampSchema } from './shared'
 
-export const ComponentBasicSchema = BaseBasicSchema.extend({})
+export const componentsQueryParamsSchema = z.object({
+  maintenanceUnit: z
+    .string()
+    .min(1, { message: 'maintenanceUnit is required and cannot be empty.' }),
+})
 
-export const ComponentSchema = ComponentBasicSchema.extend({
-  id: z.string().trim().describe('Unique identifier for the component'),
-  code: z.string().trim().describe('Component code used in the system'),
-  name: z.string().trim().describe('Display name of the component'),
-  _links: z.object({
-    self: z.object({
-      href: z.string().describe('URI to the component resource'),
-    }),
-    maintenanceUnit: z.object({
-      href: z.string().describe('URI to the associated maintenance unit'),
-    }),
-    componentType: z.object({
-      href: z.string().describe('URI to the component type definition'),
-    }),
-  }).describe('HATEOAS links for resource navigation'),
+export const ComponentSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string(),
   details: z.object({
     manufacturer: z.string().nullable(),
     typeDesignation: z.string().nullable(),

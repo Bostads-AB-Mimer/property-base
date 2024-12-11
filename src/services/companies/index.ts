@@ -17,7 +17,6 @@ import { HttpStatusCode } from 'axios'
  *     description: Operations related to companies
  */
 export const routes = (router: KoaRouter) => {
-  //todo: fix docs
   /**
    * @swagger
    * /companies/:
@@ -46,29 +45,36 @@ export const routes = (router: KoaRouter) => {
   router.get(['(.*)/companies', '(.*)/companies/'], async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /companies', metadata)
-    const response = await getCompanies()
 
-    if (response === null) {
-      return (ctx.status = HttpStatusCode.NotFound)
-    }
+    try {
+      const companies = await getCompanies()
 
-    ctx.body = {
-      content: response.map((company) => ({
-        ...company,
-        _links: {
-          self: {
-            href: `/companies/Id/${company.id}`,
+      if (companies === null) {
+        return (ctx.status = HttpStatusCode.NotFound)
+      }
+
+      ctx.body = {
+        content: companies.map((company) => ({
+          ...company,
+          _links: {
+            self: {
+              href: `/companies/Id/${company.id}`,
+            },
           },
-        },
-      })),
-      ...metadata,
-      _links: generateMetaLinks(ctx, '/companies'),
+        })),
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/companies'),
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
   })
 
   /**
    * @swagger
-   * /companies/Id/{id}/:
+   * /companies/{id}:
    *   get:
    *     summary: Get detailed information about a specific company
    *     description: |
@@ -93,21 +99,31 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   $ref: '#/components/schemas/CompanyDetails'
    */
-  router.get(
-    ['(.*)/companies/Id/:id', '(.*)/companies/Id/:id/'],
-    async (ctx) => {
-      const metadata = generateRouteMetadata(ctx)
-      logger.info('GET /companies/by/:id/', metadata)
-      const response = await getCompany(ctx.params.id)
-      console.log(response)
+  router.get('(.*)/companies/:id', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const id = ctx.params.id
+    logger.info(`GET /companies/${id}`, metadata)
+
+    try {
+      const company = await getCompany(ctx.params.id)
+
+      if (!company) {
+        ctx.status = 404
+        return
+      }
+
       ctx.body = {
-        content: response,
+        content: company,
         ...metadata,
         _links: generateMetaLinks(ctx, '/properties', {
           id: ctx.params.response,
-          properties: response?.code || '',
+          properties: company?.code || '',
         }),
       }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
     }
-  )
+  })
 }

@@ -1,6 +1,13 @@
 import { z } from 'zod'
 import { BaseBasicSchema, TimestampSchema } from './shared'
 
+export const propertiesQueryParamsSchema = z.object({
+  companyCode: z.string().min(3, {
+    message: 'companyCode is required and must be a non-empty string.',
+  }),
+  tract: z.string().optional(),
+})
+
 export const PropertyDesignationSchema = z.object({
   propertyDesignationId: z.string(),
   code: z.string(),

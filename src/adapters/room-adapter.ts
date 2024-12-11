@@ -1,5 +1,6 @@
 import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
+import { mapDbToRoom } from '../services/rooms/room-mapper'
 
 const prisma = new PrismaClient({})
 
@@ -11,6 +12,7 @@ export type RoomWithRelations = Prisma.RoomGetPayload<{
 
 //todo: add types
 
+//todo: we might be able to skip using floorCode
 export const getRooms = async (
   buildingCode: string,
   floorCode: string,
@@ -31,8 +33,6 @@ export const getRooms = async (
       localeId: null,
     },
   })
-  
-  return rooms.map(mapDbToRoom).filter((r): r is NonNullable<typeof r> => r !== null)
 
   const rooms = await prisma.room.findMany({
     where: {
@@ -40,7 +40,56 @@ export const getRooms = async (
         in: map(propertyStructures, 'objectId'),
       },
     },
-    include: {
+    select: {
+      id: true,
+      roomCode: true,
+      name: true,
+      sharedUse: true,
+      sortingOrder: true,
+      allowPeriodicWorks: true,
+      spaceType: true,
+      hasToilet: true,
+      isHeated: true,
+      hasThermostatValve: true,
+      orientation: true,
+      installationDate: true,
+      deleteMark: true,
+      fromDate: true,
+      toDate: true,
+      availableFrom: true,
+      availableTo: true,
+      timestamp: true,
+      roomType: true,
+    },
+  })
+
+  return rooms.map(mapDbToRoom)
+}
+
+export const getRoomById = async (id: string) => {
+  return prisma.room.findUnique({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      roomCode: true,
+      name: true,
+      sharedUse: true,
+      sortingOrder: true,
+      allowPeriodicWorks: true,
+      spaceType: true,
+      hasToilet: true,
+      isHeated: true,
+      hasThermostatValve: true,
+      orientation: true,
+      installationDate: true,
+      deleteMark: true,
+      fromDate: true,
+      toDate: true,
+      availableFrom: true,
+      availableTo: true,
+      timestamp: true,
       roomType: true,
     },
   })
