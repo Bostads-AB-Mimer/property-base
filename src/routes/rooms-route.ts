@@ -1,7 +1,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getRoomById, getRooms } from '../adapters/room-adapter'
-import { roomsQueryParamsSchema } from '../types/room'
+import { roomsQueryParamsSchema, RoomSchema } from '../types/room'
 import { generateMetaLinks } from '../utils/links'
 
 /**
@@ -75,8 +75,8 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const rooms = await getRooms(buildingCode, floorCode, residenceCode)
-      ctx.body = {
-        content: rooms.map((room) => ({
+      const responseContent = rooms.map((room) => {
+        const parsedRoom = RoomSchema.parse({
           ...room,
           _links: {
             self: {
@@ -92,7 +92,12 @@ export const routes = (router: KoaRouter) => {
               href: `/residences/${residenceCode}`,
             },
           },
-        })),
+        })
+        return parsedRoom
+      })
+
+      ctx.body = {
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
