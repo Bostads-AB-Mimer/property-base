@@ -1,8 +1,14 @@
-import { RoomWithRelations } from '../../adapters/room-adapter'
+import { Room, RoomType, Prisma } from '@prisma/client'
 import { RoomSchema, RoomDetailsSchema } from '../../types/room'
 import { toBoolean, trimString } from '../../utils/data-conversion'
 
-export function mapDbToRoom(dbRecord: RoomWithRelations) {
+type RoomWithRelations = Prisma.RoomGetPayload<{
+  include: {
+    roomType: true
+  }
+}>
+
+export function mapDbToRoom(dbRecord: Room & { roomType: RoomType | null }) {
   if (!dbRecord) return null
 
   return RoomSchema.parse({
@@ -20,7 +26,7 @@ export function mapDbToRoom(dbRecord: RoomWithRelations) {
   })
 }
 
-export function mapDbToRoomDetails(dbRecord: RoomWithRelations) {
+export function mapDbToRoomDetails(dbRecord: Room & { roomType: RoomType | null }) {
   if (!dbRecord) return null
 
   return RoomDetailsSchema.parse({
