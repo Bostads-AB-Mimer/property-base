@@ -58,12 +58,14 @@ export const routes = (router: KoaRouter) => {
       const responseContent = companies.map((company) => {
         const parsedCompany = CompanySchema.parse({
           ...company,
+        })
+        return {
+          ...parsedCompany,
           _links: CompanyLinksSchema.parse({
             self: { href: `/companies/${company.id}` },
             properties: { href: `/properties?companyCode=${company.code}` },
           }),
-        })
-        return parsedCompany
+        }
       })
 
       ctx.body = {
