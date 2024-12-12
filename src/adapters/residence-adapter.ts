@@ -5,7 +5,7 @@ const prisma = new PrismaClient({})
 
 //todo: add types
 
-export type ResidenceBasic = Prisma.ResidenceGetPayload<{
+export type Residence = Prisma.ResidenceGetPayload<{
   select: {
     id: true
     code: true
@@ -28,7 +28,7 @@ export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
   }
 }>
 
-const residenceBasicSelect = {
+const residenceSelect = {
   id: true,
   code: true,
   name: true,
@@ -78,7 +78,7 @@ export const getResidencesByBuildingCode = async (buildingCode: string): Promise
         in: map(propertyStructures, 'objectId'),
       },
     },
-    select: residenceBasicSelect
+    select: residenceSelect
   })
 }
 

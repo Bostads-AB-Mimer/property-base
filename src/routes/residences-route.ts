@@ -8,6 +8,7 @@ import {
 import {
   residencesQueryParamsSchema,
   ResidenceSchema,
+  ResidenceDetailedSchema,
 } from '../types/residence'
 import { ResidenceLinksSchema, ResidenceListLinksSchema } from '../types/links'
 
