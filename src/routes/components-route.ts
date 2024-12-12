@@ -58,7 +58,12 @@ export const routes = (router: KoaRouter) => {
    *         description: Internal server error
    */
   router.get('(.*)/components', async (ctx) => {
-    const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
+    // Add default type=residence if residenceCode is provided
+    const queryWithType = ctx.query.residenceCode 
+      ? { ...ctx.query, type: 'residence' }
+      : ctx.query;
+      
+    const queryParams = componentsQueryParamsSchema.safeParse(queryWithType)
 
     if (!queryParams.success) {
       ctx.status = 400
