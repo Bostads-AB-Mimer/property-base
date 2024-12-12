@@ -133,7 +133,7 @@ export const routes = (router: KoaRouter) => {
           entrance: residence.entrance || '',
           partNo: residence.partNo,
           part: residence.part,
-          deleted: Boolean(residence.deleteMark),
+          deleted: Boolean(residence.deleted),
           validityPeriod: {
             fromDate: residence.fromDate,
             toDate: residence.toDate,
