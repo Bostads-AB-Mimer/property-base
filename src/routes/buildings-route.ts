@@ -97,7 +97,7 @@ export const routes = (router: KoaRouter) => {
             valueYear: building.valueYear,
           },
           features: {
-            heating: building.heatingType || '',
+            heating: building.heating || '',
             fireRating: building.fireRating || '',
           },
           insurance: {

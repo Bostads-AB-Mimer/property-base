@@ -8,7 +8,7 @@ describe('Staircases API', () => {
     // Get a building code to use in tests
     const buildingsResponse = await request(app.callback())
       .get('/buildings')
-      .query({ propertyCode: '001BAVERN' })
+      .query({ propertyCode: '07901' })
     buildingCode = buildingsResponse.body.content[0].code
   })
 
@@ -16,7 +16,7 @@ describe('Staircases API', () => {
     const response = await request(app.callback())
       .get('/staircases')
       .query({ buildingCode })
-    
+
     expect(response.status).toBe(200)
     expect(response.body.content).toBeDefined()
     expect(Array.isArray(response.body.content)).toBe(true)
@@ -36,7 +36,7 @@ describe('Staircases API', () => {
     const response = await request(app.callback())
       .get('/staircases')
       .query({ buildingCode: 'short' }) // Too short building code
-    
+
     expect(response.status).toBe(400)
     expect(response.body.errors).toBeDefined()
   })

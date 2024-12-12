@@ -58,7 +58,9 @@ export const getResidenceById = async (
   return response
 }
 
-export const getResidencesByBuildingCode = async (buildingCode: string): Promise<ResidenceBasic[]> => {
+export const getResidencesByBuildingCode = async (
+  buildingCode: string
+): Promise<Residence[]> => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
       buildingCode: {
@@ -78,7 +80,7 @@ export const getResidencesByBuildingCode = async (buildingCode: string): Promise
         in: map(propertyStructures, 'objectId'),
       },
     },
-    select: residenceSelect
+    select: residenceSelect,
   })
 }
 

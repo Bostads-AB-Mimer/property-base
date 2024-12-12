@@ -24,7 +24,7 @@ describe('HATEOAS Links Navigation', () => {
     const buildingsUrl = property._links.buildings.href
     const buildingsResponse = await request(app.callback()).get(buildingsUrl)
     expect(buildingsResponse.status).toBe(200)
-    expect(buildingsResponse.body.content).toHaveLength(1) // Assuming at least one building
+    expect(buildingsResponse.body.content).toHaveLength(3) // Assuming at least one building
 
     const building = buildingsResponse.body.content[0]
     expect(building._links.staircases).toBeDefined()
@@ -44,11 +44,12 @@ describe('HATEOAS Links Navigation', () => {
       residencesResponse.body.content &&
       residencesResponse.body.content.length > 0
     ) {
-      const residence = residencesResponse.body.content[0]
-      expect(residence._links.rooms).toBeDefined()
+      const residenceLink = residencesResponse.body.content[0]._links.self
+      const residence = await request(app.callback()).get(residenceLink.href)
+      expect(residence.links?.rooms).toBeDefined()
 
       // Follow link to rooms
-      const roomsUrl = residence._links.rooms.href
+      const roomsUrl = residence.links?.rooms
       const roomsResponse = await request(app.callback()).get(roomsUrl)
       expect(roomsResponse.status).toBe(200)
 

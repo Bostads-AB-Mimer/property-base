@@ -2,13 +2,13 @@ import request from 'supertest'
 import app from '../app'
 
 describe('Components API', () => {
-  const testMaintenanceUnit = 'TEST001' // Replace with a valid maintenance unit code
+  const testMaintenanceUnit = '0201' // Replace with a valid maintenance unit code
 
   it('should return components for a maintenance unit', async () => {
     const response = await request(app.callback())
       .get('/components')
       .query({ maintenanceUnit: testMaintenanceUnit })
-    
+
     expect(response.status).toBe(200)
     expect(response.body.content).toBeDefined()
     expect(Array.isArray(response.body.content)).toBe(true)
@@ -30,7 +30,7 @@ describe('Components API', () => {
     const response = await request(app.callback())
       .get('/components')
       .query({ maintenanceUnit: '' }) // Empty maintenance unit code
-    
+
     expect(response.status).toBe(400)
     expect(response.body.errors).toBeDefined()
   })

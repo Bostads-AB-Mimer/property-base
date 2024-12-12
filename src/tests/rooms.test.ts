@@ -10,7 +10,7 @@ describe('Rooms API', () => {
     // Get codes needed for testing
     const buildingsResponse = await request(app.callback())
       .get('/buildings')
-      .query({ propertyCode: '001BAVERN' })
+      .query({ propertyCode: '07901' })
     buildingCode = buildingsResponse.body.content[0].code
 
     const residencesResponse = await request(app.callback())
@@ -25,7 +25,7 @@ describe('Rooms API', () => {
     const response = await request(app.callback())
       .get('/rooms')
       .query({ buildingCode, floorCode, residenceCode })
-    
+
     expect(response.status).toBe(200)
     expect(response.body.content).toBeDefined()
     expect(Array.isArray(response.body.content)).toBe(true)
@@ -45,7 +45,7 @@ describe('Rooms API', () => {
     const response = await request(app.callback())
       .get('/rooms')
       .query({ buildingCode }) // Missing required parameters
-    
+
     expect(response.status).toBe(400)
     expect(response.body.errors).toBeDefined()
   })
@@ -55,7 +55,7 @@ describe('Rooms API', () => {
     const roomsResponse = await request(app.callback())
       .get('/rooms')
       .query({ buildingCode, floorCode, residenceCode })
-    
+
     if (roomsResponse.body.content.length > 0) {
       const roomId = roomsResponse.body.content[0].id
 
