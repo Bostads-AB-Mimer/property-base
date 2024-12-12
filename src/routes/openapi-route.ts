@@ -1,6 +1,7 @@
 import KoaRouter from '@koa/router'
 import { openapiSpec } from '../openapi'
-import { koaApiReference } from '@scalar/koa-api-reference'
+import serve from 'koa-static'
+import path from 'path'
 
 export const routes = (router: KoaRouter) => {
   // Serve the OpenAPI spec as JSON
@@ -9,16 +10,6 @@ export const routes = (router: KoaRouter) => {
     ctx.body = openapiSpec
   })
 
-  // Mount Scalar UI at the root path
-  router.get('/', async (ctx, next) => {
-    await koaApiReference({
-      spec: {
-        url: '/openapi.json'
-      },
-      page: {
-        title: 'Property Base API Reference',
-        description: 'API documentation for the Property Base system'
-      }
-    })(ctx, next)
-  })
+  // Serve static files from the public directory
+  router.use(serve(path.join(process.cwd(), 'public')))
 }
