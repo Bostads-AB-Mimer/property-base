@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const LinkSchema = z.object({
-  href: z.string(),
+  href: z.string().trim(),
 })
 
 export const BaseLinksSchema = z.object({
