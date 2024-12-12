@@ -88,7 +88,7 @@ export const routes = (router: KoaRouter) => {
       const responseContent = dbResidences.map((residence) => {
         const links = ResidenceLinksSchema.parse({
           self: { href: `/residences/${residence.id}` },
-          building: { href: `/buildings/${buildingCode}` },
+          building: { href: `/buildings/${building.id}` },
           property: { href: `/properties/${residence.code}` },
           rooms: { href: `/rooms?buildingCode=${buildingCode}&residenceCode=${residence.code}` },
           components: { href: `/components?residenceCode=${residence.code}` },
