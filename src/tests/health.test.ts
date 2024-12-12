@@ -14,6 +14,10 @@ jest.mock('@prisma/client', () => {
 });
 
 describe('Health Check', () => {
+  beforeEach(() => {
+    jest.unmock('@prisma/client');
+  });
+
   it('should return healthy status when database is connected', async () => {
     const response = await request(app.callback()).get('/health')
     expect(response.status).toBe(200)
