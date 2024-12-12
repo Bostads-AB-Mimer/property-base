@@ -55,17 +55,20 @@ export const routes = (router: KoaRouter) => {
         return (ctx.status = HttpStatusCode.NotFound)
       }
 
+      // Create a temporary schema that extends CompanySchema with _links
+      const CompanyResponseSchema = z.object({
+        ...CompanySchema.shape,
+        _links: CompanyLinksSchema,
+      })
+
       const responseContent = companies.map((company) => {
-        const parsedCompany = CompanySchema.parse({
-          ...company,
-        })
-        return {
-          ...parsedCompany,
-          _links: CompanyLinksSchema.parse({
+        return CompanyResponseSchema.parse({
+          ...CompanySchema.parse(company),
+          _links: {
             self: { href: `/companies/${company.id}` },
             properties: { href: `/properties?companyCode=${company.code}` },
-          }),
-        }
+          },
+        })
       })
 
       ctx.body = {
