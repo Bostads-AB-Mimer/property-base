@@ -9,6 +9,7 @@ import { generateMetaLinks } from '../utils/links'
 import { getCompanies, getCompany } from '../adapters/company-adapter'
 import { HttpStatusCode } from 'axios'
 import { CompanySchema, CompanyDetailsSchema } from '../types/company'
+import { CompanyLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -57,14 +58,10 @@ export const routes = (router: KoaRouter) => {
       const responseContent = companies.map((company) => {
         const parsedCompany = CompanySchema.parse({
           ...company,
-          _links: {
-            self: {
-              href: `/companies/${company.id}`,
-            },
-            properties: {
-              href: `/properties?companyCode=${company.code}`,
-            },
-          },
+          _links: CompanyLinksSchema.parse({
+            self: { href: `/companies/${company.id}` },
+            properties: { href: `/properties?companyCode=${company.code}` },
+          }),
         })
         return parsedCompany
       })
@@ -123,9 +120,9 @@ export const routes = (router: KoaRouter) => {
 
       const parsedCompanyDetails = CompanyDetailsSchema.parse({
         ...company,
-        _links: generateMetaLinks(ctx, '/properties', {
-          id: ctx.params.response,
-          properties: company?.code || '',
+        _links: CompanyLinksSchema.parse({
+          self: { href: `/companies/${company.id}` },
+          properties: { href: `/properties?companyCode=${company.code}` },
         }),
       })
 
