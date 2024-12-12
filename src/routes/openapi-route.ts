@@ -11,5 +11,5 @@ export const routes = (router: KoaRouter) => {
   })
 
   // Serve static files from the public directory
-  router.use(serve(path.join(process.cwd(), 'public')))
+  router.get('/', serve(path.join(__dirname, '../public')))
 }
