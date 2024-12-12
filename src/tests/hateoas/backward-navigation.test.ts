@@ -26,9 +26,11 @@ describe('HATEOAS Backward Navigation', () => {
       .query({ buildingCode: building.code })
 
     if (residencesResponse.body.content?.length > 0) {
-      const residence = residencesResponse.body.content[0]
+      const residenceLink = residencesResponse.body.content[0]._links.self
+      const residenceResponse = await request(app.callback()).get(residenceLink.href)
+      const residence = residenceResponse.body.content
       expect(residence._links.parent).toBeDefined()
-      console.log('parent', residence._links.parent)
+
       // Navigate back to building
       const parentBuildingUrl = residence._links.parent.href
       const parentBuildingResponse = await request(app.callback()).get(
