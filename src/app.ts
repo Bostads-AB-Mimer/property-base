@@ -22,17 +22,6 @@ app.use(
   })
 )
 
-app.use(
-  koaApiReference({
-    spec: {
-      url: '/openapi.json',
-    },
-    page: {
-      title: 'Property Base API Reference',
-      description: 'API documentation for the Property Base system',
-    },
-  })
-)
 
 app.on('error', (err) => {
   logger.error(err)
