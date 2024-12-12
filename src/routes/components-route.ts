@@ -66,14 +66,17 @@ export const routes = (router: KoaRouter) => {
       return
     }
 
-    const { maintenanceUnit } = queryParams.data
-
     const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /components?maintenanceUnit=${maintenanceUnit}`, metadata)
-
+    
     try {
-      const components =
-        await getComponentByMaintenanceUnitCode(maintenanceUnit)
+      let components;
+      if (queryParams.data.type === 'maintenance') {
+        logger.info(`GET /components?type=maintenance&maintenanceUnit=${queryParams.data.maintenanceUnit}`, metadata)
+        components = await getComponentByMaintenanceUnitCode(queryParams.data.maintenanceUnit)
+      } else {
+        logger.info(`GET /components?type=residence&residenceCode=${queryParams.data.residenceCode}`, metadata)
+        components = await getComponentByMaintenanceUnitCode(queryParams.data.residenceCode) // TODO: Implement getComponentByResidenceCode
+      }
 
       if (!components) {
         ctx.status = 404
