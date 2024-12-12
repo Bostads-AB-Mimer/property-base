@@ -90,7 +90,7 @@ export const routes = (router: KoaRouter) => {
           self: { href: `/residences/${residence.id}` },
           building: { href: `/buildings/${building.code}` },
           property: { href: `/properties/${residence.code}` },
-          rooms: { href: `/rooms?buildingCode=${buildingCode}&residenceCode=${residence.code}` },
+          rooms: { href: `/rooms?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residence.code}` },
           components: { href: `/components?residenceCode=${residence.code}` },
           parent: { href: `/buildings/${buildingCode}` },
         })
