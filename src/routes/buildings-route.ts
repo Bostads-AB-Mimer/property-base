@@ -73,7 +73,7 @@ export const routes = (router: KoaRouter) => {
         const links = BuildingLinksSchema.parse({
           self: { href: `/buildings/${building.id}` },
           property: { href: `/properties/${propertyCode}` },
-          residences: { href: `/residences?buildingCode=${building.id}` },
+          residences: { href: `/residences?buildingCode=${building.code}` },
           staircases: { href: `/staircases?buildingCode=${building.id}` },
           parent: { href: `/properties/${propertyCode}` },
         })
