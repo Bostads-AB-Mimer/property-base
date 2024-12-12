@@ -7,7 +7,11 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getProperties, getPropertyById } from '../adapters/property-adapter'
 import { generateMetaLinks } from '../utils/links'
-import { propertiesQueryParamsSchema, PropertySchema, PropertyDetailsSchema } from '../types/property'
+import {
+  propertiesQueryParamsSchema,
+  PropertySchema,
+  PropertyDetailsSchema,
+} from '../types/property'
 import { PropertyLinksSchema } from '../types/links'
 
 /**
@@ -82,11 +86,11 @@ export const routes = (router: KoaRouter) => {
         const parsedProperty = PropertySchema.parse({
           ...property,
         })
-        
+
         return {
           ...parsedProperty,
           _links: PropertyLinksSchema.parse({
-            self: { href: `/properties/${property.id}` },
+            self: { href: `/properties/${property.propertyId}` },
             buildings: { href: `/buildings?propertyCode=${property.code}` },
           }),
         }

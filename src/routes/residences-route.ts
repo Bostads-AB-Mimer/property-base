@@ -9,7 +9,7 @@ import {
   residencesQueryParamsSchema,
   ResidenceSchema,
 } from '../types/residence'
-import { ResidenceLinksSchema } from '../types/links'
+import { ResidenceLinksSchema, ResidenceListLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -89,13 +89,8 @@ export const routes = (router: KoaRouter) => {
       }
 
       const responseContent = dbResidences.map((residence) => {
-        const links = ResidenceLinksSchema.parse({
+        const links = ResidenceListLinksSchema.parse({
           self: { href: `/residences/${residence.id}` },
-          building: { href: `/buildings/${buildingCode}` },
-          property: { href: `/properties/${residence.code}` },
-          rooms: {
-            href: `/rooms?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residence.code}`,
-          },
           components: { href: `/components?residenceCode=${residence.code}` },
           parent: { href: `/buildings/${buildingCode}` },
         })
@@ -111,21 +106,27 @@ export const routes = (router: KoaRouter) => {
             elevator: Boolean(residence.elevator),
           },
           features: {
-            balcony1: residence.balcony1Location ? {
-              location: residence.balcony1Location,
-              type: residence.balcony1Type || '',
-            } : undefined,
-            balcony2: residence.balcony2Location ? {
-              location: residence.balcony2Location,
-              type: residence.balcony2Type || '',
-            } : undefined,
+            balcony1: residence.balcony1Location
+              ? {
+                  location: residence.balcony1Location,
+                  type: residence.balcony1Type || '',
+                }
+              : undefined,
+            balcony2: residence.balcony2Location
+              ? {
+                  location: residence.balcony2Location,
+                  type: residence.balcony2Type || '',
+                }
+              : undefined,
             patioLocation: residence.patioLocation || undefined,
             hygieneFacility: residence.hygieneFacility || '',
             sauna: Boolean(residence.sauna),
             extraToilet: Boolean(residence.extraToilet),
             sharedKitchen: Boolean(residence.sharedKitchen),
             petAllergyFree: Boolean(residence.petAllergyFree),
-            electricAllergyIntolerance: Boolean(residence.electricAllergyIntolerance),
+            electricAllergyIntolerance: Boolean(
+              residence.electricAllergyIntolerance
+            ),
             smokeFree: Boolean(residence.smokeFree),
             asbestos: Boolean(residence.asbestos),
           },
@@ -145,18 +146,26 @@ export const routes = (router: KoaRouter) => {
             kitchen: residence.residenceType?.kitchen || 0,
             systemStandard: residence.residenceType?.systemStandard || 0,
             checklistId: residence.residenceType?.checklistId || null,
-            componentTypeActionId: residence.residenceType?.componentTypeActionId || null,
-            statisticsGroupSCBId: residence.residenceType?.statisticsGroupSCBId || null,
-            statisticsGroup2Id: residence.residenceType?.statisticsGroup2Id || null,
-            statisticsGroup3Id: residence.residenceType?.statisticsGroup3Id || null,
-            statisticsGroup4Id: residence.residenceType?.statisticsGroup4Id || null,
-            timestamp: residence.residenceType?.timestamp || new Date().toISOString(),
+            componentTypeActionId:
+              residence.residenceType?.componentTypeActionId || null,
+            statisticsGroupSCBId:
+              residence.residenceType?.statisticsGroupSCBId || null,
+            statisticsGroup2Id:
+              residence.residenceType?.statisticsGroup2Id || null,
+            statisticsGroup3Id:
+              residence.residenceType?.statisticsGroup3Id || null,
+            statisticsGroup4Id:
+              residence.residenceType?.statisticsGroup4Id || null,
+            timestamp:
+              residence.residenceType?.timestamp || new Date().toISOString(),
           },
           propertyObject: {
             energy: {
               energyClass: residence.propertyObject?.energyClass || 0,
-              energyRegistered: residence.propertyObject?.energyRegistered || undefined,
-              energyReceived: residence.propertyObject?.energyReceived || undefined,
+              energyRegistered:
+                residence.propertyObject?.energyRegistered || undefined,
+              energyReceived:
+                residence.propertyObject?.energyReceived || undefined,
               energyIndex: residence.propertyObject?.energyIndex || undefined,
             },
           },

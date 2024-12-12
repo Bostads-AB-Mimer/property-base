@@ -10,6 +10,7 @@ import { getCompanies, getCompany } from '../adapters/company-adapter'
 import { HttpStatusCode } from 'axios'
 import { CompanySchema, CompanyDetailsSchema } from '../types/company'
 import { CompanyLinksSchema } from '../types/links'
+import { z } from 'zod'
 
 /**
  * @swagger
@@ -127,7 +128,7 @@ export const routes = (router: KoaRouter) => {
         ...company,
       })
 
-      const responseContent = {
+      const content = {
         ...parsedCompanyDetails,
         _links: CompanyLinksSchema.parse({
           self: { href: `/companies/${company.id}` },
@@ -136,7 +137,7 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = {
-        content: parsedCompanyDetails,
+        content,
         ...metadata,
       }
     } catch (err) {
