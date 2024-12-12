@@ -96,7 +96,16 @@ export const routes = (router: KoaRouter) => {
           parent: { href: `/buildings/${buildingCode}` },
         })
 
-        const parsedResidence = ResidenceSchema.parse(residence)
+        const parsedResidence = ResidenceSchema.parse({
+          id: residence.id,
+          code: residence.code,
+          name: residence.name || '',
+          deleted: Boolean(residence.deleted),
+          validityPeriod: {
+            fromDate: residence.fromDate,
+            toDate: residence.toDate,
+          }
+        })
         return {
           ...parsedResidence,
           _links: links,
