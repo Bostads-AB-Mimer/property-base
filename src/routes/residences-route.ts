@@ -251,52 +251,66 @@ export const routes = (router: KoaRouter) => {
           elevator: Boolean(residence.elevator),
         },
         features: {
-          balcony1: residence.balcony1Location ? {
-            location: residence.balcony1Location,
-            type: residence.balcony1Type || '',
-          } : undefined,
-          balcony2: residence.balcony2Location ? {
-            location: residence.balcony2Location,
-            type: residence.balcony2Type || '',
-          } : undefined,
+          balcony1: residence.balcony1Location
+            ? {
+                location: residence.balcony1Location,
+                type: residence.balcony1Type || '',
+              }
+            : undefined,
+          balcony2: residence.balcony2Location
+            ? {
+                location: residence.balcony2Location,
+                type: residence.balcony2Type || '',
+              }
+            : undefined,
           patioLocation: residence.patioLocation || undefined,
           hygieneFacility: residence.hygieneFacility || '',
           sauna: Boolean(residence.sauna),
           extraToilet: Boolean(residence.extraToilet),
           sharedKitchen: Boolean(residence.sharedKitchen),
           petAllergyFree: Boolean(residence.petAllergyFree),
-          electricAllergyIntolerance: Boolean(residence.electricAllergyIntolerance),
+          electricAllergyIntolerance: Boolean(
+            residence.electricAllergyIntolerance
+          ),
           smokeFree: Boolean(residence.smokeFree),
           asbestos: Boolean(residence.asbestos),
         },
         entrance: residence.entrance || '',
         partNo: residence.partNo,
         part: residence.part,
-        deleted: Boolean(residence.deleteMark),
+        deleted: Boolean(residence.deleted),
         validityPeriod: {
           fromDate: residence.fromDate,
           toDate: residence.toDate,
         },
         residenceType: {
-          residenceTypeId: residence.residenceType?.residenceTypeId || '',
+          residenceTypeId: residence.residenceType?.id || '',
           code: residence.residenceType?.code || '',
           name: residence.residenceType?.name || null,
           roomCount: residence.residenceType?.roomCount || null,
           kitchen: residence.residenceType?.kitchen || 0,
           systemStandard: residence.residenceType?.systemStandard || 0,
           checklistId: residence.residenceType?.checklistId || null,
-          componentTypeActionId: residence.residenceType?.componentTypeActionId || null,
-          statisticsGroupSCBId: residence.residenceType?.statisticsGroupSCBId || null,
-          statisticsGroup2Id: residence.residenceType?.statisticsGroup2Id || null,
-          statisticsGroup3Id: residence.residenceType?.statisticsGroup3Id || null,
-          statisticsGroup4Id: residence.residenceType?.statisticsGroup4Id || null,
-          timestamp: residence.residenceType?.timestamp || new Date().toISOString(),
+          componentTypeActionId:
+            residence.residenceType?.componentTypeActionId || null,
+          statisticsGroupSCBId:
+            residence.residenceType?.statisticsGroupSCBId || null,
+          statisticsGroup2Id:
+            residence.residenceType?.statisticsGroup2Id || null,
+          statisticsGroup3Id:
+            residence.residenceType?.statisticsGroup3Id || null,
+          statisticsGroup4Id:
+            residence.residenceType?.statisticsGroup4Id || null,
+          timestamp:
+            residence.residenceType?.timestamp || new Date().toISOString(),
         },
         propertyObject: {
           energy: {
             energyClass: residence.propertyObject?.energyClass || 0,
-            energyRegistered: residence.propertyObject?.energyRegistered || undefined,
-            energyReceived: residence.propertyObject?.energyReceived || undefined,
+            energyRegistered:
+              residence.propertyObject?.energyRegistered || undefined,
+            energyReceived:
+              residence.propertyObject?.energyReceived || undefined,
             energyIndex: residence.propertyObject?.energyIndex || undefined,
           },
         },
