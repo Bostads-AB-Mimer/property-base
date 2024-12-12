@@ -73,8 +73,12 @@ export const routes = (router: KoaRouter) => {
         const links = BuildingLinksSchema.parse({
           self: { href: `/buildings/${building.id}` },
           property: { href: `/properties/${propertyCode}` },
-          residences: { href: `/residences?buildingCode=${building.code}` },
-          staircases: { href: `/staircases?buildingCode=${building.code}` },
+          residences: {
+            href: `/residences?buildingCode=${building.buildingCode}`,
+          },
+          staircases: {
+            href: `/staircases?buildingCode=${building.buildingCode}`,
+          },
           parent: { href: `/properties/${propertyCode}` },
         })
 
@@ -150,8 +154,12 @@ export const routes = (router: KoaRouter) => {
         _links: BuildingLinksSchema.parse({
           self: { href: `/buildings/${building.id}` },
           property: { href: `/properties/${building.propertyCode}` },
-          residences: { href: `/residences?buildingCode=${building.code}` },
-          staircases: { href: `/staircases?buildingCode=${building.code}` },
+          residences: {
+            href: `/residences?buildingCode=${building.buildingCode}`,
+          },
+          staircases: {
+            href: `/staircases?buildingCode=${building.buildingCode}`,
+          },
           parent: { href: `/properties/${building.propertyCode}` },
         }),
       })
