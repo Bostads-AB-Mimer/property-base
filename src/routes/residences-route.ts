@@ -161,12 +161,10 @@ export const routes = (router: KoaRouter) => {
           },
           propertyObject: {
             energy: {
-              energyClass: residence.propertyObject?.energyClass || 0,
-              energyRegistered:
-                residence.propertyObject?.energyRegistered || undefined,
-              energyReceived:
-                residence.propertyObject?.energyReceived || undefined,
-              energyIndex: residence.propertyObject?.energyIndex || undefined,
+              energyClass: 0,
+              energyRegistered: undefined,
+              energyReceived: undefined,
+              energyIndex: undefined,
             },
           },
         })
