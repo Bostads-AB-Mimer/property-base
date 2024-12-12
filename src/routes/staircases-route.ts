@@ -74,15 +74,18 @@ export const routes = (router: KoaRouter) => {
           parent: { href: `/buildings/${staircase.buildingCode}` },
         })
 
-        return StaircaseSchema.parse({
+        const parsedStaircase = StaircaseSchema.parse({
           ...staircase,
+        })
+        return {
+          ...parsedStaircase,
           _links: StaircaseLinksSchema.parse({
             self: { href: `/staircases/${staircase.id}` },
             building: { href: `/buildings/${staircase.buildingCode}` },
             residences: { href: `/residences?buildingCode=${staircase.buildingCode}` },
             parent: { href: `/buildings/${staircase.buildingCode}` },
           }),
-        })
+        }
       })
 
       ctx.body = {

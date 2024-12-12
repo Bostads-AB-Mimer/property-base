@@ -83,12 +83,14 @@ export const routes = (router: KoaRouter) => {
       const responseContent = components.map((component) => {
         const parsedComponent = ComponentSchema.parse({
           ...component,
+        })
+        return {
+          ...parsedComponent,
           _links: ComponentLinksSchema.parse({
             self: { href: `/components/${component.id}` },
             maintenanceUnit: { href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}` },
           }),
-        })
-        return parsedComponent
+        }
       })
 
       ctx.body = {

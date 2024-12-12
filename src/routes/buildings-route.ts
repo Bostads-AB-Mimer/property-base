@@ -84,9 +84,11 @@ export const routes = (router: KoaRouter) => {
 
         const parsedBuilding = BuildingSchema.parse({
           ...building,
-          _links: links,
         })
-        return parsedBuilding
+        return {
+          ...parsedBuilding,
+          _links: links,
+        }
       })
 
       ctx.body = {

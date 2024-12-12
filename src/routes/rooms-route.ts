@@ -86,9 +86,11 @@ export const routes = (router: KoaRouter) => {
 
         const parsedRoom = RoomSchema.parse({
           ...room,
-          _links: links,
         })
-        return parsedRoom
+        return {
+          ...parsedRoom,
+          _links: links,
+        }
       })
 
       ctx.body = {

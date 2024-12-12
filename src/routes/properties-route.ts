@@ -86,9 +86,11 @@ export const routes = (router: KoaRouter) => {
 
         const parsedProperty = PropertySchema.parse({
           ...property,
-          _links: links,
         })
-        return parsedProperty
+        return {
+          ...parsedProperty,
+          _links: links,
+        }
       })
 
       ctx.body = {
