@@ -25,12 +25,12 @@ app.use(
 app.use(
   koaApiReference({
     spec: {
-      url: '/openapi.json'
+      url: '/openapi.json',
     },
     page: {
       title: 'Property Base API Reference',
-      description: 'API documentation for the Property Base system'
-    }
+      description: 'API documentation for the Property Base system',
+    },
   })
 )
 
