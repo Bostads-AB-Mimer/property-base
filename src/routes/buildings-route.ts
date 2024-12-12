@@ -173,7 +173,28 @@ export const routes = (router: KoaRouter) => {
       }
 
       const parsedBuilding = BuildingSchema.parse({
-        ...building,
+        id: building.id,
+        code: building.buildingCode,
+        name: building.name || '',
+        buildingType: {
+          id: building.buildingType?.id || '',
+          code: building.buildingType?.code || '',
+          name: building.buildingType?.name || '',
+        },
+        construction: {
+          constructionYear: building.constructionYear,
+          renovationYear: building.renovationYear,
+          valueYear: building.valueYear,
+        },
+        features: {
+          heating: building.heatingType,
+          fireRating: building.fireRating,
+        },
+        insurance: {
+          class: building.insuranceClass,
+          value: building.insuranceValue,
+        },
+        deleted: Boolean(building.deleteMark),
         _links: BuildingLinksSchema.parse({
           self: { href: `/buildings/${building.id}` },
           property: { href: `/properties/${building.propertyObject.id}` },
