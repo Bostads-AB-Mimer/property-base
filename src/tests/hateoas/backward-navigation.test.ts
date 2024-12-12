@@ -28,10 +28,12 @@ describe('HATEOAS Backward Navigation', () => {
     if (residencesResponse.body.content?.length > 0) {
       const residence = residencesResponse.body.content[0]
       expect(residence._links.parent).toBeDefined()
-
+      console.log('parent', residence._links.parent)
       // Navigate back to building
       const parentBuildingUrl = residence._links.parent.href
-      const parentBuildingResponse = await request(app.callback()).get(parentBuildingUrl)
+      const parentBuildingResponse = await request(app.callback()).get(
+        parentBuildingUrl
+      )
       expect(parentBuildingResponse.status).toBe(200)
 
       const parentBuilding = parentBuildingResponse.body.content
@@ -39,7 +41,9 @@ describe('HATEOAS Backward Navigation', () => {
 
       // Navigate back to property
       const parentPropertyUrl = parentBuilding._links.parent.href
-      const parentPropertyResponse = await request(app.callback()).get(parentPropertyUrl)
+      const parentPropertyResponse = await request(app.callback()).get(
+        parentPropertyUrl
+      )
       expect(parentPropertyResponse.status).toBe(200)
     }
   })
