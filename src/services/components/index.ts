@@ -5,8 +5,14 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getComponentByMaintenanceUnitCode } from '../../adapters/component-adapter'
-import { componentsQueryParamsSchema } from '../../types/component'
+import {
+  getComponentByMaintenanceUnitCode,
+  newComponentFunction,
+} from '../../adapters/component-adapter'
+import {
+  componentsQueryParamsSchema,
+  componentsQueryParamsSchema2,
+} from '../../types/component'
 
 /**
  * @swagger
@@ -80,6 +86,94 @@ export const routes = (router: KoaRouter) => {
       }
 
       ctx.body = { content: components, ...metadata }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
+  /**
+   * @swagger
+   * /components2:
+   *   get:
+   *     summary: Get components by building code, floor code, residence code, and room code.
+   *     description: Returns all components belonging to a specific room.
+   *     tags:
+   *       - Components
+   *     parameters:
+   *       - in: query
+   *         name: buildingCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The building code of the building for the components.
+   *       - in: query
+   *         name: floorCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The floor code of the staircase.
+   *       - in: query
+   *         name: residenceCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The residence code where the components are located.
+   *       - in: query
+   *         name: roomCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The room code where the components are located.
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the rooms.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Room'
+   *       400:
+   *         description: Invalid query parameters.
+   *       500:
+   *         description: Internal server error.
+   */
+
+  router.get('(.*)/components2', async (ctx) => {
+    const queryParams = componentsQueryParamsSchema2.safeParse(ctx.query)
+
+    if (!queryParams.success) {
+      ctx.status = 400
+      ctx.body = { errors: queryParams.error.errors }
+      return
+    }
+
+    const { buildingCode, floorCode, residenceCode, roomCode } =
+      queryParams.data
+
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(
+      `GET /rooms?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residenceCode}&roomCode=${roomCode}`,
+      metadata
+    )
+
+    try {
+      const rooms = await newComponentFunction(
+        buildingCode,
+        floorCode,
+        residenceCode,
+        roomCode
+      )
+      //todo: add links
+      ctx.body = {
+        content: rooms,
+        ...metadata,
+      }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'

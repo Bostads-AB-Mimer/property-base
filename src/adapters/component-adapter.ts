@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import { map } from 'lodash'
 
 const prisma = new PrismaClient({
   log: ['query'],
@@ -6,6 +7,7 @@ const prisma = new PrismaClient({
 
 //todo: add types
 
+//todo: this does not get the components, it gets the maintenance units which is another entity
 export const getComponentByMaintenanceUnitCode = async (
   maintenanceUnitCode: string
 ) => {
@@ -84,4 +86,39 @@ export const getComponentByMaintenanceUnitCode = async (
       name: ps.maintenanceUnitByCode?.name ?? '',
     })),
   }))
+}
+
+export const newComponentFunction = async (
+  buildingCode: string,
+  floorCode: string,
+  residenceCode: string,
+  roomCode: string
+) => {
+  const propertyStructures = await prisma.propertyStructure.findMany({
+    where: {
+      buildingCode: {
+        contains: buildingCode,
+      },
+      floorCode: floorCode,
+      residenceCode: residenceCode,
+      roomCode: roomCode,
+      NOT: {
+        componentId: null,
+      },
+      localeId: null,
+    },
+  })
+
+  return prisma.component.findMany({
+    where: {
+      objectId: {
+        in: map(propertyStructures, 'objectId'),
+      },
+    },
+    select: {
+      id: true,
+      code: true,
+      name: true,
+    },
+  })
 }

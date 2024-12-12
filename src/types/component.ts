@@ -6,6 +6,15 @@ export const componentsQueryParamsSchema = z.object({
     .min(1, { message: 'maintenanceUnit is required and cannot be empty.' }),
 })
 
+export const componentsQueryParamsSchema2 = z.object({
+  buildingCode: z
+    .string()
+    .min(7, { message: 'buildingCode must be at least 7 characters long.' }),
+  floorCode: z.string().min(1, { message: 'floorCode is required.' }),
+  residenceCode: z.string().min(1, { message: 'residenceCode is required.' }),
+  roomCode: z.string().min(1, { message: 'roomCode is required.' }),
+})
+
 export const ComponentSchema = z.object({
   id: z.string(),
   code: z.string(),
