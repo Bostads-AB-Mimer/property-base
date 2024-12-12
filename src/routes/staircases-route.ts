@@ -7,6 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getStaircasesByBuildingCode } from '../adapters/staircase-adapter'
 import { staircasesQueryParamsSchema, StaircaseSchema } from '../types/staircase'
+import { StaircaseLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -65,25 +66,19 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const response = await getStaircasesByBuildingCode(buildingCode)
-      const responseContent = response.map((staircase) =>
-        StaircaseSchema.parse({
-          ...staircase,
-          _links: {
-            self: {
-              href: `/staircases/${staircase.id}`,
-            },
-            building: {
-              href: `/buildings/${staircase.buildingCode}`,
-            },
-            residences: {
-              href: `/residences?buildingCode=${staircase.buildingCode}`,
-            },
-            parent: {
-              href: `/buildings/${staircase.buildingCode}`,
-            },
-          },
+      const responseContent = response.map((staircase) => {
+        const links = StaircaseLinksSchema.parse({
+          self: { href: `/staircases/${staircase.id}` },
+          building: { href: `/buildings/${staircase.buildingCode}` },
+          residences: { href: `/residences?buildingCode=${staircase.buildingCode}` },
+          parent: { href: `/buildings/${staircase.buildingCode}` },
         })
-      )
+
+        return StaircaseSchema.parse({
+          ...staircase,
+          _links: links,
+        })
+      })
 
       ctx.body = {
         content: responseContent,
