@@ -187,7 +187,7 @@ export const routes = (router: KoaRouter) => {
           valueYear: building.valueYear,
         },
         features: {
-          heating: building.heatingType,
+          heating: building.heating,
           fireRating: building.fireRating,
         },
         insurance: {
@@ -195,21 +195,23 @@ export const routes = (router: KoaRouter) => {
           value: building.insuranceValue,
         },
         deleted: Boolean(building.deleteMark),
-        _links: BuildingLinksSchema.parse({
-          self: { href: `/buildings/${building.id}` },
-          property: { href: `/properties/${building.propertyObject.id}` },
-          residences: {
-            href: `/residences?buildingCode=${building.buildingCode}`,
-          },
-          staircases: {
-            href: `/staircases?buildingCode=${building.buildingCode}`,
-          },
-          parent: { href: `/properties/${building.propertyObject.id}` },
-        }),
       })
 
       ctx.body = {
-        content: parsedBuilding,
+        content: {
+          ...parsedBuilding,
+          _links: BuildingLinksSchema.parse({
+            self: { href: `/buildings/${building.id}` },
+            property: { href: `/properties/${building.propertyObject.id}` },
+            residences: {
+              href: `/residences?buildingCode=${building.buildingCode}`,
+            },
+            staircases: {
+              href: `/staircases?buildingCode=${building.buildingCode}`,
+            },
+            parent: { href: `/properties/${building.propertyObject.id}` },
+          }),
+        },
         ...metadata,
       }
     } catch (err) {
