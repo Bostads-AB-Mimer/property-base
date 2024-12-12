@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '../app'
 
-const getResponseContent = async (url, query = {}) => {
+const getResponseContent = async (url: string, query = {}) => {
   const response = await request(app.callback()).get(url).query(query)
   expect(response.status).toBe(200)
   expect(response.body.content).toBeDefined()
@@ -10,7 +10,7 @@ const getResponseContent = async (url, query = {}) => {
   return response.body.content
 }
 
-const verifyLinks = (response) => {
+const verifyLinks = (response: any) => {
   expect(response.body._links).toBeDefined()
   expect(response.body._links.self).toBeDefined()
   expect(response.body._links.self.href).toBeDefined()
