@@ -7,6 +7,7 @@ import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getBuildingById, getBuildings } from '../adapters/building-adapter'
 import { buildingsQueryParamsSchema, BuildingSchema } from '../types/building'
+import { BuildingLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -69,25 +70,17 @@ export const routes = (router: KoaRouter) => {
       const buildings = await getBuildings(propertyCode)
 
       const responseContent = buildings.map((building) => {
+        const links = BuildingLinksSchema.parse({
+          self: { href: `/buildings/${building.id}` },
+          property: { href: `/properties/${propertyCode}` },
+          residences: { href: `/residences?buildingCode=${building.id}` },
+          staircases: { href: `/staircases?buildingCode=${building.id}` },
+          parent: { href: `/properties/${propertyCode}` },
+        })
+
         const parsedBuilding = BuildingSchema.parse({
           ...building,
-          _links: {
-            self: {
-              href: `/buildings/${building.id}`,
-            },
-            property: {
-              href: `/properties/${propertyCode}`,
-            },
-            residences: {
-              href: `/residences?buildingCode=${building.id}`,
-            },
-            staircases: {
-              href: `/staircases?buildingCode=${building.id}`,
-            },
-            parent: {
-              href: `/properties/${propertyCode}`,
-            },
-          },
+          _links: links,
         })
         return parsedBuilding
       })
@@ -154,23 +147,13 @@ export const routes = (router: KoaRouter) => {
 
       const parsedBuilding = BuildingSchema.parse({
         ...building,
-        _links: {
-          self: {
-            href: `/buildings/${building.id}`,
-          },
-          property: {
-            href: `/properties/${building.propertyCode}`,
-          },
-          residences: {
-            href: `/residences?buildingCode=${building.id}`,
-          },
-          staircases: {
-            href: `/staircases?buildingCode=${building.id}`,
-          },
-          parent: {
-            href: `/properties/${building.propertyCode}`,
-          },
-        },
+        _links: BuildingLinksSchema.parse({
+          self: { href: `/buildings/${building.id}` },
+          property: { href: `/properties/${building.propertyCode}` },
+          residences: { href: `/residences?buildingCode=${building.id}` },
+          staircases: { href: `/staircases?buildingCode=${building.id}` },
+          parent: { href: `/properties/${building.propertyCode}` },
+        }),
       })
 
       ctx.body = {
