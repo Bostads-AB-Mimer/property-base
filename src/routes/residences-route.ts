@@ -6,6 +6,7 @@ import {
   getResidencesByBuildingCodeAndFloorCode,
 } from '../adapters/residence-adapter'
 import { residencesQueryParamsSchema, ResidenceSchema } from '../types/residence'
+import { ResidenceLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -84,31 +85,21 @@ export const routes = (router: KoaRouter) => {
         dbResidences = await getResidencesByBuildingCode(buildingCode)
       }
 
-      const responseContent = dbResidences.map((residence) =>
-        ResidenceSchema.parse({
-          ...residence,
-          _links: {
-            self: {
-              href: `/residences/${residence.id}`,
-            },
-            building: {
-              href: `/buildings/${buildingCode}`,
-            },
-            property: {
-              href: `/properties/${residence.code}`,
-            },
-            rooms: {
-              href: `/rooms?buildingCode=${buildingCode}&residenceCode=${residence.code}`,
-            },
-            components: {
-              href: `/components?residenceCode=${residence.code}`,
-            },
-            parent: {
-              href: `/buildings/${buildingCode}`,
-            },
-          },
+      const responseContent = dbResidences.map((residence) => {
+        const links = ResidenceLinksSchema.parse({
+          self: { href: `/residences/${residence.id}` },
+          building: { href: `/buildings/${buildingCode}` },
+          property: { href: `/properties/${residence.code}` },
+          rooms: { href: `/rooms?buildingCode=${buildingCode}&residenceCode=${residence.code}` },
+          components: { href: `/components?residenceCode=${residence.code}` },
+          parent: { href: `/buildings/${buildingCode}` },
         })
-      )
+
+        return ResidenceSchema.parse({
+          ...residence,
+          _links: links,
+        })
+      })
 
       ctx.body = {
         content: responseContent,
@@ -159,28 +150,18 @@ export const routes = (router: KoaRouter) => {
       }
 
       //todo: add room link
+      const links = ResidenceLinksSchema.parse({
+        self: { href: `/residences/${residence.id}` },
+        building: { href: `/buildings/${residence.buildingCode}` },
+        property: { href: `/properties/${residence.code}` },
+        rooms: { href: `/rooms?buildingCode=${residence.buildingCode}&residenceCode=${residence.code}` },
+        components: { href: `/components?residenceCode=${residence.code}` },
+        parent: { href: `/buildings/${residence.buildingCode}` },
+      })
+
       const parsedResidence = ResidenceSchema.parse({
         ...residence,
-        _links: {
-          self: {
-            href: `/residences/${residence.id}`,
-          },
-          building: {
-            href: `/buildings/${residence.buildingCode}`,
-          },
-          property: {
-            href: `/properties/${residence.code}`,
-          },
-          rooms: {
-            href: `/rooms?buildingCode=${residence.buildingCode}&residenceCode=${residence.code}`,
-          },
-          components: {
-            href: `/components?residenceCode=${residence.code}`,
-          },
-          parent: {
-            href: `/buildings/${residence.buildingCode}`,
-          },
-        },
+        _links: links,
       })
 
       ctx.body = { content: parsedResidence, ...metadata }
