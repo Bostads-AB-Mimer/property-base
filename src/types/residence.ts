@@ -7,7 +7,18 @@ export const residencesQueryParamsSchema = z.object({
   floorCode: z.string().optional(),
 })
 
-export const ResidenceSchema = z.object({
+export const BaseResidenceSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string(),
+  deleted: z.boolean(),
+  validityPeriod: z.object({
+    fromDate: z.date(),
+    toDate: z.date(),
+  }),
+})
+
+export const ResidenceSchema = BaseResidenceSchema.extend({
   id: z.string(),
   code: z.string(),
   name: z.string(),

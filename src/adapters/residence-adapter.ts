@@ -5,6 +5,17 @@ const prisma = new PrismaClient({})
 
 //todo: add types
 
+export type ResidenceBasic = Prisma.ResidenceGetPayload<{
+  select: {
+    id: true
+    code: true
+    name: true
+    deleted: true
+    fromDate: true
+    toDate: true
+  }
+}>
+
 export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
   include: {
     residenceType: true
@@ -16,6 +27,15 @@ export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
     }
   }
 }>
+
+const residenceBasicSelect = {
+  id: true,
+  code: true,
+  name: true,
+  deleted: true,
+  fromDate: true,
+  toDate: true,
+}
 
 export const getResidenceById = async (
   id: string
@@ -38,7 +58,7 @@ export const getResidenceById = async (
   return response
 }
 
-export const getResidencesByBuildingCode = async (buildingCode: string) => {
+export const getResidencesByBuildingCode = async (buildingCode: string): Promise<ResidenceBasic[]> => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
       buildingCode: {
@@ -58,6 +78,7 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
         in: map(propertyStructures, 'objectId'),
       },
     },
+    select: residenceBasicSelect
   })
 }
 
