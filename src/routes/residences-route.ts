@@ -93,7 +93,6 @@ export const routes = (router: KoaRouter) => {
         const links = ResidenceListLinksSchema.parse({
           self: { href: `/residences/${residence.id}` },
           components: { href: `/components?residenceCode=${residence.code}` },
-          parent: { href: `/buildings/${buildingCode}` },
         })
 
         const parsedResidence = ResidenceSchema.parse({
@@ -160,23 +159,10 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      console.log('residence', residence)
+      // TODO: find out why building is null in residence
+      //const building = await getBuildingByCode(residence.buildingCode)
 
-      //todo: add room link
-      const links = ResidenceLinksSchema.parse({
-        self: { href: `/residences/${residence.id}` },
-        building: {
-          href: `/buildings/${residence.propertyObject.building?.buildingCode}`, // TODO: check why building is null here sometimes
-        },
-        property: { href: `/properties/${residence.code}` },
-        rooms: {
-          href: `/rooms?buildingCode=${residence.propertyObject.building?.buildingCode}&residenceCode=${residence.code}`,
-        },
-        components: { href: `/components?residenceCode=${residence.code}` },
-        parent: {
-          href: `/buildings/${residence.propertyObject.building?.buildingCode}`,
-        },
-      })
+      console.log('residence', residence)
 
       const parsedResidence = ResidenceDetailedSchema.parse({
         id: residence.id,
@@ -249,10 +235,27 @@ export const routes = (router: KoaRouter) => {
         },
       })
 
+      const _links = ResidenceLinksSchema.parse({
+        self: { href: `/residences/${residence.id}` },
+        building: {
+          href: `/buildings/${residence.propertyObject.building?.buildingCode}`, // TODO: check why building is null here sometimes
+        },
+        property: {
+          href: `/properties/${residence.propertyObject.property?.id}`,
+        },
+        rooms: {
+          href: `/rooms?buildingCode=${residence.propertyObject.building?.buildingCode}&residenceCode=${residence.code}`,
+        },
+        components: { href: `/components?residenceCode=${residence.code}` },
+        parent: {
+          href: `/buildings/${residence.propertyObject.building?.buildingCode}`,
+        },
+      })
+
       ctx.body = {
         content: {
           ...parsedResidence,
-          _links: links,
+          _links,
         },
         ...metadata,
       }
