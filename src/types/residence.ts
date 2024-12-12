@@ -42,31 +42,6 @@ export const ResidenceSchema = z.object({
     smokeFree: z.boolean(),
     asbestos: z.boolean(),
   }),
-  rooms: z
-    .array(
-      z.object({
-        roomId: z.string(),
-        roomCode: z.string(),
-        name: z.string().optional(),
-        sharedUse: z.boolean(),
-        sortingOrder: z.number(),
-        allowPeriodicWorks: z.boolean(),
-        spaceType: z.number(),
-        hasToilet: z.boolean(),
-        isHeated: z.number(),
-        hasThermostatValve: z.boolean(),
-        orientation: z.number(),
-        installationDate: z.date().optional(),
-        deleteMark: z.boolean(),
-        fromDate: z.date(),
-        toDate: z.date(),
-        availableFrom: z.date().optional(),
-        availableTo: z.date().optional(),
-        timestamp: z.string(),
-      })
-    )
-    .optional()
-    .default([]),
   entrance: z.string(),
   partNo: z.number().optional().nullable(),
   part: z.string().optional().nullable(),
