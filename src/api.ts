@@ -7,6 +7,7 @@ import { routes as staircasesRoutes } from './routes/staircases-route'
 import { routes as roomsRoutes } from './routes/rooms-route'
 import { routes as companiesRoutes } from './routes/companies-route'
 import { routes as healthRoutes } from './routes/health-route'
+import { routes as openapiRoutes } from './routes/openapi-route'
 
 const router = new KoaRouter()
 
@@ -18,5 +19,6 @@ staircasesRoutes(router)
 roomsRoutes(router)
 companiesRoutes(router)
 healthRoutes(router)
+openapiRoutes(router)
 
 export default router

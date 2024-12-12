@@ -6,8 +6,7 @@ import cors from '@koa/cors'
 import api from './api'
 
 import { logger, loggerMiddlewares } from 'onecore-utilities'
-import { koaSwagger } from 'koa2-swagger-ui'
-import { routes as swaggerRoutes } from './routes/swagger-route'
+import { koaApiReference } from '@scalar/koa-api-reference'
 
 const app = new Koa()
 
@@ -24,16 +23,14 @@ app.use(
 )
 
 app.use(
-  koaSwagger({
-    routePrefix: '/swagger',
-    swaggerOptions: {
-      url: '/swagger.json',
-      defaultModelsExpandDepth: '-1',
-      tryItOutEnabled: true,
-      displayRequestDuration: true,
-      persistAuthorization: true,
-      tagsSorter: 'alpha',
+  koaApiReference({
+    spec: {
+      url: '/openapi.json'
     },
+    page: {
+      title: 'Property Base API Reference',
+      description: 'API documentation for the Property Base system'
+    }
   })
 )
 
@@ -49,7 +46,6 @@ app.use(bodyParser())
 
 const publicRouter = new KoaRouter()
 
-swaggerRoutes(publicRouter)
 app.use(publicRouter.routes())
 
 app.use(api.routes())
