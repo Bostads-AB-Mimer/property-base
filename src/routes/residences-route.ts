@@ -104,7 +104,7 @@ export const routes = (router: KoaRouter) => {
           validityPeriod: {
             fromDate: residence.fromDate,
             toDate: residence.toDate,
-          }
+          },
         })
         return {
           ...parsedResidence,
@@ -160,11 +160,13 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
+      console.log('residence', residence)
+
       //todo: add room link
       const links = ResidenceLinksSchema.parse({
         self: { href: `/residences/${residence.id}` },
         building: {
-          href: `/buildings/${residence.propertyObject.building?.buildingCode}`,
+          href: `/buildings/${residence.propertyObject.building?.buildingCode}`, // TODO: check why building is null here sometimes
         },
         property: { href: `/properties/${residence.code}` },
         rooms: {
@@ -222,21 +224,16 @@ export const routes = (router: KoaRouter) => {
         residenceType: {
           residenceTypeId: residence.residenceType?.id || '',
           code: residence.residenceType?.code || '',
-          name: residence.residenceType?.name || null,
-          roomCount: residence.residenceType?.roomCount || null,
+          name: residence.residenceType?.name,
+          roomCount: residence.residenceType?.roomCount,
           kitchen: residence.residenceType?.kitchen || 0,
           systemStandard: residence.residenceType?.systemStandard || 0,
-          checklistId: residence.residenceType?.checklistId || null,
-          componentTypeActionId:
-            residence.residenceType?.componentTypeActionId || null,
-          statisticsGroupSCBId:
-            residence.residenceType?.statisticsGroupSCBId || null,
-          statisticsGroup2Id:
-            residence.residenceType?.statisticsGroup2Id || null,
-          statisticsGroup3Id:
-            residence.residenceType?.statisticsGroup3Id || null,
-          statisticsGroup4Id:
-            residence.residenceType?.statisticsGroup4Id || null,
+          checklistId: residence.residenceType?.checklistId,
+          componentTypeActionId: residence.residenceType?.componentTypeActionId,
+          statisticsGroupSCBId: residence.residenceType?.statisticsGroupSCBId,
+          statisticsGroup2Id: residence.residenceType?.statisticsGroup2Id,
+          statisticsGroup3Id: residence.residenceType?.statisticsGroup3Id,
+          statisticsGroup4Id: residence.residenceType?.statisticsGroup4Id,
           timestamp:
             residence.residenceType?.timestamp || new Date().toISOString(),
         },
@@ -250,10 +247,15 @@ export const routes = (router: KoaRouter) => {
             energyIndex: residence.propertyObject?.energyIndex || undefined,
           },
         },
-        _links: links,
       })
 
-      ctx.body = { content: parsedResidence, ...metadata }
+      ctx.body = {
+        content: {
+          ...parsedResidence,
+          _links: links,
+        },
+        ...metadata,
+      }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
