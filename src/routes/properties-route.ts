@@ -79,17 +79,16 @@ export const routes = (router: KoaRouter) => {
       const properties = await getProperties(companyCode, tract)
 
       const responseContent = properties.map((property) => {
-        const links = PropertyLinksSchema.parse({
-          self: { href: `/properties/${property.id}` },
-          buildings: { href: `/buildings?propertyCode=${property.code}` },
-        })
-
         const parsedProperty = PropertySchema.parse({
           ...property,
         })
+        
         return {
           ...parsedProperty,
-          _links: links,
+          _links: PropertyLinksSchema.parse({
+            self: { href: `/properties/${property.id}` },
+            buildings: { href: `/buildings?propertyCode=${property.code}` },
+          }),
         }
       })
 

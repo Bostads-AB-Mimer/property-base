@@ -21,11 +21,6 @@ export const PropertySchema = z.object<z.ZodRawShape>({
   name: z.string(),
   code: z.string(),
   propertyId: z.string(),
-  _links: z.object({
-    self: z.object({
-      href: z.string(),
-    }),
-  }),
 })
 
 export const PropertyDetailsSchema = z.object({
