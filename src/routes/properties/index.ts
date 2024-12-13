@@ -124,6 +124,12 @@ export const routes = (router: KoaRouter) => {
    *               properties:
    *                 content:
    *                   $ref: '#/components/schemas/PropertyDetails'
+   *       400:
+   *         description: Invalid query parameters
+   *       404:
+   *         description: property not found
+   *       500:
+   *         description: Internal server error
    */
   router.get('(.*)/properties/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
