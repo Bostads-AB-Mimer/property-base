@@ -58,40 +58,23 @@ const getProperties = async (
   companyCode: string,
   tract: string | undefined
 ): Promise<any[]> => {
-  if (tract) {
-    let propertyStructures = await prisma.propertyStructure.findMany({
-      where: {
-        name: { contains: tract },
-        companyCode: companyCode,
-        propertyId: { not: null },
-        buildingId: null,
-        managementUnitId: null,
-        landAreaId: null,
-        roomId: null,
-        maintenanceUnitId: null,
-        systemId: null,
-      },
-    })
-
-    return prisma.property.findMany({
-      where: {
-        propertyObjectId: {
-          in: map(propertyStructures, 'objectId'),
-        },
-      },
-    })
+  const whereClause: Record<string, any> = {
+    companyCode,
+    propertyId: { not: null },
+    buildingId: null,
+    managementUnitId: null,
+    landAreaId: null,
+    roomId: null,
+    maintenanceUnitId: null,
+    systemId: null,
   }
+
+  if (tract) {
+    whereClause.name = { contains: tract }
+  }
+
   const propertyStructures = await prisma.propertyStructure.findMany({
-    where: {
-      companyCode: companyCode,
-      propertyId: { not: null },
-      buildingId: null,
-      managementUnitId: null,
-      landAreaId: null,
-      roomId: null,
-      maintenanceUnitId: null,
-      systemId: null,
-    },
+    where: whereClause,
   })
 
   return prisma.property.findMany({
