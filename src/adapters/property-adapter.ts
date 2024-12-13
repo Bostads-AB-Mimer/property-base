@@ -24,7 +24,7 @@ const getPropertyById = async (
   propertyId: string
 ): Promise<PropertyWithObject | null> => {
   //todo: /properties/ returns a list of properties from babuf
-  //todo: the are 2 ids in each element: id and propertyId
+  //todo: there are 2 ids in each element: id and propertyId
   //todo: id is the babuf id and propertyId is the cmobj id
   //todo: this endpoint relies on propertyId
   //todo: we need to make this clear in the docs/endpoint or map propertyId in babuf to id
@@ -64,6 +64,9 @@ const getProperties = async (
   // but that would require a join with bafst based on the result of below query
   // the join would be performed on keyobjfst
   // we could then get the actual property data from bafst
+  //todo: re-estate my assumptions
+  //todo: we should look up the actual properties in bafst
+  //todo: the performance is not an issue, nor the query
   if (tract) {
     return prisma.propertyStructure.findMany({
       where: {

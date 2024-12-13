@@ -108,17 +108,21 @@ export const newComponentFunction = async (
       localeId: null,
     },
   })
-
+  //todo: qualify select and add mapper
   return prisma.component.findMany({
     where: {
       objectId: {
         in: map(propertyStructures, 'objectId'),
       },
     },
-    select: {
-      id: true,
-      code: true,
-      name: true,
+  })
+}
+
+export const getComponentById = async (id: string) => {
+  return prisma.component.findUnique({
+    where: {
+      id: id,
     },
+    //todo: qualify select and add mapper
   })
 }
