@@ -24,8 +24,8 @@ async function getStaircasesByBuildingCode(buildingCode: string) {
 
   const staircases = await prisma.staircase.findMany({
     where: {
-      objectID: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
   })
