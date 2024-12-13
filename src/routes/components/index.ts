@@ -6,6 +6,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import {
+  getComponentById,
   getComponentByMaintenanceUnitCode,
   newComponentFunction,
 } from '../../adapters/component-adapter'
@@ -13,6 +14,8 @@ import {
   componentsQueryParamsSchema,
   componentsQueryParamsSchema2,
 } from '../../types/component'
+import { getRoomById } from '../../adapters/room-adapter'
+import { generateMetaLinks } from '../../utils/links'
 
 /**
  * @swagger
@@ -93,6 +96,7 @@ export const routes = (router: KoaRouter) => {
     }
   })
 
+  //todo: use correct type in schema
   /**
    * @swagger
    * /components2:
@@ -128,7 +132,7 @@ export const routes = (router: KoaRouter) => {
    *         description: The room code where the components are located.
    *     responses:
    *       200:
-   *         description: Successfully retrieved the rooms.
+   *         description: Successfully retrieved the components.
    *         content:
    *           application/json:
    *             schema:
@@ -137,7 +141,7 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Room'
+   *                     $ref: '#/components/schemas/Component'
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -173,6 +177,61 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: rooms,
         ...metadata,
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
+  //todo: use correct type in schema
+  /**
+   * @swagger
+   * /components/{id}:
+   *   get:
+   *     summary: Get a component by ID
+   *     description: Returns a component with the specified ID
+   *     tags:
+   *       - Components
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The ID of the component
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the component
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Component'
+   *       404:
+   *         description: Component not found
+   *       500:
+   *         description: Internal server error
+   */
+  router.get('(.*)/components/:id', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const id = ctx.params.id
+    logger.info(`GET /components/${id}`, metadata)
+
+    try {
+      const component = await getComponentById(id)
+      if (!component) {
+        ctx.status = 404
+        return
+      }
+
+      //todo: add links
+      ctx.body = {
+        content: component,
+        ...metadata,
+        _links: generateMetaLinks(ctx, '/components', {
+          id: ctx.params.response,
+        }),
       }
     } catch (err) {
       ctx.status = 500

@@ -127,7 +127,7 @@ export const routes = (router: KoaRouter) => {
    *       400:
    *         description: Invalid query parameters
    *       404:
-   *         description: property not found
+   *         description: Property not found
    *       500:
    *         description: Internal server error
    */
