@@ -78,7 +78,7 @@ const getProperties = async (
   return prisma.property.findMany({
     where: {
       propertyObjectId: {
-        in: map(propertyStructures, 'objectId'),
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
   })
