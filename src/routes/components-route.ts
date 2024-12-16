@@ -82,7 +82,7 @@ export const routes = (router: KoaRouter) => {
 
     const metadata = generateRouteMetadata(ctx)
     logger.info(
-      `GET /rooms?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residenceCode}&roomCode=${roomCode}`,
+      `GET /components?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residenceCode}&roomCode=${roomCode}`,
       metadata
     )
 
