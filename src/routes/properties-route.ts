@@ -56,7 +56,25 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Property'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Property'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             type: object
+   *                             properties:
+   *                               self:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/properties/123"
+   *                               buildings:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings?propertyCode=07901"
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -135,7 +153,25 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/PropertyDetails'
+   *                   allOf:
+   *                     - $ref: '#/components/schemas/PropertyDetails'
+   *                     - type: object
+   *                       properties:
+   *                         _links:
+   *                           type: object
+   *                           properties:
+   *                             self:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/properties/123"
+   *                             buildings:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/buildings?propertyCode=07901"
    */
   router.get('(.*)/properties/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
