@@ -85,7 +85,7 @@ export const routes = (router: KoaRouter) => {
               href: `/staircases?buildingCode=${building.id}`,
             },
             parent: {
-              href: `/properties/${propertyCode}`,
+              href: `/properties?propertyCode=${propertyCode}`,
             },
           },
         })),
