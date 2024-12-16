@@ -41,7 +41,25 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Company'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Company'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             type: object
+   *                             properties:
+   *                               self:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/companies/123"
+   *                               properties:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/properties?companyCode=001"
    *       500:
    *         description: Internal server error
    */
@@ -109,7 +127,25 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/CompanyDetails'
+   *                   allOf:
+   *                     - $ref: '#/components/schemas/CompanyDetails'
+   *                     - type: object
+   *                       properties:
+   *                         _links:
+   *                           type: object
+   *                           properties:
+   *                             self:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/companies/123"
+   *                             properties:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/properties?companyCode=001"
    */
   router.get('(.*)/companies/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
