@@ -17,6 +17,57 @@ import { generateMetaLinks } from '../utils/links'
  *     description: Operations related to components
  */
 export const routes = (router: KoaRouter) => {
+  //todo: use correct type in schema
+  /**
+   * @swagger
+   * /components:
+   *   get:
+   *     summary: Get components by building code, floor code, residence code, and room code.
+   *     description: Returns all components belonging to a specific room.
+   *     tags:
+   *       - Components
+   *     parameters:
+   *       - in: query
+   *         name: buildingCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The building code of the building for the components.
+   *       - in: query
+   *         name: floorCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The floor code of the staircase for the building.
+   *       - in: query
+   *         name: residenceCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The residence code where the components are located.
+   *       - in: query
+   *         name: roomCode
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The room code where the components are located.
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the components.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Component'
+   *       400:
+   *         description: Invalid query parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   router.get('(.*)/components', async (ctx) => {
     const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
 
