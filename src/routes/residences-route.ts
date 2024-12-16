@@ -52,7 +52,49 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Residence'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Residence'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             type: object
+   *                             properties:
+   *                               self:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/residences/123"
+   *                               building:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings/456"
+   *                               property:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/properties/789"
+   *                               rooms:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/rooms?buildingCode=0790101&residenceCode=07901011001"
+   *                               components:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/components?residenceCode=07901011001"
+   *                               parent:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings/456"
    *       400:
    *         description: Invalid query parameters.
    *       500:
