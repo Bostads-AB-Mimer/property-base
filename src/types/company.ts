@@ -12,7 +12,7 @@ export const CompanySchema = z.object({
 export const CompanyDetailsSchema = z.object({
   id: z.string(),
   propertyObjectId: z.string(),
-  code: z.string(),
+  code: z.string().describe('Company code'),
   name: z.string(),
   organizationNumber: z.string().nullable(),
   phone: z.string().nullable(),

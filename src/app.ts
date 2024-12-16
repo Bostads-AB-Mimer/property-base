@@ -6,7 +6,6 @@ import cors from '@koa/cors'
 import api from './api'
 
 import { logger, loggerMiddlewares } from 'onecore-utilities'
-import { koaApiReference } from '@scalar/koa-api-reference'
 
 const app = new Koa()
 
@@ -21,7 +20,6 @@ app.use(
     credentials: true, // Allow credentials (cookies, authorization headers, etc)
   })
 )
-
 
 app.on('error', (err) => {
   logger.error(err)
