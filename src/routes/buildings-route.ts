@@ -46,7 +46,43 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Building'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Building'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             type: object
+   *                             properties:
+   *                               self:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings/123"
+   *                               property:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/properties/456"
+   *                               residences:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/residences?buildingCode=0790101"
+   *                               staircases:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/staircases?buildingCode=0790101"
+   *                               parent:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/properties/456"
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -151,7 +187,43 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/Building'
+   *                   allOf:
+   *                     - $ref: '#/components/schemas/Building'
+   *                     - type: object
+   *                       properties:
+   *                         _links:
+   *                           type: object
+   *                           properties:
+   *                             self:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/buildings/123"
+   *                             property:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/properties/456"
+   *                             residences:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/residences?buildingCode=0790101"
+   *                             staircases:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/staircases?buildingCode=0790101"
+   *                             parent:
+   *                               type: object
+   *                               properties:
+   *                                 href:
+   *                                   type: string
+   *                                   example: "/properties/456"
    *       400:
    *         description: Invalid building code format
    *       404:
