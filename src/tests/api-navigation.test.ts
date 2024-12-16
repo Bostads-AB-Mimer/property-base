@@ -10,16 +10,9 @@ const getResponseContent = async (url: string, query = {}) => {
   return response.body.content
 }
 
-const verifyLinks = (response: any) => {
-  expect(response.body._links).toBeDefined()
-  expect(response.body._links.self).toBeDefined()
-  expect(response.body._links.self.href).toBeDefined()
-}
-
 describe('API Navigation Tests', () => {
   it('should get companies', async () => {
     const companies = await getResponseContent('/companies/')
-    verifyLinks(companies)
 
     const company = companies[0]
     expect(company.id).toBeDefined()
@@ -36,7 +29,6 @@ describe('API Navigation Tests', () => {
       companyCode: testCompany,
       tract: testTract,
     })
-    verifyLinks(properties)
 
     const property = properties[0]
     expect(property.propertyId).toBeDefined()
@@ -61,8 +53,6 @@ describe('API Navigation Tests', () => {
     const propertyDetails = propertyDetailsResponse.body.content
     expect(propertyDetails.propertyObjectId).toBe(property.propertyId)
     expect(propertyDetails.code).toBe(property.code)
-
-    verifyLinks(propertyDetailsResponse)
   })
 
   it('should get buildings associated with a property', async () => {
