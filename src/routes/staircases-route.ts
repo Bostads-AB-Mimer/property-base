@@ -47,7 +47,37 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Staircase'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Staircase'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             type: object
+   *                             properties:
+   *                               self:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/staircases/123"
+   *                               building:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings/456"
+   *                               residences:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/residences?buildingCode=0790101"
+   *                               parent:
+   *                                 type: object
+   *                                 properties:
+   *                                   href:
+   *                                     type: string
+   *                                     example: "/buildings/456"
    *       400:
    *         description: Invalid query parameters.
    *       500:
