@@ -1,8 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { map } from 'lodash'
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
   include: {

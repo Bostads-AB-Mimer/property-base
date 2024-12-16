@@ -1,9 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 import { map } from 'lodash'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 //todo: add types
 
@@ -56,8 +54,8 @@ export const getResidencesByBuildingCode = async (buildingCode: string) => {
 
   return prisma.residence.findMany({
     where: {
-      objectId: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
   })
@@ -83,8 +81,8 @@ export const getResidencesByBuildingCodeAndFloorCode = async (
 
   return prisma.residence.findMany({
     where: {
-      objectId: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
   })

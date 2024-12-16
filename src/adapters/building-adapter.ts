@@ -1,9 +1,7 @@
 import { map } from 'lodash'
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 //todo: add types
 
@@ -22,8 +20,8 @@ const getBuildings = async (propertyCode: string) => {
 
   return prisma.building.findMany({
     where: {
-      objectId: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
     include: {
