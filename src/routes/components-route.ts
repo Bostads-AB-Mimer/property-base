@@ -5,8 +5,9 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getComponentByMaintenanceUnitCode } from '../adapters/component-adapter'
+import { getComponentById, getComponents } from '../adapters/component-adapter'
 import { componentsQueryParamsSchema } from '../types/component'
+import { generateMetaLinks } from '../utils/links'
 
 /**
  * @swagger
@@ -16,46 +17,6 @@ import { componentsQueryParamsSchema } from '../types/component'
  *     description: Operations related to components
  */
 export const routes = (router: KoaRouter) => {
-  /**
-   * @swagger
-   * /components:
-   *   get:
-   *     summary: Gets a list of components for a maintenance unit
-   *     description: |
-   *       Retrieves all components associated with a specific maintenance unit code.
-   *       Components are returned ordered by installation date (newest first).
-   *       Each component includes details about its type, category, manufacturer,
-   *       and associated maintenance unit information.
-   *     tags:
-   *       - Components
-   *     parameters:
-   *       - in: query
-   *         name: maintenanceUnit
-   *         required: true
-   *         schema:
-   *           type: string
-   *         description: The unique code identifying the maintenance unit.
-   *     responses:
-   *       200:
-   *         description: |
-   *           Successfully retrieved the components list. Returns an array of component objects
-   *           containing details like ID, code, name, manufacturer, installation date, etc.
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 content:
-   *                   type: array
-   *                   items:
-   *                     $ref: '#/components/schemas/Component'
-   *       400:
-   *         description: Invalid maintenance unit code provided
-   *       404:
-   *         description: No components found for the specified maintenance unit
-   *       500:
-   *         description: Internal server error
-   */
   router.get('(.*)/components', async (ctx) => {
     const queryParams = componentsQueryParamsSchema.safeParse(ctx.query)
 
@@ -65,33 +26,81 @@ export const routes = (router: KoaRouter) => {
       return
     }
 
-    const { maintenanceUnit } = queryParams.data
+    const { buildingCode, floorCode, residenceCode, roomCode } =
+      queryParams.data
 
     const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /components?maintenanceUnit=${maintenanceUnit}`, metadata)
+    logger.info(
+      `GET /rooms?buildingCode=${buildingCode}&floorCode=${floorCode}&residenceCode=${residenceCode}&roomCode=${roomCode}`,
+      metadata
+    )
 
     try {
-      const components =
-        await getComponentByMaintenanceUnitCode(maintenanceUnit)
+      const rooms = await getComponents(
+        buildingCode,
+        floorCode,
+        residenceCode,
+        roomCode
+      )
+      //todo: add links
+      ctx.body = {
+        content: rooms,
+        ...metadata,
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
 
-      if (!components) {
+  //todo: use correct type in schema
+  /**
+   * @swagger
+   * /components/{id}:
+   *   get:
+   *     summary: Get a component by ID
+   *     description: Returns a component with the specified ID
+   *     tags:
+   *       - Components
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The ID of the component
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the component
+   *         content:
+   *           application/json:
+   *             schema:
+   *               $ref: '#/components/schemas/Component'
+   *       404:
+   *         description: Component not found
+   *       500:
+   *         description: Internal server error
+   */
+  router.get('(.*)/components/:id', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const id = ctx.params.id
+    logger.info(`GET /components/${id}`, metadata)
+
+    try {
+      const component = await getComponentById(id)
+      if (!component) {
         ctx.status = 404
         return
       }
 
+      //todo: add links
       ctx.body = {
-        content: components.map((component) => ({
-          ...component,
-          _links: {
-            self: {
-              href: `/components/${component.id}`,
-            },
-            maintenanceUnit: {
-              href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}`,
-            },
-          },
-        })),
+        content: component,
         ...metadata,
+        _links: generateMetaLinks(ctx, '/components', {
+          id: ctx.params.response,
+        }),
       }
     } catch (err) {
       ctx.status = 500
