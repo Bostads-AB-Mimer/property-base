@@ -116,7 +116,10 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   allOf:
    *                    - $ref: '#/components/schemas/CompanyDetails'
-   *                    - $ref: '#/components/schemas/CompanyLinks'
+   *                    - type: object
+   *                       properties:
+   *                         _links:
+   *                           $ref: '#/components/schemas/CompanyLinks'
    *       404:
    *         description: Company not found
    *       500:
