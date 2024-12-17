@@ -62,7 +62,12 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Component'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Component'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             $ref: '#/components/schemas/ComponentLinks'
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -93,7 +98,7 @@ export const routes = (router: KoaRouter) => {
         residenceCode,
         roomCode
       )
-      //todo: add links
+      //todo: add links by ComponentLinksSchema
       ctx.body = {
         content: components,
         ...metadata,
