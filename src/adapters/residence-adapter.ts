@@ -87,7 +87,7 @@ export const getResidencesByBuildingCode = async (
 export const getResidencesByBuildingCodeAndFloorCode = async (
   buildingCode: string,
   floorCode: string
-) => {
+): Promise<Residence[]> => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
       buildingCode: {

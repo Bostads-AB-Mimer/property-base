@@ -84,11 +84,8 @@ export const routes = (router: KoaRouter) => {
           parent: { href: `/residences/${residenceCode}` },
         })
 
-        const parsedRoom = RoomSchema.parse({
-          ...room,
-        })
         return {
-          ...parsedRoom,
+          ...room,
           _links: links,
         }
       })
