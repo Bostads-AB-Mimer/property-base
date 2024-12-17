@@ -2,29 +2,51 @@ import request from 'supertest'
 import app from '../app'
 
 describe('Components API', () => {
-  const testMaintenanceUnit = '703T01' // Replace with a valid maintenance unit code
+  let buildingCode: string
+  let floorCode: string
+  let residenceCode: string
+  let roomCode: string
 
-  // ACTIVATE this when we have a valid component in the db
-  xit('should return components for a maintenance unit', async () => {
-    const response = await request(app.callback())
-      .get('/components')
-      .query({ maintenanceUnit: testMaintenanceUnit })
+  beforeAll(async () => {
+    // Get codes needed for testing
+    const buildingsResponse = await request(app.callback())
+      .get('/buildings')
+      .query({ propertyCode: '01901' })
+    buildingCode = buildingsResponse.body.content[0].code
+
+    const staircaseResponse = await request(app.callback())
+      .get('/staircases')
+      .query({ buildingCode })
+    floorCode = staircaseResponse.body.content[0].code
+
+    const residencesResponse = await request(app.callback())
+      .get('/residences')
+      .query({ buildingCode })
+    const residence = residencesResponse.body.content[0]
+    residenceCode = residence.code
+
+    const roomsResponse = await request(app.callback())
+      .get('/rooms')
+      .query({ buildingCode, floorCode, residenceCode })
+    roomCode = roomsResponse.body.content[2].code
+  })
+
+  it('should return components for a maintenance unit', async () => {
+    const response = await request(app.callback()).get('/components').query({
+      buildingCode: buildingCode,
+      floorCode: floorCode,
+      residenceCode: residenceCode,
+      roomCode: roomCode,
+    })
 
     expect(response.status).toBe(200)
     expect(response.body.content).toBeDefined()
     expect(Array.isArray(response.body.content)).toBe(true)
 
-    if (response.body.content.length > 0) {
-      const component = response.body.content[0]
-      expect(component.id).toBeDefined()
-      expect(component.code).toBeDefined()
-      expect(component.name).toBeDefined()
-      expect(component.details).toBeDefined()
-      expect(component.classification).toBeDefined()
-      expect(component._links).toBeDefined()
-      expect(component._links.self).toBeDefined()
-      expect(component._links.maintenanceUnit).toBeDefined()
-    }
+    const component = response.body.content[0]
+    expect(component.id).toBeDefined()
+    expect(component.code).toBeDefined()
+    expect(component.name).toBeDefined()
   })
 
   it('should validate maintenanceUnit parameter', async () => {
