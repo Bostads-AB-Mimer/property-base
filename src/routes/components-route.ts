@@ -49,7 +49,12 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Component'
+   *                     allOf:
+   *                       - $ref: '#/components/schemas/Component'
+   *                       - type: object
+   *                         properties:
+   *                           _links:
+   *                             $ref: '#/components/schemas/ComponentLinks'
    *       400:
    *         description: Invalid maintenance unit code provided
    *       404:
