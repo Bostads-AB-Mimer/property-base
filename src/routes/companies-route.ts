@@ -41,7 +41,12 @@ export const routes = (router: KoaRouter) => {
    *                 content:
    *                   type: array
    *                   items:
-   *                     $ref: '#/components/schemas/Company'
+   *                     allOf:
+   *                      - $ref: '#/components/schemas/company'
+   *                      - type: object
+   *                        properties:
+   *                          _links:
+   *                            $ref: '#/components/schemas/CompanyLinks'
    *       500:
    *         description: Internal server error
    */
@@ -109,7 +114,9 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/CompanyDetails'
+   *                   allOf:
+   *                    - $ref: '#/components/schemas/CompanyDetails'
+   *                    - $ref: '#/components/schemas/CompanyLinks'
    *       404:
    *         description: Company not found
    *       500:
