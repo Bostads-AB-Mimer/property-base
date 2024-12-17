@@ -131,7 +131,12 @@ export const routes = (router: KoaRouter) => {
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/PropertyDetails'
+   *                   allOf:
+   *                     - $ref: '#/components/schemas/PropertyDetails'
+   *                     - type: object
+   *                       properties:
+   *                         _links:
+   *                           $ref: '#/components/schemas/PropertyLinks'
    *       404:
    *         description: Property not found
    *       500:
