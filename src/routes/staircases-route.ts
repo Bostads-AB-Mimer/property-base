@@ -70,7 +70,7 @@ export const routes = (router: KoaRouter) => {
     try {
       const response = await getStaircasesByBuildingCode(buildingCode)
       const responseContent = response.map((staircase) => {
-        const links = StaircaseLinksSchema.parse({
+        const _links = StaircaseLinksSchema.parse({
           self: { href: `/staircases/${staircase.id}` },
           building: { href: `/buildings/${staircase.buildingCode}` },
           residences: {
@@ -80,19 +80,9 @@ export const routes = (router: KoaRouter) => {
           components: { href: `/components?maintenanceUnit=${staircase.code}` },
         })
 
-        const parsedStaircase = StaircaseSchema.parse({
-          ...staircase,
-        })
         return {
-          ...parsedStaircase,
-          _links: StaircaseLinksSchema.parse({
-            self: { href: `/staircases/${staircase.id}` },
-            building: { href: `/buildings/${staircase.buildingCode}` },
-            residences: {
-              href: `/residences?buildingCode=${staircase.buildingCode}`,
-            },
-            parent: { href: `/buildings/${staircase.buildingCode}` },
-          }),
+          ...staircase,
+          _links,
         }
       })
 
