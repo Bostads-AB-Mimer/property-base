@@ -28,8 +28,5 @@ export const getConstructionPartsByBuildingCode = async (
         in: map(propertyStructures, 'propertyObjectId'),
       },
     },
-    include: {
-      constructionPartType: true,
-    },
   })
 }
