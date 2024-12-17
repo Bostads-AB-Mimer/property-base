@@ -1,7 +1,7 @@
 import request from 'supertest'
 import app from '../app'
 
-describe('Staircases API', () => {
+describe('Construction parts API', () => {
   let buildingCode: string
 
   beforeAll(async () => {
