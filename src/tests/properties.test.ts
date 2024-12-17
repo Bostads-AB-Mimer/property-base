@@ -18,7 +18,7 @@ describe('Properties API', () => {
     const property = response.body.content[0]
     expect(property.id).toBeDefined()
     expect(property.code).toBeDefined()
-    expect(property.name).toBeDefined()
+    expect(property.designation).toBeDefined() // Changed from name to designation
     expect(property._links).toBeDefined()
     expect(property._links.self).toBeDefined()
     expect(property._links.buildings).toBeDefined()
