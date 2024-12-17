@@ -36,17 +36,14 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               type: object
-   *               properties:
-   *                 content:
-   *                   type: array
-   *                   items:
-   *                     allOf:
-   *                      - $ref: '#/components/schemas/Company'
-   *                      - type: object
-   *                        properties:
-   *                          _links:
-   *                            $ref: '#/components/schemas/CompanyLinks'
+   *               type: array
+   *               items:
+   *                 allOf:
+   *                  - $ref: '#/components/schemas/Company'
+   *                  - type: object
+   *                    properties:
+   *                      _links:
+   *                        $ref: '#/components/schemas/CompanyLinks'
    *       500:
    *         description: Internal server error
    */
@@ -77,11 +74,7 @@ export const routes = (router: KoaRouter) => {
         })
       })
 
-      ctx.body = {
-        content: responseContent,
-        ...metadata,
-        _links: generateMetaLinks(ctx, '/companies'),
-      }
+      ctx.body = responseContent
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
