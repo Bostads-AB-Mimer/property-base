@@ -102,6 +102,7 @@ export const routes = (router: KoaRouter) => {
           _links: ComponentLinksSchema.parse({
             self: { href: `/components/${component.id}` },
             maintenanceUnit: { href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}` },
+            parent: { href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}` },
           }),
         }
       })
