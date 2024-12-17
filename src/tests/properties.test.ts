@@ -35,7 +35,7 @@ describe('Properties API', () => {
     expect(response.body.content.length).toBeGreaterThan(0)
 
     const property = response.body.content[0]
-    expect(property.name).toContain(testTract)
+    expect(property.designation).toContain(testTract)
   })
 
   it('should return property details by ID', async () => {
