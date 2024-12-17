@@ -110,6 +110,10 @@ export const routes = (router: KoaRouter) => {
    *               properties:
    *                 content:
    *                   $ref: '#/components/schemas/CompanyDetails'
+   *       404:
+   *         description: Company not found
+   *       500:
+   *         description: Internal server error
    */
   router.get('(.*)/companies/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
