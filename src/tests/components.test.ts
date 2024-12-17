@@ -34,6 +34,9 @@ describe('Components API', () => {
 
     expect(response.status).toBe(400)
     expect(response.body.errors).toBeDefined()
+    if (response.status === 500) {
+      console.error('Test failed with reason:', response.body.reason)
+    }
   })
 
   it('should include residence link when queried by residence', async () => {
