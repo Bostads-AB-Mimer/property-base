@@ -6,7 +6,6 @@ const prisma = new PrismaClient({
 })
 
 //todo: add types
-//todo: rename construction part to building part instead?
 export const getConstructionPartsByBuildingCode = async (
   buildingCode: string
 ) => {
@@ -16,7 +15,7 @@ export const getConstructionPartsByBuildingCode = async (
         contains: buildingCode,
       },
       NOT: {
-        buildingPartId: null,
+        constructionPartId: null,
       },
       residenceId: null,
       localeId: null,
@@ -25,8 +24,8 @@ export const getConstructionPartsByBuildingCode = async (
 
   return prisma.constructionPart.findMany({
     where: {
-      objectId: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
     include: {
