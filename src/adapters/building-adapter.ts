@@ -1,13 +1,23 @@
 import { map } from 'lodash'
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
-//todo: add types
+export type BuildingWithRelations = Prisma.BuildingGetPayload<{
+  include: {
+    buildingType: true
+    marketArea: true
+    propertyDesignation: true
+    district: true
+    propertyObject: {
+      include: {
+        property: true
+      }
+    }
+  }
+}>
 
-const getBuildings = async (propertyCode: string) => {
+const getBuildings = async (propertyCode: string): Promise<BuildingWithRelations[]> => {
   const propertyStructures = await prisma.propertyStructure.findMany({
     where: {
       propertyCode: {
@@ -22,8 +32,8 @@ const getBuildings = async (propertyCode: string) => {
 
   return prisma.building.findMany({
     where: {
-      objectId: {
-        in: map(propertyStructures, 'objectId'),
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
       },
     },
     include: {
@@ -31,11 +41,16 @@ const getBuildings = async (propertyCode: string) => {
       marketArea: true,
       district: true,
       propertyDesignation: true,
+      propertyObject: {
+        include: {
+          property: true
+        }
+      }
     },
   })
 }
 
-const getBuildingById = async (id: string) => {
+const getBuildingById = async (id: string): Promise<BuildingWithRelations | null> => {
   return prisma.building.findFirst({
     where: {
       id: id,
@@ -45,6 +60,11 @@ const getBuildingById = async (id: string) => {
       marketArea: true,
       propertyDesignation: true,
       district: true,
+      propertyObject: {
+        include: {
+          property: true
+        }
+      }
     },
   })
 }

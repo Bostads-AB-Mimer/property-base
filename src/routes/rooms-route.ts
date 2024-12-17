@@ -1,8 +1,9 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { getRoomById, getRooms } from '../../adapters/room-adapter'
-import { roomsQueryParamsSchema } from '../../types/room'
-import { generateMetaLinks } from '../../utils/links'
+import { getRoomById, getRooms } from '../adapters/room-adapter'
+import { roomsQueryParamsSchema, RoomSchema } from '../types/room'
+import { RoomLinksSchema } from '../types/links'
+import { generateMetaLinks } from '../utils/links'
 
 /**
  * @swagger
@@ -75,8 +76,22 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const rooms = await getRooms(buildingCode, floorCode, residenceCode)
+      const responseContent = rooms.map((room) => {
+        const links = RoomLinksSchema.parse({
+          self: { href: `/rooms/${room.id}` },
+          residence: { href: `/residences/${residenceCode}` },
+          building: { href: `/buildings/${buildingCode}` },
+          parent: { href: `/residences/${residenceCode}` },
+        })
+
+        return {
+          ...room,
+          _links: links,
+        }
+      })
+
       ctx.body = {
-        content: rooms,
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
@@ -109,7 +124,9 @@ export const routes = (router: KoaRouter) => {
    *             schema:
    *               $ref: '#/components/schemas/Room'
    *       404:
-   *         description: Residence not found
+   *         description: Room not found
+   *       500:
+   *         description: Internal server error
    */
   router.get('(.*)/rooms/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)

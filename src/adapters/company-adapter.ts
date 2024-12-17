@@ -1,9 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client'
-import { PropertyBasicInfo } from './property-adapter'
 
-const prisma = new PrismaClient({
-  log: ['query'],
-})
+const prisma = new PrismaClient({})
 
 export type CompanyBasicInfo = Prisma.CompanyGetPayload<{
   select: typeof companyBasicInfoSelect
