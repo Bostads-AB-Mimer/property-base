@@ -42,7 +42,7 @@ export const routes = (router: KoaRouter) => {
    *                   type: array
    *                   items:
    *                     allOf:
-   *                      - $ref: '#/components/schemas/company'
+   *                      - $ref: '#/components/schemas/Company'
    *                      - type: object
    *                        properties:
    *                          _links:
