@@ -35,4 +35,18 @@ describe('Components API', () => {
     expect(response.status).toBe(400)
     expect(response.body.errors).toBeDefined()
   })
+
+  it('should include residence link when queried by residence', async () => {
+    const testResidenceCode = '0790101001'
+    const response = await request(app.callback())
+      .get('/components')
+      .query({ type: 'residence', residenceCode: testResidenceCode })
+
+    expect(response.status).toBe(200)
+    if (response.body.content.length > 0) {
+      const component = response.body.content[0]
+      expect(component._links.residence).toBeDefined()
+      expect(component._links.residence.href).toBe(`/residences/${testResidenceCode}`)
+    }
+  })
 })

@@ -53,6 +53,7 @@ export const RoomLinksSchema = BaseLinksSchema.extend({
 export const ComponentLinksSchema = BaseLinksSchema.extend({
   maintenanceUnit: LinkSchema,
   parent: LinkSchema,
+  residence: LinkSchema.optional(),
 })
 
 export type CompanyLinks = z.infer<typeof CompanyLinksSchema>
