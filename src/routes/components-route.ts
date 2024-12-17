@@ -87,7 +87,7 @@ export const routes = (router: KoaRouter) => {
     )
 
     try {
-      const rooms = await getComponents(
+      const components = await getComponents(
         buildingCode,
         floorCode,
         residenceCode,
@@ -95,7 +95,7 @@ export const routes = (router: KoaRouter) => {
       )
       //todo: add links
       ctx.body = {
-        content: rooms,
+        content: components,
         ...metadata,
       }
     } catch (err) {

@@ -24,7 +24,6 @@ export const getComponents = async (
       localeId: null,
     },
   })
-  //todo: qualify select and add mapper
   return prisma.component.findMany({
     where: {
       propertyObjectId: {
@@ -39,6 +38,5 @@ export const getComponentById = async (id: string) => {
     where: {
       id: id,
     },
-    //todo: qualify select and add mapper
   })
 }
