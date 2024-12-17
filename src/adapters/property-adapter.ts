@@ -39,7 +39,7 @@ const getPropertyById = async (
   return response
 }
 
-export type PropertyBasicInfo = Prisma.PropertyStructureGetPayload<{
+export type Property = Prisma.PropertyStructureGetPayload<{
   select: {
     id: true
     companyId: true
