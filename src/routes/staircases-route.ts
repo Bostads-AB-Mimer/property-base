@@ -70,7 +70,7 @@ export const routes = (router: KoaRouter) => {
     try {
       const response = await getStaircasesByBuildingCode(buildingCode)
       const responseContent = response.map((staircase) => {
-        const links = StaircaseLinksSchema.parse({
+        const _links = StaircaseLinksSchema.parse({
           self: { href: `/staircases/${staircase.id}` },
           building: { href: `/buildings/${staircase.buildingCode}` },
           residences: {
@@ -79,19 +79,9 @@ export const routes = (router: KoaRouter) => {
           parent: { href: `/buildings/${staircase.buildingCode}` },
         })
 
-        const parsedStaircase = StaircaseSchema.parse({
-          ...staircase,
-        })
         return {
-          ...parsedStaircase,
-          _links: StaircaseLinksSchema.parse({
-            self: { href: `/staircases/${staircase.id}` },
-            building: { href: `/buildings/${staircase.buildingCode}` },
-            residences: {
-              href: `/residences?buildingCode=${staircase.buildingCode}`,
-            },
-            parent: { href: `/buildings/${staircase.buildingCode}` },
-          }),
+          ...staircase,
+          _links,
         }
       })
 
@@ -105,7 +95,4 @@ export const routes = (router: KoaRouter) => {
       ctx.body = { reason: errorMessage, ...metadata }
     }
   })
-
-  //todo: add staircases details GET
-  //todo: the details data will be quote identical to the one in the list GET because of the data model
 }
