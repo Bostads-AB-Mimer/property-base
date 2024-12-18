@@ -6,8 +6,12 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { getComponentById, getComponents } from '../adapters/component-adapter'
-import { componentsQueryParamsSchema } from '../types/component'
+import {
+  ComponentSchema,
+  componentsQueryParamsSchema,
+} from '../types/component'
 import { generateMetaLinks } from '../utils/links'
+import { ComponentLinksSchema } from '../types/links'
 
 /**
  * @swagger
@@ -98,30 +102,28 @@ export const routes = (router: KoaRouter) => {
         residenceCode,
         roomCode
       )
-      //todo: add links by ComponentLinksSchema
 
-      // const responseContent = components.map((component) => {
-      //   const parsedComponent = ComponentSchema.parse({
-      //     ...component,
-      //   })
-      //   return {
-      //     ...parsedComponent,
-      //     _links: ComponentLinksSchema.parse({
-      //       self: { href: `/components/${component.id}` },
-      //       maintenanceUnit: { href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}` },
-      //       parent: { href: `/maintenanceUnits/${component.maintenanceUnits[0]?.code}` },
-      //       ...(queryParams.data.type === 'residence' && {
-      //         residence: { href: `/residences/${queryParams.data.residenceCode}` }
-      //       }),
-      //     }),
-      //   }
-      // })
-
+      const responseContent = components.map((component) => {
+        const parsedComponent = ComponentSchema.parse({
+          ...component,
+        })
+        return {
+          ...parsedComponent,
+          _links: ComponentLinksSchema.parse({
+            self: { href: `/components/${component.id}` },
+            parent: {
+              href: `/residences/${residenceCode}`,
+            },
+            residence: { href: `/residences/${residenceCode}` },
+          }),
+        }
+      })
       ctx.body = {
-        content: components,
+        content: responseContent,
         ...metadata,
       }
     } catch (err) {
+      console.log(err)
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
       ctx.body = { reason: errorMessage, ...metadata }

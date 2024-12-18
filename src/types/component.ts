@@ -9,36 +9,29 @@ export const componentsQueryParamsSchema = z.object({
   roomCode: z.string().min(1, { message: 'roomCode is required.' }),
 })
 
-//todo: remove
 export const ComponentSchema = z.object({
   id: z.string(),
+  propertyObjectId: z.string(),
+  typeId: z.string(),
+  categoryId: z.string().nullable(),
+  systemSupplierId: z.string().nullable(),
+  ownerUserId: z.string().nullable(),
+  constructionPartId: z.string().nullable(),
+  itemId: z.string(),
+  priceCategoryId: z.string().nullable(),
   code: z.string(),
   name: z.string(),
-  details: z.object({
-    manufacturer: z.string().nullable(),
-    typeDesignation: z.string().nullable(),
-  }),
-  dates: z.object({
-    installation: z.date().nullable(),
-    warrantyEnd: z.date().nullable(),
-  }),
-  classification: z.object({
-    componentType: z.object({
-      code: z.string(),
-      name: z.string(),
-    }),
-    category: z.object({
-      code: z.string(),
-      name: z.string(),
-    }),
-  }),
-  maintenanceUnits: z.array(
-    z.object({
-      id: z.string(),
-      code: z.string(),
-      name: z.string(),
-    })
-  ),
+  manufacturer: z.string().nullable(),
+  typeDesignation: z.string().nullable(),
+  installationDate: z.date(),
+  warrantyEndDate: z.string().datetime().nullable(),
+  serves: z.string().nullable(),
+  faultReportingAdministration: z.number().int(),
+  isArtInventory: z.number().int(),
+  deleteMark: z.number().int(),
+  fromDate: z.date(),
+  toDate: z.date(),
+  timestamp: z.string(),
 })
 
 export type Component = z.infer<typeof ComponentSchema>
