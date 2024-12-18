@@ -21,7 +21,6 @@ import { ComponentLinksSchema } from '../types/links'
  *     description: Operations related to components
  */
 export const routes = (router: KoaRouter) => {
-  //todo: use correct type in schema
   /**
    * @swagger
    * /components:
@@ -68,10 +67,6 @@ export const routes = (router: KoaRouter) => {
    *                   items:
    *                     allOf:
    *                       - $ref: '#/components/schemas/Component'
-   *                       - type: object
-   *                         properties:
-   *                           _links:
-   *                             $ref: '#/components/schemas/ComponentLinks'
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -130,7 +125,6 @@ export const routes = (router: KoaRouter) => {
     }
   })
 
-  //todo: use correct type in schema
   /**
    * @swagger
    * /components/{id}:
@@ -170,7 +164,6 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      //todo: add links
       ctx.body = {
         content: component,
         ...metadata,
