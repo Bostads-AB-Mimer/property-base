@@ -22,7 +22,7 @@ import { z } from 'zod'
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /companies/:
+   * /companies:
    *   get:
    *     summary: Get a list of all companies
    *     description: |
@@ -36,18 +36,16 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               type: array
-   *               items:
-   *                 allOf:
-   *                  - $ref: '#/components/schemas/Company'
-   *                  - type: object
-   *                    properties:
-   *                      _links:
-   *                        $ref: '#/components/schemas/CompanyLinks'
+   *               type: object
+   *               properties:
+   *                 content:
+   *                  type: array
+   *                  items:
+   *                    $ref: '#/components/schemas/Company'
    *       500:
    *         description: Internal server error
    */
-  router.get(['(.*)/companies', '(.*)/companies/'], async (ctx) => {
+  router.get(['(.*)/companies'], async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     logger.info('GET /companies', metadata)
 
@@ -68,13 +66,17 @@ export const routes = (router: KoaRouter) => {
         return CompanyResponseSchema.parse({
           ...CompanySchema.parse(company),
           _links: {
-            self: { href: `/companies/${company.id}` },
+            self: {
+              href: `/companies/{companyId}`,
+              useParams: true,
+              params: { companyId: company.id },
+            },
             properties: { href: `/properties?companyCode=${company.code}` },
           },
         })
       })
 
-      ctx.body = responseContent
+      ctx.body = { content: responseContent }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
