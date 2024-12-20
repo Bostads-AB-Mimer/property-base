@@ -144,7 +144,7 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/Residence'
+   *               $ref: '#/components/schemas/ResidenceDetails'
    *       404:
    *         description: Residence not found
    *       500:
@@ -170,7 +170,6 @@ export const routes = (router: KoaRouter) => {
       const parsedResidence = ResidenceDetailedSchema.parse({
         id: residence.id,
         code: residence.code,
-        buildingCode: residence.propertyObject.building?.buildingCode,
         name: residence.name || '',
         location: residence.location || '',
         accessibility: {
