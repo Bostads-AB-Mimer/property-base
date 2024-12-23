@@ -21,8 +21,8 @@ export const routes = (router: KoaRouter) => {
    * @swagger
    * /planned-maintenance/{propertyObjectId}:
    *   get:
-   *     summary: Get all planned maintenance items by property object ID
-   *     description: Returns the planned maintenance items belonging to roof or facade based on property object code.
+   *     summary: Gets the planned maintenance on a construction part by property object ID
+   *     description: Returns the planned maintenance belonging to a construction part based on property object code.
    *     tags:
    *       - Planned Maintenance
    *     parameters:
@@ -31,7 +31,7 @@ export const routes = (router: KoaRouter) => {
    *         required: true
    *         schema:
    *           type: string
-   *         description: The property object id of the roof or facade
+   *         description: The property object id of the construction part
    *     responses:
    *       200:
    *         description: Successfully retrieved the planned maintenance
