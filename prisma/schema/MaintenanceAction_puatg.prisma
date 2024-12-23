@@ -1,5 +1,5 @@
 model MaintenanceAction {
-  maintenanceActionId           String   @id(map: "pkpuatg") @map("keypuatg") @db.Char(15)
+  id                            String   @id(map: "pkpuatg") @map("keypuatg") @db.Char(15)
   componentTypeActionId         String?  @map("keypuatt") @db.Char(15) // Previously mapped as puatt
   workTypeId                    String?  @map("keypumtt") @db.Char(15) // WorkType relation not known yet
   articleId                     String?  @map("keycmart") @db.Char(15) // Mapped to Article
@@ -48,7 +48,8 @@ model MaintenanceAction {
   // maintenanceActionGroup        MaintenanceActionGroup? @relation(fields: [actionGroupId], references: [maintenanceActionGroupId], onDelete: NoAction, onUpdate: NoAction, map: "fkpuatgkeypuagr") // Based on previous MaintenanceActionGroup conversion
   // actionType                    ActionType?             @relation(fields: [componentTypeActionId], references: [actionTypeId], onUpdate: NoAction, map: "fkpuatgkeypuatt") // Based on previous ActionType conversion
   // maintenanceLogs               MaintenanceLog[] // Uses previously renamed model name
-  // plannedMaintenances PlannedMaintenance[] // Uses previously renamed model name
+  plannedMaintenances PlannedMaintenance[]
+
   @@index([articleId], map: "fkpuatgcmart")
   @@index([unitId], map: "fkpuatgcmuni")
   @@index([measurementTypeId], map: "fkpuatgcmvat")
