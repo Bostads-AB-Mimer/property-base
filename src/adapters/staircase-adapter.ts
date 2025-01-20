@@ -29,12 +29,12 @@ async function getStaircasesByBuildingCode(buildingCode: string) {
   })
 
   return staircases.map((staircase) => ({
-    id: staircase.id,
-    code: staircase.code,
-    name: staircase.name,
-    buildingCode: buildingCode,
+    id: staircase.id?.trim(),
+    code: staircase.code?.trim(),
+    name: staircase.name?.trim(),
+    buildingCode: buildingCode?.trim(),
     features: {
-      floorPlan: staircase.floorPlan,
+      floorPlan: staircase.floorPlan?.trim(),
       accessibleByElevator: toBoolean(staircase.accessibleByElevator),
     },
     dates: {
