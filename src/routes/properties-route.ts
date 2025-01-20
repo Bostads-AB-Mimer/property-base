@@ -5,6 +5,7 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
+import { etagMiddleware } from '../middleware/etag'
 import { getProperties, getPropertyById } from '../adapters/property-adapter'
 import { generateMetaLinks } from '../utils/links'
 import {
@@ -22,6 +23,7 @@ import { PropertyLinksSchema } from '../types/links'
  *     description: Operations related to properties
  */
 export const routes = (router: KoaRouter) => {
+  router.use(etagMiddleware())
   /**
    * @swagger
    * /properties:
