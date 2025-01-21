@@ -54,6 +54,7 @@ export const routes = (router: KoaRouter) => {
    *           application/json:
    *             schema:
    *               type: array
+   *               items:
    *                 $ref: '#/components/schemas/Property'
    *       400:
    *         description: Invalid query parameters.
