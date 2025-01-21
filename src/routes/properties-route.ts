@@ -90,11 +90,7 @@ export const routes = (router: KoaRouter) => {
         }
       })
 
-      ctx.body = {
-        content: responseContent,
-        ...metadata,
-        _links: generateMetaLinks(ctx, '/properties'),
-      }
+      ctx.body = responseContent
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
