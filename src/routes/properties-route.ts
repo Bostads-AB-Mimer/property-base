@@ -53,9 +53,12 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/Property'
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/Property'
    *       400:
    *         description: Invalid query parameters.
    *       500:
@@ -91,7 +94,9 @@ export const routes = (router: KoaRouter) => {
         }
       })
 
-      ctx.body = responseContent
+      ctx.body = {
+        content: responseContent
+      }
     } catch (err) {
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
