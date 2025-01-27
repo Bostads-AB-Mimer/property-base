@@ -1,10 +1,9 @@
 {
   "private": true,
   "workspaces": [
-    "packages/base",
-    "packages/frontend"
+    "packages/*"
   ],
   "scripts": {
-    "dev": "echo 'start dev for all packages...'"
+    "dev": "concurrently -k -n \"base,frontend\" \"npm run dev --workspace=base\" \"npm run dev --workspace=frontend\""
   }
 }
