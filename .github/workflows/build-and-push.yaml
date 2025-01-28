@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/k8s
+      - feat/k8s*
     tags:
       - production*
       - staging*
