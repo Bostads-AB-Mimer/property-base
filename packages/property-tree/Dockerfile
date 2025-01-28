@@ -1,17 +1,28 @@
-FROM node:20-alpine
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy the entire monorepo
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm ci
+
+# Copy source files
 COPY . .
 
-# Install dependencies at root level
-RUN npm install
-
-# Build only this package
-WORKDIR /app/packages/property-tree
+# Build
 RUN npm run build
 
-EXPOSE 3000
+# Production image
+FROM nginx:alpine
 
-CMD ["npm", "start"]
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built files to nginx
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
