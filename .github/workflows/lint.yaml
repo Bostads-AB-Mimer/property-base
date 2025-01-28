@@ -25,9 +25,15 @@ jobs:
 
       - name: Run Prettier check
         run: npm run prettier
+        env:
+          PRETTIER_IGNORE_PATTERN: "**/dist/**"
 
       - name: Run ESLint
         run: npm run lint
+        env:
+          ESLINT_IGNORE_PATTERN: "**/dist/**"
 
       - name: Run TypeScript check
         run: npm run type-check
+        env:
+          TS_IGNORE_PATTERN: "**/dist/**"
