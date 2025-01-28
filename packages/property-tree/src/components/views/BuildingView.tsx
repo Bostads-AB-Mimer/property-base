@@ -10,8 +10,8 @@ import {
 import { Building as BuildingType } from '../../services/types'
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
-import { Card } from '@/components/ui/card'
-import { Grid } from '@/components/ui/grid'
+import { Card } from '@/components/ui/Card'
+import { Grid } from '@/components/ui/Grid'
 
 export function BuildingView() {
   const { buildingId } = useParams()

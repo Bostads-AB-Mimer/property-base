@@ -9,8 +9,8 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { Component } from '../../services/types'
-import { Card } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/Card'
+import { Button } from '@/components/ui/Button'
 import { ComponentModal } from './ComponentModal'
 
 interface ComponentListProps {

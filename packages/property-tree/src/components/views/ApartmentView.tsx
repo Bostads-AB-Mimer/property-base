@@ -14,12 +14,12 @@ import {
 import { propertyService, residenceService } from '../../services/api'
 import { Apartment } from '../../services/types'
 import { ViewHeader } from '../shared/ViewHeader'
-import { Card } from '@/components/ui/card'
-import { Grid } from '@/components/ui/grid'
+import { Card } from '@/components/ui/Card'
+import { Grid } from '@/components/ui/Grid'
 import { RoomCard } from '../shared/RoomCard'
 import { ActiveIssues } from '../shared/ActiveIssues'
 import { StatCard } from '../shared/StatCard'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/components/ui/Button'
 import { ContractModal } from '../shared/ContractModal'
 
 export function ApartmentView() {
