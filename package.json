@@ -9,8 +9,8 @@
     "dev": "concurrently -k -n \"property-base,property-tree\" \"npm run dev --workspace=property-base\" \"npm run dev --workspace=property-tree\"",
     "lint": "npm run lint --workspaces --if-present",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
-    "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write .",
+    "prettier": "prettier --check . --ignore-path .prettierignore",
+    "prettier:fix": "prettier --write . --ignore-path .prettierignore",
     "type-check": "npm run type-check --workspaces --if-present",
     "ci": "npm run prettier && npm run lint && npm run type-check"
   },
