@@ -11,7 +11,11 @@ interface BuildingListProps {
   icon?: React.ComponentType
 }
 
-export function BuildingList({ buildings, title = "Byggnader", icon }: BuildingListProps) {
+export function BuildingList({
+  buildings,
+  title = 'Byggnader',
+  icon,
+}: BuildingListProps) {
   const navigate = useNavigate()
 
   return (

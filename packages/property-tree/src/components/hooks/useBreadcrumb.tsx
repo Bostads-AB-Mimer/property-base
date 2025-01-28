@@ -1,6 +1,12 @@
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { buildingService, propertyService, residenceService, companyService, staircaseService } from '@/services/api'
+import {
+  buildingService,
+  propertyService,
+  residenceService,
+  companyService,
+  staircaseService,
+} from '@/services/api'
 
 export function useBreadcrumb() {
   const location = useLocation()
@@ -37,7 +43,9 @@ export function useBreadcrumb() {
         const propertyId = building._links.parent.href.split('/').pop()
         const property = await propertyService.getPropertyById(propertyId)
         const companyId = property._links?.parent?.href.split('/').pop()
-        const company = companyId ? await companyService.getById(companyId) : null
+        const company = companyId
+          ? await companyService.getById(companyId)
+          : null
         return { ...building, property, company }
       }
       return building
@@ -48,13 +56,18 @@ export function useBreadcrumb() {
   const staircaseQuery = useQuery({
     queryKey: ['breadcrumb-staircase', id, staircaseId],
     queryFn: async () => {
-      const staircase = await staircaseService.getByBuildingCodeAndId(id, staircaseId!)
+      const staircase = await staircaseService.getByBuildingCodeAndId(
+        id,
+        staircaseId!
+      )
       const building = await buildingService.getById(id)
       if (building._links?.parent) {
         const propertyId = building._links.parent.href.split('/').pop()
         const property = await propertyService.getPropertyById(propertyId)
         const companyId = property._links?.parent?.href.split('/').pop()
-        const company = companyId ? await companyService.getById(companyId) : null
+        const company = companyId
+          ? await companyService.getById(companyId)
+          : null
         return { ...staircase, building, property, company }
       }
       return { ...staircase, building }
@@ -70,9 +83,13 @@ export function useBreadcrumb() {
         const buildingId = residence._links.parent.href.split('/').pop()
         const building = await buildingService.getById(buildingId)
         const propertyId = building._links?.parent?.href.split('/').pop()
-        const property = propertyId ? await propertyService.getPropertyById(propertyId) : null
+        const property = propertyId
+          ? await propertyService.getPropertyById(propertyId)
+          : null
         const companyId = property?._links?.parent?.href.split('/').pop()
-        const company = companyId ? await companyService.getById(companyId) : null
+        const company = companyId
+          ? await companyService.getById(companyId)
+          : null
         return { ...residence, building, property, company }
       }
       return residence
@@ -83,8 +100,19 @@ export function useBreadcrumb() {
   const items = []
 
   // Add company breadcrumb
-  if (companyQuery.data || propertyQuery.data?.company || buildingQuery.data?.company || staircaseQuery.data?.company || residenceQuery.data?.company) {
-    const company = companyQuery.data || propertyQuery.data?.company || buildingQuery.data?.company || staircaseQuery.data?.company || residenceQuery.data?.company
+  if (
+    companyQuery.data ||
+    propertyQuery.data?.company ||
+    buildingQuery.data?.company ||
+    staircaseQuery.data?.company ||
+    residenceQuery.data?.company
+  ) {
+    const company =
+      companyQuery.data ||
+      propertyQuery.data?.company ||
+      buildingQuery.data?.company ||
+      staircaseQuery.data?.company ||
+      residenceQuery.data?.company
     items.push({
       label: company.name,
       href: `/companies/${company.id}`,
@@ -92,8 +120,17 @@ export function useBreadcrumb() {
   }
 
   // Add property breadcrumb
-  if (propertyQuery.data || buildingQuery.data?.property || staircaseQuery.data?.property || residenceQuery.data?.property) {
-    const property = propertyQuery.data || buildingQuery.data?.property || staircaseQuery.data?.property || residenceQuery.data?.property
+  if (
+    propertyQuery.data ||
+    buildingQuery.data?.property ||
+    staircaseQuery.data?.property ||
+    residenceQuery.data?.property
+  ) {
+    const property =
+      propertyQuery.data ||
+      buildingQuery.data?.property ||
+      staircaseQuery.data?.property ||
+      residenceQuery.data?.property
     items.push({
       label: property.designation,
       href: `/properties/${property.id}`,
@@ -101,8 +138,15 @@ export function useBreadcrumb() {
   }
 
   // Add building breadcrumb
-  if (buildingQuery.data || staircaseQuery.data?.building || residenceQuery.data?.building) {
-    const building = buildingQuery.data || staircaseQuery.data?.building || residenceQuery.data?.building
+  if (
+    buildingQuery.data ||
+    staircaseQuery.data?.building ||
+    residenceQuery.data?.building
+  ) {
+    const building =
+      buildingQuery.data ||
+      staircaseQuery.data?.building ||
+      residenceQuery.data?.building
     items.push({
       label: building.name,
       href: `/buildings/${building.id}`,
@@ -125,8 +169,13 @@ export function useBreadcrumb() {
     })
   }
 
-  return { 
-    items, 
-    isLoading: companyQuery.isLoading || propertyQuery.isLoading || buildingQuery.isLoading || staircaseQuery.isLoading || residenceQuery.isLoading 
+  return {
+    items,
+    isLoading:
+      companyQuery.isLoading ||
+      propertyQuery.isLoading ||
+      buildingQuery.isLoading ||
+      staircaseQuery.isLoading ||
+      residenceQuery.isLoading,
   }
 }
