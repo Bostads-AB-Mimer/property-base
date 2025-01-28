@@ -4,6 +4,7 @@
   "description": "POC to investigate Prisma as data-layer between Xpand and ONECore",
   "main": "index.ts",
   "scripts": {
+    "start": "node --import tsx index.ts",
     "dev": "node --import tsx --watch index.ts",
     "build": "tsc",
     "test": "jest --config jest.config.js",
