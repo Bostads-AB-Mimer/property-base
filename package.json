@@ -4,6 +4,9 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently -k -n \"base,frontend\" \"npm run dev --workspace=base\" \"npm run dev --workspace=frontend\""
+    "dev": "concurrently -k -n \"property-base,property-tree\" \"npm run dev --workspace=property-base\" \"npm run dev --workspace=property-tree\""
+  },
+  "dependencies": {
+    "concurrently": "^9.1.2"
   }
 }
