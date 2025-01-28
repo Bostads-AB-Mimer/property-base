@@ -5,6 +5,7 @@ on:
     branches: ['**']
   push:
     branches: ['**']
+  workflow_call:
 
 jobs:
   lint:
