@@ -98,8 +98,9 @@ jobs:
       - name: Create package-lock for package
         run: |
           cd packages/${{ matrix.package }}
-          npm i --package-lock-only --workspaces=false
-          
+          cp ../../package-lock.json .
+          # npm ci --package-lock-only --workspaces=false
+
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
