@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal } from '../ui/modal'
+import { Modal } from '@/components/ui/modal'
 import { ComponentForm } from './ComponentForm'
 
 interface ComponentModalProps {
