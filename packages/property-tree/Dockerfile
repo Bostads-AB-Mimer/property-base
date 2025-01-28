@@ -8,7 +8,7 @@ COPY ./package*.json /app/
 COPY ./packages/property-tree /app/packages/property-tree
 
 # Install dependencies
-RUN npm ci --workspace packages/property-tree --production
+RUN npm ci --workspace packages/property-tree
 
 # Build
 WORKDIR /app/packages/property-tree
