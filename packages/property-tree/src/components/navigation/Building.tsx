@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Building } from '@/services/types'
 import { Warehouse } from 'lucide-react'
-import { SidebarMenuItem, SidebarMenuButton } from '../ui/sidebar'
+import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
 import { StaircaseList } from './StaircaseList'
 import { ResidenceList } from './ResidenceList'
 

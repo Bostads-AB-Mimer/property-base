@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Building } from '@/services/types'
 import { useNavigate } from 'react-router-dom'
-import { Card } from '../ui/card'
+import { Card } from '@/components/ui/card'
 
 interface BuildingListProps {
   buildings: Building[]

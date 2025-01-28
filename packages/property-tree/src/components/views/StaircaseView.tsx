@@ -13,9 +13,9 @@ import { buildingService, residenceService } from '../../services/api'
 import { Building, Issue, Residence, Staircase } from '../../services/types'
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
-import { Card } from '../ui/card'
-import { Grid } from '../ui/grid'
-import { Badge } from '../ui/badge'
+import { Card } from '@/components/ui/card'
+import { Grid } from '@/components/ui/grid'
+import { Badge } from '@/components/ui/badge'
 import { staircaseService } from '@/services/api/staircaseService'
 
 function LoadingSkeleton() {
