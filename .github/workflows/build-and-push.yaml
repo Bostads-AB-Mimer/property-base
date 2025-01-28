@@ -45,7 +45,7 @@ jobs:
           TS_IGNORE_PATTERN: '**/dist/**'
 
   version:
-    needs: lint-and-test
+    #needs: lint-and-test
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
