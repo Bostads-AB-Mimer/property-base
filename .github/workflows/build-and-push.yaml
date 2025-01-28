@@ -35,15 +35,28 @@ jobs:
         run: |
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
+          
+          # Get current branch name
+          BRANCH_NAME=${GITHUB_REF#refs/heads/}
+          
+          # Determine version bump based on ref
           if [[ $GITHUB_REF == refs/tags/production* ]]; then
-            npm version major
+            npm version major -no-git-tag-version
           elif [[ $GITHUB_REF == refs/tags/staging* ]]; then
-            npm version minor
+            npm version minor -no-git-tag-version
           else
-            npm version patch
+            npm version patch -no-git-tag-version
           fi
-          echo "version=$(npm pkg get version | tr -d '"')" >> $GITHUB_OUTPUT
-          git push origin main --follow-tags
+          
+          # Get the new version
+          VERSION=$(npm pkg get version | tr -d '"')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          # Commit and push the version change
+          git add package.json
+          git commit -m "chore: bump version to $VERSION [skip ci]"
+          git tag "v$VERSION"
+          git push origin HEAD:$BRANCH_NAME --follow-tags
 
   build-and-push:
     needs: version
