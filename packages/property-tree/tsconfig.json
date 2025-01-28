@@ -18,10 +18,9 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "typeRoots": ["../../node_modules/@types"],
     "types": ["jest", "node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "../../node_modules"],
+  "exclude": ["**/node_modules", "dist"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
