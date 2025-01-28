@@ -12,8 +12,8 @@ import {
 import { BuildingList } from '../shared/BuildingList'
 import { propertyService, buildingService } from '../../services/api'
 import { ViewHeader } from '../shared/ViewHeader'
-import { Card } from '@/components/ui/card'
-import { Grid } from '@/components/ui/grid'
+import { Card } from '../../components/ui/Card'
+import { Grid } from '../../components/ui/Grid'
 import { StatCard } from '../shared/StatCard'
 
 export function PropertyView() {
