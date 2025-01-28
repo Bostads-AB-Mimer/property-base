@@ -8,11 +8,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - property-base.example.com
-    - property-tree.example.com
+    - property-base.onecore.mimer.nu
+    - property-tree.onecore.mimer.nu
     secretName: property-tls
   rules:
-  - host: property-base.example.com
+  - host: property-base.onecore.mimer.nu
     http:
       paths:
       - path: /
@@ -22,7 +22,7 @@ spec:
             name: property-base
             port:
               number: 80
-  - host: property-tree.example.com
+  - host: property-tree.onecore.mimer.nu
     http:
       paths:
       - path: /
