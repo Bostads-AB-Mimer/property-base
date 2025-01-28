@@ -35,6 +35,7 @@
     "onecore-utilities": "^1.1.0",
     "prisma": "^5.21.1",
     "swagger-jsdoc": "^6.2.8",
+    "tsc": "^2.0.4",
     "tsx": "^4.19.2",
     "zod": "^3.23.8",
     "zod-prisma-types": "^3.2.1",
