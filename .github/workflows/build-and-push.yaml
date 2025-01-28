@@ -55,8 +55,8 @@ jobs:
           cache-from: type=gha,scope=${{ matrix.package }}
           cache-to: type=gha,mode=max,scope=${{ matrix.package }}
 
-  version:
-    needs: [lint, build-and-push]
+  prepare-version:
+    needs: [lint]
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.version.outputs.version }}
@@ -72,15 +72,9 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
-      - name: Update version
+      - name: Calculate next version
         id: version
         run: |
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.name "github-actions[bot]"
-
-          # Get current branch name
-          BRANCH_NAME=${GITHUB_REF#refs/heads/}
-
           # Determine version bump based on ref
           if [[ $GITHUB_REF == refs/tags/production* ]]; then
             npm version major -no-git-tag-version
@@ -94,14 +88,8 @@ jobs:
           VERSION=$(npm pkg get version | tr -d '"')
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          # Commit and push the version change
-          git add package.json
-          git commit -m "chore: bump version to $VERSION [skip ci]"
-          git tag "v$VERSION"
-          git push origin HEAD:$BRANCH_NAME --follow-tags
-
   build-and-push:
-    needs: version
+    needs: prepare-version
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -129,7 +117,7 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository }}/${{ matrix.package }}
           tags: |
-            type=raw,value=${{ needs.version.outputs.version }}
+            type=raw,value=${{ needs.prepare-version.outputs.version }}
             type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Build and push
