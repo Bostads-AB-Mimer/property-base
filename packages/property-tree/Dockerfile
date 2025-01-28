@@ -10,7 +10,7 @@ COPY packages/property-tree/package*.json ./packages/property-tree/
 RUN npm ci
 
 # Copy source files
-COPY packages/property-tree ./packages/property-tree
+COPY packages/property-tree /app/packages/property-tree
 
 # Build
 WORKDIR /app/packages/property-tree
