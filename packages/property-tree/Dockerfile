@@ -3,17 +3,16 @@ FROM node:23-alpine AS builder
 WORKDIR /app
 
 # Copy package files for dependency installation
-COPY package*.json ./
-COPY packages/property-tree/package*.json ./packages/property-tree/
+COPY ./package*.json /app/
+
+COPY ./packages/property-tree /app/packages/property-tree
 
 # Install dependencies
-RUN npm ci
-
-# Copy source files
-COPY packages/property-tree ./packages/property-tree
+RUN npm ci --workspace packages/property-tree --production
 
 # Build
 WORKDIR /app/packages/property-tree
+
 RUN npm run build
 
 # Production image
