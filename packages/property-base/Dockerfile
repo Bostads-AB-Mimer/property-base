@@ -13,7 +13,6 @@ COPY . .
 
 # Generate Prisma client and build
 RUN npm run generate
-RUN npm run build
 
 EXPOSE 3000
 
