@@ -2,13 +2,6 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY ../../package-lock.json ./
-
-# Install dependencies
-RUN npm ci --omit=dev
-
 # Copy source files
 COPY . .
 
