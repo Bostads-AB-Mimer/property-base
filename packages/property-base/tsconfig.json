@@ -10,8 +10,9 @@
     "outDir": "dist",
     "rootDir": "src",
     "typeRoots": ["../../node_modules/@types"],
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "dist", "../../node_modules"]
 }
