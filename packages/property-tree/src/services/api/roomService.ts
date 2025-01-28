@@ -49,5 +49,5 @@ export const roomService = {
     })
     if (error) throw error
     return data?.content || []
-  }
+  },
 }

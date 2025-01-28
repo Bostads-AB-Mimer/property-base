@@ -7,6 +7,7 @@
     "dev": "wait-on http://localhost:5050/swagger && npm run generate-api-types && vite",
     "format": "prettier --write .",
     "start:server": "node --import tsx src/server/api.ts",
+    "type-check": "tsc --noEmit",
     "start": "vite",
     "generate-api-types": "npx openapi-typescript http://localhost:5050/swagger.json -o ./src/services/api/generated/api-types.ts"
   },
