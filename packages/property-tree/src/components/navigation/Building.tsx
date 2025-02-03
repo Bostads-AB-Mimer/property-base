@@ -1,9 +1,11 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Building, Property, Staircase } from '@/services/types'
+import { Building, Property } from '@/services/types'
 import { Warehouse } from 'lucide-react'
 import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
 import { ResidenceList } from './ResidenceList'
+import { MapDialog } from '@/components/shared/MapDialog'
+import { useQuery } from '@tanstack/react-query'
+import { residenceService } from '@/services/api'
 
 interface BuildingNavigationProps {
   building: Building
@@ -14,27 +16,34 @@ export function BuildingNavigation({
   building,
   property,
 }: BuildingNavigationProps) {
-  const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = React.useState(false)
+
+  const { data: residences } = useQuery({
+    queryKey: ['residences', building.id],
+    queryFn: () => residenceService.getByBuildingCode(building.code),
+    enabled: isExpanded,
+  })
 
   return (
     <SidebarMenuItem>
-      <SidebarMenuButton
-        onClick={() => {
-          setIsExpanded(!isExpanded)
-          navigate(`/buildings/${building.id}`, {
-            state: {
-              propertyId: property.id,
-              buildingId: building.id,
-              buildingCode: building.code,
-            },
-          })
-        }}
-        tooltip={building.code}
-      >
-        <Warehouse />
-        <span>{building.code}</span>
-      </SidebarMenuButton>
+      <div className="flex items-center justify-between pr-2">
+        <SidebarMenuButton
+          onClick={() => setIsExpanded(!isExpanded)}
+          tooltip={building.code}
+        >
+          <Warehouse />
+          <span>{building.code}</span>
+        </SidebarMenuButton>
+        {isExpanded && residences && residences.length > 0 && (
+          <MapDialog
+            residences={residences.map((r) => ({
+              code: r.code,
+              name: `${building.street} ${building.number}`,
+              address: `${building.street} ${building.number}`,
+            }))}
+          />
+        )}
+      </div>
       {isExpanded && (
         <div className="pl-4 mt-1">
           <ResidenceList building={building} />
