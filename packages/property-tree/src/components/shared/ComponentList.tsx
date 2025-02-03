@@ -34,9 +34,9 @@ const statusColors = {
   broken: 'text-red-500',
 }
 
-const getComponentType = (component: Component) => 
+const getComponentType = (component: Component) =>
   component.classification.componentType.code
-const getComponentStatus = (component: Component) => 
+const getComponentStatus = (component: Component) =>
   component.details.status || 'operational'
 const getComponentRoom = (component: Component) =>
   component.maintenanceUnits[0]?.location || 'Okänd plats'
@@ -106,8 +106,10 @@ export function ComponentList({
                       <span
                         className={`text-sm ${statusColors[getComponentStatus(component)]}`}
                       >
-                        {getComponentStatus(component) === 'operational' && 'OK'}
-                        {getComponentStatus(component) === 'needs-service' && 'Service'}
+                        {getComponentStatus(component) === 'operational' &&
+                          'OK'}
+                        {getComponentStatus(component) === 'needs-service' &&
+                          'Service'}
                         {getComponentStatus(component) === 'broken' && 'Trasig'}
                       </span>
                       <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" />

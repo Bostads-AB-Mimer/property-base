@@ -59,7 +59,6 @@ export function ResidenceView() {
 
   const buildingCode = state?.buildingCode
   const floorCode = state?.floorCode
-  console.log('data', residenceQuery.data)
 
   const isLoading = residenceQuery.isLoading
   const error = residenceQuery.error
@@ -118,7 +117,11 @@ export function ResidenceView() {
         className="grid grid-cols-1 lg:grid-cols-3 gap-8"
       >
         <div className="lg:col-span-2 space-y-6">
-          <ResidenceRooms residenceId={residence.id} />
+          <ResidenceRooms
+            buildingCode={buildingCode}
+            floorCode={floorCode}
+            residenceId={residenceId}
+          />
 
           <Card title="Egenskaper">
             <Grid cols={2}>
@@ -276,7 +279,6 @@ export function ResidenceView() {
             residenceId={residence.id}
             buildingCode={buildingCode}
             floorCode={floorCode}
-            residenceCode={residence.code}
           />
         </div>
 
@@ -307,14 +309,14 @@ export function ResidenceView() {
         </div>
       </motion.div>
 
-      {residence.tenant && (
+      {/*residence.tenant && (
         <ContractModal
           isOpen={showContract}
           onClose={() => setShowContract(false)}
           tenant={residence.tenant}
           residence={residence}
         />
-      )}
+      )*/}
     </div>
   )
 }

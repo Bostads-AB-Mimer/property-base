@@ -23,10 +23,10 @@ export function BuildingNavigation({
         onClick={() => {
           setIsExpanded(!isExpanded)
           navigate(`/buildings/${building.id}`, {
-            state: { 
+            state: {
               propertyId: property.id,
               buildingId: building.id,
-              buildingCode: building.code
+              buildingCode: building.code,
             },
           })
         }}

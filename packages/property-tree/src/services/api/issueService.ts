@@ -36,7 +36,7 @@ const mockIssues = {
       residenceId: 'residence-2',
     },
   ],
-}
+} as Record<string, Issue[]>
 
 export const issueService = {
   // Get all issues
@@ -82,7 +82,7 @@ export const issueService = {
       id: `issue-${Date.now()}`,
       date: new Date().toISOString().split('T')[0],
       status: 'pending',
-    }
+    } as Issue
     if (!mockIssues[data.residenceId]) {
       mockIssues[data.residenceId] = []
     }

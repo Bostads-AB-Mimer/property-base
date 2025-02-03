@@ -44,7 +44,11 @@ export function BuildingList({ property }: BuildingListProps) {
   return (
     <SidebarMenu>
       {buildings?.map((building) => (
-        <BuildingNavigation key={building.code} building={building} />
+        <BuildingNavigation
+          key={building.code}
+          property={property}
+          building={building}
+        />
       ))}
     </SidebarMenu>
   )

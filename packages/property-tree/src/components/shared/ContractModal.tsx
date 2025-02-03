@@ -37,9 +37,7 @@ export function ContractModal({
           <Button variant="secondary" onClick={onClose}>
             Stäng
           </Button>
-          <Button variant="primary" icon={FileText}>
-            Ladda ner kontrakt
-          </Button>
+          <Button variant="default">Ladda ner kontrakt</Button>
         </div>
       }
     >

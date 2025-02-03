@@ -77,10 +77,10 @@ export function PropertyView() {
 
       <Grid cols={4} className="mb-8">
         <StatCard
-          title="Lägenheter"
-          value={propertyQuery.data.totalApartments}
+          title="Byggnader"
+          value={buildingsQuery.data?.length || 0}
           icon={Home}
-          subtitle={`${propertyQuery.data.occupiedApartments} uthyrda`}
+          subtitle={`?st uthyrda`}
         />
         <StatCard
           title="Byggnader"

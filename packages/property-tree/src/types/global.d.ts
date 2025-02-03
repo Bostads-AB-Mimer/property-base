@@ -38,7 +38,3 @@ interface Tenant {
   moveInDate: string
   residenceId: string
 }
-
-interface VersionSwitcher extends React.FC {
-  // Add any specific props if needed
-}

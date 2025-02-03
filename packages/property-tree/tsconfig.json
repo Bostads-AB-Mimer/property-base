@@ -30,18 +30,7 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": [
-    "src/**/*",
-    "src/**/*.tsx",
-    "src/**/*.ts",
-    "src/**/*.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "../../node_modules",
-    "src/services/api/generated",
-    "**/generated/**"
-  ],
+  "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts", "src/**/*.d.ts"],
+  "exclude": ["node_modules", "dist", "../../node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
