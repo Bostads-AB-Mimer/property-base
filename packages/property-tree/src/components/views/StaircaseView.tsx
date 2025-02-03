@@ -163,7 +163,7 @@ export function StaircaseView() {
                     navigate(`/residences/${residence.id}`, {
                       state: {
                         buildingCode: buildingQuery.data?.code,
-                        floorCode: residence,
+                        floorCode: residence.code.substring(2, 4),
                       },
                     })
                   }
