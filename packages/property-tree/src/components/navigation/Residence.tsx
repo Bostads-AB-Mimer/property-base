@@ -14,7 +14,9 @@ export function ResidenceNavigation({ residence }: ResidenceNavigationProps) {
     <SidebarMenuItem>
       <SidebarMenuButton
         onClick={() => {
-          navigate(`/residences/${residence.id}`)
+          navigate(`/residences/${residence.id}`, {
+            state: { buildingCode: residence.buildingCode }
+          })
         }}
         tooltip={residence.name}
       >

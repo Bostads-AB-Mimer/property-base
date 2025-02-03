@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ChefHat, GitGraph, CalendarClock } from 'lucide-react'
 import { ResidenceRooms } from '../shared/ResidenceRooms'
@@ -48,6 +48,7 @@ function LoadingSkeleton() {
 
 export function ResidenceView() {
   const { residenceId } = useParams()
+  const { state } = useLocation()
   const [showContract, setShowContract] = React.useState(false)
 
   const residenceQuery = useQuery({
@@ -55,6 +56,8 @@ export function ResidenceView() {
     queryFn: () => residenceService.getById(residenceId!),
     enabled: !!residenceId,
   })
+
+  const buildingCode = state?.buildingCode
   console.log('data', residenceQuery.data)
 
   const isLoading = residenceQuery.isLoading
@@ -270,7 +273,7 @@ export function ResidenceView() {
 
           <ResidenceRooms
             residenceId={residence.id}
-            buildingCode={building}
+            buildingCode={buildingCode}
             floorCode={residence.floorCode}
             residenceCode={residence.code}
           />
