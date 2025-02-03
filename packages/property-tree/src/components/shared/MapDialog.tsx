@@ -16,7 +16,7 @@ interface MapDialogProps {
 
 export function MapDialog({ residences }: MapDialogProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const residenceAddresses = residences.map((r) => r.address).filter(Boolean)
+  const residenceAddresses = residences.map((r) => `${r.name}`).filter(Boolean)
 
   const { data: coordinates, isLoading } = useQuery({
     queryKey: ['coordinates', residenceAddresses],

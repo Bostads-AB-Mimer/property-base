@@ -23,7 +23,7 @@ export function BuildingDetails() {
     enabled: !!buildingCode,
   })
 
-  const residenceAddresses = residences?.map((r) => r.name).filter(Boolean) || []
+  const residenceAddresses = residences?.map((r) => `${building.street} ${building.number}`).filter(Boolean) || []
   
   const { data: coordinates, isLoading: coordinatesLoading } = useQuery({
     queryKey: ['coordinates', residenceAddresses],
