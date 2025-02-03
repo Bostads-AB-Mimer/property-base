@@ -1,5 +1,5 @@
-import React from 'react'
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
+import React, { useState } from 'react'
+import { Dialog } from '@/components/ui/dialog'
 import { Map } from '@/components/shared/Map'
 import { Button } from '@/components/ui/button'
 import { MapIcon } from 'lucide-react'
@@ -15,6 +15,7 @@ interface MapDialogProps {
 }
 
 export function MapDialog({ residences }: MapDialogProps) {
+  const [isOpen, setIsOpen] = useState(false)
   const residenceAddresses = residences.map((r) => r.address).filter(Boolean)
 
   const { data: coordinates, isLoading } = useQuery({
@@ -42,13 +43,11 @@ export function MapDialog({ residences }: MapDialogProps) {
     .filter((loc): loc is NonNullable<typeof loc> => loc !== null)
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="icon">
-          <MapIcon className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[800px]">
+    <>
+      <Button variant="outline" size="icon" onClick={() => setIsOpen(true)}>
+        <MapIcon className="h-4 w-4" />
+      </Button>
+      <Dialog isOpen={isOpen} onClose={() => setIsOpen(false)} className="sm:max-w-[800px]">
         {locations.length > 0 ? (
           <Map locations={locations} center={locations[0].coordinates} />
         ) : (
@@ -56,7 +55,7 @@ export function MapDialog({ residences }: MapDialogProps) {
             {isLoading ? 'Loading...' : 'No locations available'}
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </Dialog>
+    </>
   )
 }
