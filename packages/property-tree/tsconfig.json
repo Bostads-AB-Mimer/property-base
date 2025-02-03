@@ -19,9 +19,17 @@
       "@/*": ["./src/*"]
     },
     "typeRoots": ["../../node_modules/@types", "node_modules/@types"],
-    "types": ["jest", "node"]
+    "types": ["jest", "node", "react", "react-dom"],
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true
   },
-  "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts"],
+  "include": [
+    "src/**/*",
+    "src/**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.d.ts"
+  ],
   "exclude": ["node_modules", "dist", "../../node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
