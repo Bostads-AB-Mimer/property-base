@@ -23,7 +23,7 @@ export function BuildingDetails() {
     enabled: !!buildingCode,
   })
 
-  const residenceAddresses = residences?.map((r) => r.address).filter(Boolean) || []
+  const residenceAddresses = residences?.map((r) => r.name).filter(Boolean) || []
   
   const { data: coordinates, isLoading: coordinatesLoading } = useQuery({
     queryKey: ['coordinates', residenceAddresses],
@@ -41,6 +41,10 @@ export function BuildingDetails() {
   if (isLoading) {
     return <div>Loading...</div>
   }
+
+  console.log('Building:', building)
+  console.log('Residences:', residences)
+  console.log('Coordinates:', coordinates)
 
   if (!building || !residences || !coordinates?.length) {
     return <div>Building not found or no residences with coordinates</div>
