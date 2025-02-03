@@ -19,7 +19,7 @@
       "@/*": ["./src/*"]
     },
     "typeRoots": ["../../node_modules/@types", "node_modules/@types"],
-    "types": ["jest", "node", "react", "react-dom"]
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*", "src/**/*.tsx", "src/**/*.ts"],
   "exclude": ["node_modules", "dist", "../../node_modules"],
