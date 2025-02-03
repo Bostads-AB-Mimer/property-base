@@ -8,9 +8,10 @@ import { ResidenceList } from './ResidenceList'
 
 interface BuildingNavigationProps {
   building: Building
+  propertyId: string
 }
 
-export function BuildingNavigation({ building }: BuildingNavigationProps) {
+export function BuildingNavigation({ building, propertyId }: BuildingNavigationProps) {
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = React.useState(false)
 
@@ -20,7 +21,7 @@ export function BuildingNavigation({ building }: BuildingNavigationProps) {
         onClick={() => {
           setIsExpanded(!isExpanded)
           navigate(`/buildings/${building.id}`, {
-            state: { propertyId: building.propertyId }
+            state: { propertyId }
           })
         }}
         tooltip={building.code}
