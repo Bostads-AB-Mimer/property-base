@@ -1,6 +1,7 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useQuery } from '@tanstack/react-query'
 import {
   Layers,
   Home,
@@ -65,42 +66,33 @@ const statusLabels = {
 export function StaircaseView() {
   const { staircaseId, buildingId } = useParams()
   const navigate = useNavigate()
-  const [staircase, setStaircase] = React.useState<Staircase | null>(null)
-  const [building, setBuilding] = React.useState<Building | null>(null)
-  const [residences, setResidences] = React.useState<Residence[]>([])
-  const [allIssues, setAllIssues] = React.useState<Issue[]>([])
-  const [loading, setLoading] = React.useState(true)
+  const buildingQuery = useQuery({
+    queryKey: ['building', buildingId],
+    queryFn: () => buildingService.getById(buildingId!),
+    enabled: !!buildingId,
+  })
 
-  React.useEffect(() => {
-    const loadData = async () => {
-      try {
-        if (!staircaseId || !buildingId) return
-        const building = await buildingService.getById(buildingId)
-        const staircase = await staircaseService.getByBuildingCodeAndId(
-          building.code,
-          staircaseId
-        )
-        const residences = await residenceService.getByBuildingCode(
-          building.code
-        )
-        setStaircase(staircase)
-        setResidences(residences)
+  const staircaseQuery = useQuery({
+    queryKey: ['staircase', buildingId, staircaseId],
+    queryFn: () =>
+      staircaseService.getByBuildingCodeAndId(
+        buildingQuery.data?.code!,
+        staircaseId!
+      ),
+    enabled: !!buildingId && !!staircaseId && !!buildingQuery.data?.code,
+  })
 
-        const issues = [] as Issue[]
+  const residencesQuery = useQuery({
+    queryKey: ['residences', buildingQuery.data?.code],
+    queryFn: () => residenceService.getByBuildingCode(buildingQuery.data?.code!),
+    enabled: !!buildingQuery.data?.code,
+  })
 
-        setAllIssues(issues)
-      } finally {
-        setLoading(false)
-      }
-    }
-    loadData()
-  }, [staircaseId, buildingId])
-
-  if (loading) {
+  if (buildingQuery.isLoading || staircaseQuery.isLoading || residencesQuery.isLoading) {
     return <LoadingSkeleton />
   }
 
-  if (!staircase) {
+  if (!staircaseQuery.data) {
     return (
       <div className="p-8 text-center">
         <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
@@ -113,8 +105,8 @@ export function StaircaseView() {
   return (
     <div className="p-8 animate-in">
       <ViewHeader
-        title={building.name}
-        subtitle={`Byggnad ${staircase.name}`}
+        title={buildingQuery.data?.name}
+        subtitle={`Byggnad ${staircaseQuery.data?.name}`}
         type="Uppgång"
         icon={Layers}
       />
@@ -122,18 +114,18 @@ export function StaircaseView() {
       <Grid cols={3} className="mb-8">
         <StatCard
           title="Bostäder"
-          value={staircase.totalResidences}
+          value={residencesQuery.data?.length || 0}
           icon={Home}
-          subtitle={`${staircase.occupiedResidences} uthyrda`}
+          subtitle={`${residencesQuery.data?.filter(r => r.tenant)?.length || 0} uthyrda`}
         />
         <StatCard
           title="Uthyrningsgrad"
-          value={`${Math.round((staircase.occupiedResidences / staircase.totalResidences) * 100)}%`}
+          value={`${Math.round(((residencesQuery.data?.filter(r => r.tenant)?.length || 0) / (residencesQuery.data?.length || 1)) * 100)}%`}
           icon={Users}
         />
         <StatCard
           title="Våningar"
-          value={Math.ceil(staircase.totalResidences / 2)}
+          value={Math.ceil((residencesQuery.data?.length || 0) / 2)}
           icon={BuildingIcon}
         />
       </Grid>
@@ -147,11 +139,16 @@ export function StaircaseView() {
         <div className="lg:col-span-2 space-y-6">
           <Card title="Bostäder" icon={Home}>
             <Grid cols={2}>
-              {staircase.residences.map((residenceId) => (
+              {residencesQuery.data?.map((residence) => (
                 <motion.div
-                  key={residenceId}
+                  key={residence.id}
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => navigate(`/residences/${residenceId}`)}
+                  onClick={() => navigate(`/residences/${residence.id}`, {
+                    state: {
+                      buildingCode: buildingQuery.data?.code,
+                      floorCode: residence.floorCode
+                    }
+                  })}
                   className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
