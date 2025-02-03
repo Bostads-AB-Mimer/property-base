@@ -1,13 +1,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import {
-  Settings,
-  Building,
-  Package,
-  Wrench,
-  Plus,
-  ArrowRight,
-} from 'lucide-react'
+import { Settings, Building, Package, Wrench, ArrowRight } from 'lucide-react'
 import { Component } from '../../services/types'
 import { Card } from '@/components/ui/Card'
 import { Button } from '@/components/ui/Button'
@@ -37,9 +30,9 @@ const statusColors = {
 const getComponentType = (component: Component) =>
   component.classification.componentType.code
 const getComponentStatus = (component: Component) =>
-  component.details.status || 'operational'
+  component.details.typeDesignation || 'operational'
 const getComponentRoom = (component: Component) =>
-  component.maintenanceUnits[0]?.location || 'Okänd plats'
+  component.maintenanceUnits[0] || 'Okänd plats'
 
 export function ComponentList({
   components,
@@ -52,12 +45,12 @@ export function ComponentList({
   const [editingComponent, setEditingComponent] =
     React.useState<Component | null>(null)
 
-  const handleAddSubmit = async (data: any) => {
+  const handleAddSubmit = async (data: Component) => {
     await onAddComponent(data)
     setShowAddModal(false)
   }
 
-  const handleEditSubmit = async (data: any) => {
+  const handleEditSubmit = async (data: Component) => {
     if (editingComponent) {
       await onEditComponent(editingComponent.id, data)
       setEditingComponent(null)
@@ -69,11 +62,7 @@ export function ComponentList({
       <Card title="Komponenter">
         <div className="space-y-4">
           <div className="flex justify-end">
-            <Button
-              variant="default"
-              icon={Plus}
-              onClick={() => setShowAddModal(true)}
-            >
+            <Button variant="default" onClick={() => setShowAddModal(true)}>
               Lägg till komponent
             </Button>
           </div>
@@ -97,9 +86,7 @@ export function ComponentList({
                         <h3 className="font-medium group-hover:text-blue-500 transition-colors">
                           {component.name}
                         </h3>
-                        <p className="text-sm text-gray-500">
-                          {getComponentRoom(component)}
-                        </p>
+                        <p className="text-sm text-gray-500">? plats</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">

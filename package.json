@@ -15,7 +15,8 @@
     "ci": "npm run prettier && npm run lint && npm run type-check"
   },
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "maplibre-gl": "^5.1.0"
   },
   "devDependencies": {
     "prettier": "^3.2.5"

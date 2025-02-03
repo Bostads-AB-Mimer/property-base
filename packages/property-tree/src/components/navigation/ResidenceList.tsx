@@ -1,5 +1,5 @@
 import React from 'react'
-import { Building, Staircase } from '@/services/types'
+import { Building } from '@/services/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { SidebarMenu } from '@/components/ui/sidebar'
 import { ResidenceNavigation } from './Residence'
@@ -46,17 +46,23 @@ export function ResidenceList({ building }: ResidenceListProps) {
     <div>
       <div className="flex justify-end mb-2 mr-2">
         {residences && residences.length > 0 && (
-          <MapDialog residences={residences} />
+          <MapDialog
+            residences={residences.map((r) => ({
+              code: r.code,
+              name: r.name,
+              address: r.name,
+            }))}
+          />
         )}
       </div>
       <SidebarMenu>
         {residences?.map((residence) => (
-        <ResidenceNavigation
-          key={residence.id}
-          residence={residence}
-          buildingCode={building.code}
-          floorCode={residence.code.split('-')[0]} // Assuming floor code is first part of residence code
-        />
+          <ResidenceNavigation
+            key={residence.id}
+            residence={residence}
+            buildingCode={building.code}
+            floorCode={residence.code.split('-')[0]} // Assuming floor code is first part of residence code
+          />
         ))}
       </SidebarMenu>
     </div>
