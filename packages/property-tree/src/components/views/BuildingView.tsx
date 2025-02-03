@@ -14,7 +14,7 @@ import { Card } from '@/components/ui/Card'
 import { Grid } from '@/components/ui/Grid'
 
 export function BuildingView() {
-  const { buildingId } = useParams()
+  const { buildingId, propertyId } = useParams()
   const navigate = useNavigate()
 
   const buildingQuery = useQuery({
@@ -24,9 +24,9 @@ export function BuildingView() {
   })
 
   const propertyQuery = useQuery({
-    queryKey: ['property', buildingQuery.data?.propertyId],
-    queryFn: () => propertyService.getById(buildingQuery.data!.propertyId),
-    enabled: !!buildingQuery.data?.propertyId,
+    queryKey: ['property', propertyId],
+    queryFn: () => propertyService.getPropertyById(propertyId),
+    enabled: !!propertyId,
   })
 
   const residencesQuery = useQuery({
@@ -47,8 +47,12 @@ export function BuildingView() {
     staircasesQuery.isLoading ||
     propertyQuery.isLoading
   const error =
-    buildingQuery.error || residencesQuery.error || staircasesQuery.error || propertyQuery.error
+    buildingQuery.error ||
+    residencesQuery.error ||
+    staircasesQuery.error ||
+    propertyQuery.error
   const building = buildingQuery.data
+  const property = propertyQuery.data
 
   if (isLoading) {
     return (
@@ -89,7 +93,7 @@ export function BuildingView() {
     <div className="p-8 animate-in">
       <ViewHeader
         title={building.name}
-        subtitle={`Fastighet ${propertyQuery.data?.propertyDesignation || building.code}`}
+        subtitle={`Fastighet ${property?.propertyDesignation}`}
         type="Byggnad"
         icon={Building}
       />
@@ -167,13 +171,13 @@ export function BuildingView() {
                   <motion.div
                     key={residence.id}
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => 
+                    onClick={() =>
                       navigate(`/residences/${residence.id}`, {
                         state: {
                           buildingCode: building.code,
                           floorCode: residence.code.substring(2, 4),
-                          propertyId: propertyQuery.data?.id
-                        }
+                          propertyId: propertyQuery.data?.id,
+                        },
                       })
                     }
                     className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer group"
