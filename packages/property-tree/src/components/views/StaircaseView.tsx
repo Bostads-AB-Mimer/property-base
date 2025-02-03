@@ -11,6 +11,32 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { buildingService, residenceService } from '../../services/api'
+import { Issue } from '@/services/types'
+
+const mockIssues: Issue[] = [
+  {
+    id: 'issue-1',
+    description: 'Läckande kran i köket',
+    priority: 'high',
+    status: 'in-progress',
+    room: 'Kök',
+    feature: 'Vattenkran',
+    date: '2024-02-01',
+    residenceId: 'residence-1',
+    residenceName: 'LGH 1001'
+  },
+  {
+    id: 'issue-2',
+    description: 'Trasig dörrhandtag',
+    priority: 'medium',
+    status: 'pending',
+    room: 'Hall',
+    feature: 'Ytterdörr',
+    date: '2024-02-02',
+    residenceId: 'residence-2',
+    residenceName: 'LGH 1002'
+  }
+]
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
 import { Card } from '@/components/ui/Card'
@@ -165,10 +191,10 @@ export function StaircaseView() {
             </Grid>
           </Card>
 
-          {allIssues.length > 0 && (
+          {mockIssues.length > 0 && (
             <Card title="Pågående ärenden" icon={AlertCircle}>
               <div className="space-y-4">
-                {allIssues.map((issue) => (
+                {mockIssues.map((issue) => (
                   <motion.div
                     key={issue.id}
                     initial={{ opacity: 0, y: 10 }}
