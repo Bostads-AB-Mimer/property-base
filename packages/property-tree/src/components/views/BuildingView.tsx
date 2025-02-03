@@ -6,6 +6,7 @@ import {
   buildingService,
   residenceService,
   staircaseService,
+  propertyService,
 } from '../../services/api'
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
@@ -20,6 +21,12 @@ export function BuildingView() {
     queryKey: ['building', buildingId],
     queryFn: () => buildingService.getById(buildingId!),
     enabled: !!buildingId,
+  })
+
+  const propertyQuery = useQuery({
+    queryKey: ['property', buildingQuery.data?.propertyId],
+    queryFn: () => propertyService.getById(buildingQuery.data!.propertyId),
+    enabled: !!buildingQuery.data?.propertyId,
   })
 
   const residencesQuery = useQuery({
@@ -37,9 +44,10 @@ export function BuildingView() {
   const isLoading =
     buildingQuery.isLoading ||
     residencesQuery.isLoading ||
-    staircasesQuery.isLoading
+    staircasesQuery.isLoading ||
+    propertyQuery.isLoading
   const error =
-    buildingQuery.error || residencesQuery.error || staircasesQuery.error
+    buildingQuery.error || residencesQuery.error || staircasesQuery.error || propertyQuery.error
   const building = buildingQuery.data
 
   if (isLoading) {
@@ -159,7 +167,15 @@ export function BuildingView() {
                   <motion.div
                     key={residence.id}
                     whileHover={{ scale: 1.02 }}
-                    onClick={() => navigate(`/residences/${residence.id}`)}
+                    onClick={() => 
+                      navigate(`/residences/${residence.id}`, {
+                        state: {
+                          buildingCode: building.code,
+                          floorCode: residence.code.substring(2, 4),
+                          propertyId: propertyQuery.data?.id
+                        }
+                      })
+                    }
                     className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer group"
                   >
                     <div className="flex items-center justify-between">
