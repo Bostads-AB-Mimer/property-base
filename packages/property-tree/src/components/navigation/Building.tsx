@@ -23,7 +23,11 @@ export function BuildingNavigation({
         onClick={() => {
           setIsExpanded(!isExpanded)
           navigate(`/buildings/${building.id}`, {
-            state: { property, building, staircase },
+            state: { 
+              propertyId: property.id,
+              buildingId: building.id,
+              buildingCode: building.code
+            },
           })
         }}
         tooltip={building.code}
