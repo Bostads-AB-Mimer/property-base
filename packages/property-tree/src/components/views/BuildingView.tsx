@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Building, DoorClosed, Home, Users, ArrowRight } from 'lucide-react'
 import {
@@ -14,8 +14,10 @@ import { Card } from '@/components/ui/Card'
 import { Grid } from '@/components/ui/Grid'
 
 export function BuildingView() {
-  const { buildingId, propertyId } = useParams()
+  const { buildingId } = useParams()
   const navigate = useNavigate()
+  const { state } = useLocation()
+  const propertyId = state?.propertyId
 
   const buildingQuery = useQuery({
     queryKey: ['building', buildingId],

@@ -19,7 +19,9 @@ export function BuildingNavigation({ building }: BuildingNavigationProps) {
       <SidebarMenuButton
         onClick={() => {
           setIsExpanded(!isExpanded)
-          navigate(`/buildings/${building.id}`)
+          navigate(`/buildings/${building.id}`, {
+            state: { propertyId: building.propertyId }
+          })
         }}
         tooltip={building.code}
       >
