@@ -1,4 +1,5 @@
 import { Issue } from '../types'
+import { simulateDelay } from '../../utils/delay'
 
 const mockIssues = {
   'residence-1': [
@@ -49,7 +50,7 @@ export const issueService = {
 
   // Get issue by ID
   async getById(id: string): Promise<Issue> {
-    await simulateDelay()
+    await simulateDelay(500)
     const issue = Object.values(mockIssues)
       .flat()
       .find((i) => i.id === id)
