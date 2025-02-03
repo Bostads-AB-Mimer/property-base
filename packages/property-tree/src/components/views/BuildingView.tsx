@@ -89,7 +89,7 @@ export function BuildingView() {
     <div className="p-8 animate-in">
       <ViewHeader
         title={building.name}
-        subtitle={`Fastighet ${property.propertyDesignation}`}
+        subtitle={`Fastighet ${propertyQuery.data?.propertyDesignation || building.code}`}
         type="Byggnad"
         icon={Building}
       />
