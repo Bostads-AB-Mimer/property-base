@@ -1,9 +1,6 @@
 import { Room } from '../types'
 import { GET } from './baseApi'
 
-import { Room } from '../types'
-import { GET } from './baseApi'
-
 export const roomService = {
   // Get all rooms
   async getAll(): Promise<Room[]> {

@@ -13,7 +13,7 @@ class GeocodingQueue {
     address: string,
     onResult: (result: [number, number]) => void,
     onError: (error: Error) => void
-  ): void {
+  ): Promise<void> {
     this.queue.push({
       address,
       resolve: onResult,
