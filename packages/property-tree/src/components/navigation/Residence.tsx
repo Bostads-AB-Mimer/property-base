@@ -1,18 +1,18 @@
-import { Building, Residence, Staircase } from '@/services/types'
+import { Residence } from '@/services/types'
 import { Hotel } from 'lucide-react'
 import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
 import { useNavigate } from 'react-router-dom'
 
 interface ResidenceNavigationProps {
   residence: Residence
-  building: Building
-  staircase: Staircase
+  buildingCode: string
+  floorCode: string
 }
 
 export function ResidenceNavigation({
   residence,
-  building,
-  staircase,
+  buildingCode,
+  floorCode,
 }: ResidenceNavigationProps) {
   const navigate = useNavigate()
 
@@ -22,8 +22,8 @@ export function ResidenceNavigation({
         onClick={() => {
           navigate(`/residences/${residence.id}`, {
             state: {
-              buildingCode: building.code,
-              floorCode: staircase.code,
+              buildingCode,
+              floorCode,
             },
           })
         }}
