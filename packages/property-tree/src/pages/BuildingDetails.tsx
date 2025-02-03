@@ -17,21 +17,47 @@ export function BuildingDetails() {
     enabled: !!buildingId,
   })
 
-  const { data: coordinates, isLoading: coordinatesLoading } = useQuery({
-    queryKey: ['coordinates', building?.address],
-    queryFn: () => geocodingService.searchAddress(building?.address || ''),
-    enabled: !!building?.address,
+  const { data: residences, isLoading: residencesLoading } = useQuery({
+    queryKey: ['residences', buildingId],
+    queryFn: () => residenceService.getByBuildingCode(buildingCode),
+    enabled: !!buildingCode,
   })
 
-  const isLoading = buildingLoading || coordinatesLoading
+  const residenceAddresses = residences?.map((r) => r.address).filter(Boolean) || []
+  
+  const { data: coordinates, isLoading: coordinatesLoading } = useQuery({
+    queryKey: ['coordinates', residenceAddresses],
+    queryFn: async () => {
+      const coords = await Promise.all(
+        residenceAddresses.map((address) => geocodingService.searchAddress(address))
+      )
+      return coords.filter((coord): coord is [number, number] => coord !== null)
+    },
+    enabled: residenceAddresses.length > 0,
+  })
+
+  const isLoading = buildingLoading || residencesLoading || coordinatesLoading
 
   if (isLoading) {
     return <div>Loading...</div>
   }
 
-  if (!building) {
-    return <div>Building not found</div>
+  if (!building || !residences || !coordinates?.length) {
+    return <div>Building not found or no residences with coordinates</div>
   }
+
+  const locations = residences
+    .map((residence, index) => {
+      if (!coordinates[index]) return null
+      const floor = parseInt(residence.code.split('-')[0])
+      return {
+        name: `LGH ${residence.code}`,
+        coordinates: coordinates[index],
+        floor,
+        color: `hsl(${(floor * 30) % 360}, 70%, 50%)`, // Different color for each floor
+      }
+    })
+    .filter((loc): loc is NonNullable<typeof loc> => loc !== null)
 
   return (
     <div className="space-y-8">
@@ -42,12 +68,10 @@ export function BuildingDetails() {
         icon={Building2}
       />
       
-      {coordinates && (
+      {locations.length > 0 && (
         <Map
-          location={{
-            name: building.name || buildingCode,
-            coordinates: coordinates,
-          }}
+          locations={locations}
+          center={locations[0].coordinates}
         />
       )}
     </div>

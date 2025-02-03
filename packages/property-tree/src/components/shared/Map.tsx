@@ -2,14 +2,19 @@ import React, { useEffect, useRef } from 'react'
 import maplibregl from 'maplibre-gl'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
-interface MapProps {
-  location: {
-    name: string
-    coordinates: [number, number]
-  }
+interface Location {
+  name: string
+  coordinates: [number, number]
+  floor?: number
+  color?: string
 }
 
-export function Map({ location }: MapProps) {
+interface MapProps {
+  locations: Location[]
+  center: [number, number]
+}
+
+export function Map({ locations, center }: MapProps) {
   const mapContainer = useRef<HTMLDivElement>(null)
   const map = useRef<maplibregl.Map | null>(null)
 
@@ -21,8 +26,8 @@ export function Map({ location }: MapProps) {
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/basic-v2/style.json?key=${MAPTILER_KEY}`,
-      center: location.coordinates,
-      zoom: 16,
+      center: center,
+      zoom: 17,
       pitch: 45,
       bearing: -17.6,
       maxZoom: 19,
@@ -88,11 +93,36 @@ export function Map({ location }: MapProps) {
       )
     })
 
-    // Add marker and popup
-    new maplibregl.Marker()
-      .setLngLat(location.coordinates)
-      .setPopup(new maplibregl.Popup().setHTML(`<h3>${location.name}</h3>`))
-      .addTo(map.current)
+    // Add markers and popups for each location
+    locations.forEach((location) => {
+      const el = document.createElement('div')
+      el.className = 'marker'
+      el.style.backgroundColor = location.color || '#4A5568'
+      el.style.width = '20px'
+      el.style.height = '20px'
+      el.style.borderRadius = '50%'
+      el.style.border = '2px solid white'
+      el.style.boxShadow = '0 2px 4px rgba(0,0,0,0.2)'
+      
+      const floorHeight = location.floor || 0
+      const heightOffset = floorHeight * 0.0001 // Adjust this value to change vertical spacing
+
+      new maplibregl.Marker({
+        element: el,
+        offset: [0, -10],
+      })
+        .setLngLat([
+          location.coordinates[0],
+          location.coordinates[1] + heightOffset, // Offset latitude based on floor
+        ])
+        .setPopup(
+          new maplibregl.Popup().setHTML(
+            `<h3 class="text-sm font-semibold">${location.name}</h3>` +
+            (location.floor ? `<p class="text-xs">Floor: ${location.floor}</p>` : '')
+          )
+        )
+        .addTo(map.current)
+    })
 
     // Add navigation controls
     map.current.addControl(new maplibregl.NavigationControl(), 'top-right')
