@@ -34,6 +34,13 @@ const statusColors = {
   broken: 'text-red-500',
 }
 
+const getComponentType = (component: Component) => 
+  component.classification.componentType.code
+const getComponentStatus = (component: Component) => 
+  component.details.status || 'operational'
+const getComponentRoom = (component: Component) =>
+  component.maintenanceUnits[0]?.location || 'Okänd plats'
+
 export function ComponentList({
   components,
   rooms,
@@ -73,7 +80,7 @@ export function ComponentList({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {components.map((component) => {
-              const Icon = typeIcons[component.type]
+              const Icon = typeIcons[getComponentType(component)]
               return (
                 <motion.div
                   key={component.id}
@@ -91,17 +98,17 @@ export function ComponentList({
                           {component.name}
                         </h3>
                         <p className="text-sm text-gray-500">
-                          {component.room}
+                          {getComponentRoom(component)}
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <span
-                        className={`text-sm ${statusColors[component.status]}`}
+                        className={`text-sm ${statusColors[getComponentStatus(component)]}`}
                       >
-                        {component.status === 'operational' && 'OK'}
-                        {component.status === 'needs-service' && 'Service'}
-                        {component.status === 'broken' && 'Trasig'}
+                        {getComponentStatus(component) === 'operational' && 'OK'}
+                        {getComponentStatus(component) === 'needs-service' && 'Service'}
+                        {getComponentStatus(component) === 'broken' && 'Trasig'}
                       </span>
                       <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
                     </div>
