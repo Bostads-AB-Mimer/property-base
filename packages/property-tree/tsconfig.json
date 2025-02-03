@@ -40,7 +40,8 @@
     "node_modules",
     "dist",
     "../../node_modules",
-    "src/services/api/generated/**/*"
+    "src/services/api/generated",
+    "**/generated/**"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
