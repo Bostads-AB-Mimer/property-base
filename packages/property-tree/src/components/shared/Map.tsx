@@ -130,7 +130,7 @@ export function Map({ locations, center }: MapProps) {
     return () => {
       map.current?.remove()
     }
-  }, [location])
+  }, [locations, center])
 
   return (
     <div className="w-full h-[400px] rounded-lg overflow-hidden">

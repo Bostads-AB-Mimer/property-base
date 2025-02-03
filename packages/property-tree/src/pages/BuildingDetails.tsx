@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
-import { buildingService } from '@/services/api'
+import { buildingService, residenceService } from '@/services/api'
 import { ViewHeader } from '@/components/shared/ViewHeader'
 import { Building2 } from 'lucide-react'
 import { Map } from '@/components/shared/Map'
