@@ -70,7 +70,7 @@ export function ComponentList({
         <div className="space-y-4">
           <div className="flex justify-end">
             <Button
-              variant="primary"
+              variant="default"
               icon={Plus}
               onClick={() => setShowAddModal(true)}
             >
