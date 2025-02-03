@@ -2,19 +2,14 @@ import React from 'react'
 import { useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ChefHat, GitGraph, CalendarClock } from 'lucide-react'
-import { propertyService } from '../../services/api'
 import { ResidenceRooms } from '../shared/ResidenceRooms'
-import { Residence } from '../../services/types'
 import { ViewHeader } from '../shared/ViewHeader'
 import { Card } from '@/components/ui/Card'
 import { Grid } from '@/components/ui/Grid'
-import { RoomCard } from '../shared/RoomCard'
-import { ActiveIssues } from '../shared/ActiveIssues'
 import { StatCard } from '../shared/StatCard'
-import { Button } from '@/components/ui/Button'
 import { ContractModal } from '../shared/ContractModal'
 import { residenceService } from '@/services/api'
-import { useQueries, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@/components/ui/Badge'
 
 function LoadingSkeleton() {
@@ -275,7 +270,7 @@ export function ResidenceView() {
 
           <ResidenceRooms
             residenceId={residence.id}
-            buildingCode={residence.buildingCode}
+            buildingCode={building}
             floorCode={residence.floorCode}
             residenceCode={residence.code}
           />
