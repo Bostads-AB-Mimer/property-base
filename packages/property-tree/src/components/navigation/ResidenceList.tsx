@@ -8,7 +8,6 @@ import { residenceService } from '@/services/api'
 
 interface ResidenceListProps {
   building: Building
-  staircase: Staircase
 }
 
 export function ResidenceList({ building }: ResidenceListProps) {
@@ -45,7 +44,12 @@ export function ResidenceList({ building }: ResidenceListProps) {
   return (
     <SidebarMenu>
       {residences?.map((residence) => (
-        <ResidenceNavigation key={residence.id} residence={residence} />
+        <ResidenceNavigation 
+          key={residence.id} 
+          residence={residence}
+          buildingCode={building.code}
+          floorCode={residence.code.split('-')[0]} // Assuming floor code is first part of residence code
+        />
       ))}
     </SidebarMenu>
   )

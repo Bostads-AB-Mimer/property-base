@@ -7,13 +7,11 @@ import { ResidenceList } from './ResidenceList'
 
 interface BuildingNavigationProps {
   building: Building
-  staircase: Staircase
   property: Property
 }
 
 export function BuildingNavigation({
   building,
-  staircase,
   property,
 }: BuildingNavigationProps) {
   const navigate = useNavigate()
@@ -35,7 +33,7 @@ export function BuildingNavigation({
       </SidebarMenuButton>
       {isExpanded && (
         <div className="pl-4 mt-1">
-          <ResidenceList staircase={staircase} building={building} />
+          <ResidenceList building={building} />
         </div>
       )}
     </SidebarMenuItem>
