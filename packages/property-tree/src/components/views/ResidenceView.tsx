@@ -58,6 +58,7 @@ export function ResidenceView() {
   })
 
   const buildingCode = state?.buildingCode
+  const floorCode = state?.floorCode
   console.log('data', residenceQuery.data)
 
   const isLoading = residenceQuery.isLoading
@@ -274,7 +275,7 @@ export function ResidenceView() {
           <ResidenceRooms
             residenceId={residence.id}
             buildingCode={buildingCode}
-            floorCode={residence.floorCode}
+            floorCode={floorCode}
             residenceCode={residence.code}
           />
         </div>
