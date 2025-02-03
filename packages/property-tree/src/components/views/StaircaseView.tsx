@@ -23,7 +23,6 @@ const mockIssues: Issue[] = [
     feature: 'Vattenkran',
     date: '2024-02-01',
     residenceId: 'residence-1',
-    residenceName: 'LGH 1001'
   },
   {
     id: 'issue-2',
@@ -34,8 +33,7 @@ const mockIssues: Issue[] = [
     feature: 'Ytterdörr',
     date: '2024-02-02',
     residenceId: 'residence-2',
-    residenceName: 'LGH 1002'
-  }
+  },
 ]
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
@@ -138,13 +136,9 @@ export function StaircaseView() {
           title="Bostäder"
           value={residencesQuery.data?.length || 0}
           icon={Home}
-          subtitle={`${residencesQuery.data?.filter((r) => r.tenant)?.length || 0} uthyrda`}
+          subtitle={`? st uthyrda`}
         />
-        <StatCard
-          title="Uthyrningsgrad"
-          value={`${Math.round(((residencesQuery.data?.filter((r) => r.tenant)?.length || 0) / (residencesQuery.data?.length || 1)) * 100)}%`}
-          icon={Users}
-        />
+        <StatCard title="Uthyrningsgrad" value={`? %`} icon={Users} />
         <StatCard
           title="Våningar"
           value={Math.ceil((residencesQuery.data?.length || 0) / 2)}
