@@ -185,11 +185,15 @@ export function StaircaseView() {
                     <div className="flex items-start justify-between">
                       <div className="space-y-1">
                         <div className="flex items-center space-x-2">
-                          <Badge variant={issue.priority as any}>
+                          <Badge
+                            variant={
+                              issue.priority === 'high' ? 'error' : 'default'
+                            }
+                          >
                             {priorityLabels[issue.priority]}
                           </Badge>
                           <Badge>{statusLabels[issue.status]}</Badge>
-                          <Badge variant="default">{issue.residenceName}</Badge>
+                          <Badge variant="default">{issue.residenceId}</Badge>
                         </div>
                         <p className="font-medium group-hover:text-blue-500 transition-colors">
                           {issue.description}
