@@ -11,7 +11,6 @@ import {
   AlertCircle,
 } from 'lucide-react'
 import { buildingService, residenceService } from '../../services/api'
-import { Building, Issue, Residence, Staircase } from '../../services/types'
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
 import { Card } from '@/components/ui/Card'
@@ -44,13 +43,6 @@ function LoadingSkeleton() {
   )
 }
 
-const priorityColors = {
-  low: 'bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400',
-  medium:
-    'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400',
-  high: 'bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400',
-}
-
 const priorityLabels = {
   low: 'Låg',
   medium: 'Medium',
@@ -76,19 +68,23 @@ export function StaircaseView() {
     queryKey: ['staircase', buildingId, staircaseId],
     queryFn: () =>
       staircaseService.getByBuildingCodeAndId(
-        buildingQuery.data?.code!,
-        staircaseId!
+        buildingQuery.data.code,
+        staircaseId
       ),
     enabled: !!buildingId && !!staircaseId && !!buildingQuery.data?.code,
   })
 
   const residencesQuery = useQuery({
     queryKey: ['residences', buildingQuery.data?.code],
-    queryFn: () => residenceService.getByBuildingCode(buildingQuery.data?.code!),
+    queryFn: () => residenceService.getByBuildingCode(buildingQuery.data.code),
     enabled: !!buildingQuery.data?.code,
   })
 
-  if (buildingQuery.isLoading || staircaseQuery.isLoading || residencesQuery.isLoading) {
+  if (
+    buildingQuery.isLoading ||
+    staircaseQuery.isLoading ||
+    residencesQuery.isLoading
+  ) {
     return <LoadingSkeleton />
   }
 
@@ -116,11 +112,11 @@ export function StaircaseView() {
           title="Bostäder"
           value={residencesQuery.data?.length || 0}
           icon={Home}
-          subtitle={`${residencesQuery.data?.filter(r => r.tenant)?.length || 0} uthyrda`}
+          subtitle={`${residencesQuery.data?.filter((r) => r.tenant)?.length || 0} uthyrda`}
         />
         <StatCard
           title="Uthyrningsgrad"
-          value={`${Math.round(((residencesQuery.data?.filter(r => r.tenant)?.length || 0) / (residencesQuery.data?.length || 1)) * 100)}%`}
+          value={`${Math.round(((residencesQuery.data?.filter((r) => r.tenant)?.length || 0) / (residencesQuery.data?.length || 1)) * 100)}%`}
           icon={Users}
         />
         <StatCard
@@ -143,18 +139,20 @@ export function StaircaseView() {
                 <motion.div
                   key={residence.id}
                   whileHover={{ scale: 1.02 }}
-                  onClick={() => navigate(`/residences/${residence.id}`, {
-                    state: {
-                      buildingCode: buildingQuery.data?.code,
-                      floorCode: residence.floorCode
-                    }
-                  })}
+                  onClick={() =>
+                    navigate(`/residences/${residence.id}`, {
+                      state: {
+                        buildingCode: buildingQuery.data?.code,
+                        floorCode: residence,
+                      },
+                    })
+                  }
                   className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
                     <div>
                       <h3 className="font-medium group-hover:text-blue-500 transition-colors">
-                        Lägenhet {residenceId}
+                        Lägenhet {residence.code}
                       </h3>
                       <p className="text-sm text-gray-500">
                         3 rum och kök, 75m²
