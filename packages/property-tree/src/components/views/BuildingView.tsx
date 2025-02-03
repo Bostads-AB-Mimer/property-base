@@ -7,7 +7,6 @@ import {
   residenceService,
   staircaseService,
 } from '../../services/api'
-import { Building as BuildingType } from '../../services/types'
 import { StatCard } from '../shared/StatCard'
 import { ViewHeader } from '../shared/ViewHeader'
 import { Card } from '@/components/ui/Card'
@@ -82,7 +81,7 @@ export function BuildingView() {
     <div className="p-8 animate-in">
       <ViewHeader
         title={building.name}
-        subtitle={`Fastighet ${building.propertyId}`}
+        subtitle={`Fastighet ${property.propertyDesignation}`}
         type="Byggnad"
         icon={Building}
       />
