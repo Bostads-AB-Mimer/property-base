@@ -1,17 +1,21 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Building } from '@/services/types'
+import { Building, Property, Staircase } from '@/services/types'
 import { Warehouse } from 'lucide-react'
 import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
-import { StaircaseList } from './StaircaseList'
 import { ResidenceList } from './ResidenceList'
 
 interface BuildingNavigationProps {
   building: Building
-  propertyId: string
+  staircase: Staircase
+  property: Property
 }
 
-export function BuildingNavigation({ building, propertyId }: BuildingNavigationProps) {
+export function BuildingNavigation({
+  building,
+  staircase,
+  property,
+}: BuildingNavigationProps) {
   const navigate = useNavigate()
   const [isExpanded, setIsExpanded] = React.useState(false)
 
@@ -21,7 +25,7 @@ export function BuildingNavigation({ building, propertyId }: BuildingNavigationP
         onClick={() => {
           setIsExpanded(!isExpanded)
           navigate(`/buildings/${building.id}`, {
-            state: { propertyId }
+            state: { property, building, staircase },
           })
         }}
         tooltip={building.code}
@@ -31,7 +35,7 @@ export function BuildingNavigation({ building, propertyId }: BuildingNavigationP
       </SidebarMenuButton>
       {isExpanded && (
         <div className="pl-4 mt-1">
-          <ResidenceList building={building} />
+          <ResidenceList staircase={staircase} building={building} />
         </div>
       )}
     </SidebarMenuItem>
