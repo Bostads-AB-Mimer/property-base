@@ -12,10 +12,7 @@ interface BuildingNavigationProps {
   property: Property
 }
 
-export function BuildingNavigation({
-  building,
-  property,
-}: BuildingNavigationProps) {
+export function BuildingNavigation({ building }: BuildingNavigationProps) {
   const [isExpanded, setIsExpanded] = React.useState(false)
 
   const { data: residences } = useQuery({

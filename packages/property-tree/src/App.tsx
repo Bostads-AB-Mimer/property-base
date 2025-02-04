@@ -26,7 +26,6 @@ import { Separator } from '@radix-ui/react-separator'
 import {
   Breadcrumb,
   BreadcrumbList,
-  BreadcrumbPage,
   BreadcrumbItem,
   BreadcrumbLink,
 } from './components/ui/breadcrumb'

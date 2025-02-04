@@ -1,4 +1,3 @@
-import React from 'react'
 import { Building } from '@/services/types'
 import { Skeleton } from '@/components/ui/skeleton'
 import { SidebarMenu } from '@/components/ui/sidebar'
@@ -11,10 +10,7 @@ interface StaircaseListProps {
   onStaircaseSelect?: (staircaseId: string) => void
 }
 
-export function StaircaseList({
-  building,
-  onStaircaseSelect,
-}: StaircaseListProps) {
+export function StaircaseList({ building }: StaircaseListProps) {
   const {
     data: staircases,
     isLoading,
