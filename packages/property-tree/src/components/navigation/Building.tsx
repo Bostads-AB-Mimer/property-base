@@ -38,8 +38,8 @@ export function BuildingNavigation({
           <MapDialog
             residences={residences.map((r) => ({
               code: r.code,
-              name: `${building.street} ${building.number}`,
-              address: `${building.street} ${building.number}`,
+              name: `${building.name}`,
+              address: `${building.name} ${building.code}`,
             }))}
           />
         )}
