@@ -1,4 +1,3 @@
-import React from 'react'
 import { useParams, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { Home, ChefHat, GitGraph, CalendarClock } from 'lucide-react'

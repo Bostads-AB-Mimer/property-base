@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Dialog } from '@/components/ui/dialog'
+import { Dialog } from '@/components/ui/Dialog'
 import { Map } from '@/components/shared/Map'
 import { Button } from '@/components/ui/Button'
 import { MapIcon } from 'lucide-react'

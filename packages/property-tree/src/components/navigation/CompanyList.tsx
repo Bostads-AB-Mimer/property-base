@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Skeleton } from '@/components/ui/Skeleton'
 import { companyService } from '@/services/api'
 import { CompanyNavigation } from './Company'
-import { SidebarGroup, SidebarMenu } from '@/components/ui/sidebar'
+import { SidebarGroup, SidebarMenu } from '@/components/ui/Sidebar'
 
 export function CompanyList() {
   const {

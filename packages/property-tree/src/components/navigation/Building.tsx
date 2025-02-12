@@ -1,7 +1,7 @@
 import React from 'react'
 import { Building, Property } from '@/services/types'
 import { Warehouse } from 'lucide-react'
-import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar'
+import { SidebarMenuItem, SidebarMenuButton } from '@/components/ui/Sidebar'
 import { ResidenceList } from './ResidenceList'
 import { MapDialog } from '@/components/shared/MapDialog'
 import { useQuery } from '@tanstack/react-query'
