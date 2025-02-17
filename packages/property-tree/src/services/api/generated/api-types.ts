@@ -30,9 +30,7 @@ export interface paths {
         200: {
           content: {
             "application/json": {
-              content?: (components["schemas"]["Component"] & {
-                  _links?: components["schemas"]["ComponentLinks"];
-                })[];
+              content?: components["schemas"]["Component"][];
             };
           };
         };
@@ -102,9 +100,7 @@ export interface paths {
         200: {
           content: {
             "application/json": {
-              content?: components["schemas"]["ResidenceDetails"] & {
-                _links?: components["schemas"]["ResidenceLinks"];
-              };
+              content?: components["schemas"]["ResidenceDetails"];
             };
           };
         };
@@ -242,9 +238,7 @@ export interface paths {
         200: {
           content: {
             "application/json": {
-              content?: components["schemas"]["PropertyDetails"] & {
-                _links?: components["schemas"]["PropertyLinks"];
-              };
+              content?: components["schemas"]["PropertyDetails"];
             };
           };
         };
@@ -397,9 +391,7 @@ export interface paths {
         200: {
           content: {
             "application/json": {
-              content?: components["schemas"]["CompanyDetails"] & {
-                _links?: components["schemas"]["CompanyLinks"];
-              };
+              content?: components["schemas"]["CompanyDetails"];
             };
           };
         };
@@ -643,14 +635,6 @@ export interface components {
         energyIndex: string | null;
         heatingNature: number;
       };
-      _links: {
-        self: {
-          href: string;
-        };
-        buildings: {
-          href: string;
-        };
-      };
     };
     Staircase: {
       id: string;
@@ -746,63 +730,6 @@ export interface components {
       subletFeeAmount: number;
       disableQuantitiesBelowCompany: number;
       timestamp: string;
-    };
-    CompanyLinks: {
-      self: {
-        href: string;
-      };
-      properties: definitions["CompanyLinks"]["self"];
-    };
-    PropertyLinks: {
-      self: {
-        href: string;
-      };
-      buildings: definitions["PropertyLinks"]["self"];
-      parent?: definitions["PropertyLinks"]["self"];
-    };
-    BuildingLinks: {
-      self: {
-        href: string;
-      };
-      property: definitions["BuildingLinks"]["self"];
-      residences: definitions["BuildingLinks"]["self"];
-      staircases: definitions["BuildingLinks"]["self"];
-      parent: definitions["BuildingLinks"]["self"];
-    };
-    StaircaseLinks: {
-      self: {
-        href: string;
-      };
-      building: definitions["StaircaseLinks"]["self"];
-      residences: definitions["StaircaseLinks"]["self"];
-      parent: definitions["StaircaseLinks"]["self"];
-      components: definitions["StaircaseLinks"]["self"];
-    };
-    ResidenceLinks: {
-      self: {
-        href: string;
-      };
-      building: definitions["ResidenceLinks"]["self"];
-      property: definitions["ResidenceLinks"]["self"];
-      rooms: definitions["ResidenceLinks"]["self"];
-      components: definitions["ResidenceLinks"]["self"];
-      parent: definitions["ResidenceLinks"]["self"];
-    };
-    RoomLinks: {
-      self: {
-        href: string;
-      };
-      residence: definitions["RoomLinks"]["self"];
-      building: definitions["RoomLinks"]["self"];
-      parent: definitions["RoomLinks"]["self"];
-      components: definitions["RoomLinks"]["self"];
-    };
-    ComponentLinks: {
-      self: {
-        href: string;
-      };
-      maintenanceUnit: definitions["ComponentLinks"]["self"];
-      parent: definitions["ComponentLinks"]["self"];
     };
   };
   responses: never;
