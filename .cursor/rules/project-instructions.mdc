@@ -1,0 +1,23 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+
+# Project wide instructions
+
+These are general instructions that aims to guide you (the LLM) to generate the
+best possible output according to our preferences.
+
+This repository is a monorepo, consisting of several packages, although autonomous relative to each other.
+
+When asked to perform a task or solve a problem, please try to not generate any
+more code than necessary to address the issue or solve the problem.
+
+Try to keep the number of files affected by your code generation as low as possible.
+If new, put many functions in the same file rather than scattering them
+across the code base. Moving them to appropriate files will come in a later
+instruction.
+
+Avoid making assumptions and decisions about code that wasn't explicitly written out by the
+prompter. If you are unsure, please ask first.
