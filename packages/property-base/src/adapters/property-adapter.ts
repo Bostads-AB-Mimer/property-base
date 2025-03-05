@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { map } from 'lodash'
+import { z } from 'zod'
 const prisma = new PrismaClient({})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
@@ -84,4 +85,77 @@ const getProperties = async (
   })
 }
 
-export { getPropertyById, getProperties }
+const PropertySearchResult = z.object({
+  type: z.literal('property'),
+  id: z.string(),
+  name: z.string(),
+})
+
+const BuildingSearchResult = z.object({
+  type: z.literal('building'),
+  id: z.string(),
+  name: z.string(),
+  property: z.object({
+    id: z.string(),
+    name: z.string(),
+  }),
+})
+
+const SearchResultSchema = z.discriminatedUnion('type', [
+  PropertySearchResult,
+  BuildingSearchResult,
+])
+
+type SearchResult = z.infer<typeof SearchResultSchema>
+
+const searchProperties = async (
+  companyCode: string,
+  q: string
+): Promise<SearchResult[]> => {
+  const properties = await prisma.property.findMany({
+    where: {
+      designation: { contains: q },
+    },
+    select: {
+      id: true,
+      designation: true,
+      propertyObjectId: true,
+    },
+  })
+
+  const buildings = await prisma.building.findMany({
+    where: {
+      name: { contains: q },
+    },
+    select: {
+      id: true,
+      name: true,
+      propertyDesignation: {
+        select: {
+          name: true,
+        },
+      },
+      propertyObject: { select: { id: true } },
+    },
+  })
+
+  const mappedBuildings: SearchResult[] = buildings.map((b) => ({
+    type: 'building' as const,
+    id: b.id,
+    name: b.name ?? '',
+    property: {
+      id: b.propertyObject.id,
+      name: b.propertyDesignation?.name ?? '',
+    },
+  }))
+
+  const mappedProperties: SearchResult[] = properties.map((p) => ({
+    type: 'property' as const,
+    id: p.id,
+    name: p.designation ?? '',
+  }))
+
+  return mappedBuildings.concat(mappedProperties)
+}
+
+export { getPropertyById, getProperties, searchProperties }
