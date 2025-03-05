@@ -6,11 +6,16 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
 import { etagMiddleware } from '../middleware/etag'
-import { getProperties, getPropertyById } from '../adapters/property-adapter'
+import {
+  getProperties,
+  getPropertyById,
+  searchProperties,
+} from '../adapters/property-adapter'
 import {
   propertiesQueryParamsSchema,
   PropertyDetailsSchema,
 } from '../types/property'
+import { z } from 'zod'
 
 /**
  * @swagger
@@ -141,6 +146,40 @@ export const routes = (router: KoaRouter) => {
       ctx.body = {
         content: PropertyDetailsSchema.parse(property),
         ...metadata,
+      }
+    } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
+  const PropertySearchQueryParamsSchema = z.object({
+    q: z.string().min(3),
+  })
+
+  router.get('(.*)/properties/:companyCode/search', async (ctx) => {
+    const queryParams = PropertySearchQueryParamsSchema.safeParse(ctx.query)
+    const companyCode = ctx.params.companyCode
+
+    if (!queryParams.success) {
+      ctx.status = 400
+      ctx.body = { errors: queryParams.error.errors }
+      return
+    }
+
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(
+      `GET /properties/${companyCode}?q=${queryParams.data.q}`,
+      metadata
+    )
+
+    try {
+      const properties = await searchProperties(companyCode, queryParams.data.q)
+
+      const responseContent = properties
+      ctx.body = {
+        content: responseContent,
       }
     } catch (err) {
       ctx.status = 500
