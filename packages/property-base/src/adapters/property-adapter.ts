@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { map } from 'lodash'
+import { z } from 'zod'
 const prisma = new PrismaClient({})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
@@ -84,4 +85,95 @@ const getProperties = async (
   })
 }
 
-export { getPropertyById, getProperties }
+const PropertySearchResult = z.object({
+  type: z.literal('property'),
+  id: z.string(),
+  name: z.string(),
+})
+
+const BuildingSearchResult = z.object({
+  type: z.literal('building'),
+  id: z.string(),
+  name: z.string(),
+  propertyId: z.string(),
+  propertyName: z.string(),
+})
+
+const SearchResultSchema = z.discriminatedUnion('type', [
+  PropertySearchResult,
+  BuildingSearchResult,
+])
+
+type SearchResult = z.infer<typeof SearchResultSchema>
+
+const searchProperties = async (
+  companyCode: string,
+  q: string
+): Promise<SearchResult[]> => {
+  const propertyStructures = await prisma.propertyStructure.findMany({
+    where: {
+      companyCode,
+      propertyId: { not: null },
+      buildingId: null,
+      managementUnitId: null,
+      landAreaId: null,
+      roomId: null,
+      maintenanceUnitId: null,
+      systemId: null,
+    },
+    select: {
+      propertyObjectId: true,
+    },
+  })
+
+  const properties = await prisma.property.findMany({
+    where: {
+      propertyObjectId: {
+        in: map(propertyStructures, 'propertyObjectId'),
+      },
+      designation: { contains: q },
+    },
+    select: {
+      id: true,
+      designation: true,
+    },
+  })
+
+  const buildingStructures = await prisma.building.findMany({
+    where: {
+      companyCode,
+      buildingId: { not: null },
+      name: { contains: q },
+    },
+    select: {
+      buildingId: true,
+      name: true,
+      propertyObject: {
+        select: {
+          id: true,
+          designation: true,
+        },
+      },
+    },
+    include: { propertyObject: true },
+  })
+
+  const results: SearchResult[] = [
+    ...properties.map((p) => ({
+      type: 'property' as const,
+      id: p.id,
+      name: p.designation || '',
+    })),
+    ...buildingStructures.map((b) => ({
+      type: 'building' as const,
+      id: b.buildingId!,
+      name: b.name,
+      propertyId: b.property.id,
+      propertyName: b.property.designation || '',
+    })),
+  ]
+
+  return results
+}
+
+export { getPropertyById, getProperties, searchProperties }
