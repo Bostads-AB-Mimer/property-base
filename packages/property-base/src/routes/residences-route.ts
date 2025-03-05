@@ -1,5 +1,7 @@
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
+import { z } from 'zod'
+
 import {
   getResidenceById,
   getResidencesByBuildingCode,
@@ -10,7 +12,6 @@ import {
   ResidenceSchema,
   ResidenceDetailedSchema,
 } from '../types/residence'
-import { z } from 'zod'
 
 /**
  * @swagger
@@ -144,6 +145,7 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
+  type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
   router.get('(.*)/residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
@@ -158,8 +160,6 @@ export const routes = (router: KoaRouter) => {
 
       // TODO: find out why building is null in residence
       //const building = await getBuildingByCode(residence.buildingCode)
-
-      console.log('residence', residence)
 
       const parsedResidence = ResidenceDetailedSchema.parse({
         id: residence.id,
@@ -227,14 +227,13 @@ export const routes = (router: KoaRouter) => {
               residence.propertyObject?.energyRegistered || undefined,
             energyReceived:
               residence.propertyObject?.energyReceived || undefined,
-            energyIndex: residence.propertyObject?.energyIndex || undefined,
+            energyIndex: residence.propertyObject?.energyIndex?.toNumber(),
           },
         },
-      })
+      } satisfies ResidenceDetails)
 
       ctx.body = {
         content: parsedResidence,
-
         ...metadata,
       }
     } catch (err) {
