@@ -108,10 +108,7 @@ const SearchResultSchema = z.discriminatedUnion('type', [
 
 type SearchResult = z.infer<typeof SearchResultSchema>
 
-const searchProperties = async (
-  companyCode: string,
-  q: string
-): Promise<SearchResult[]> => {
+const searchProperties = async (q: string): Promise<SearchResult[]> => {
   const properties = await prisma.property.findMany({
     where: {
       designation: { contains: q },
