@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "concurrently -k -n \"property-base,property-tree\" \"npm run dev --workspace=property-base\" \"npm run dev --workspace=property-tree\"",
+    "dev": "concurrently -k -n \"property-base,property-tree,core\" \"npm run dev --workspace=property-base\" \"npm run dev --workspace=property-tree\" \"npm run dev --workspace=core\"",
     "lint": "npm run lint --workspaces --if-present",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
     "prettier": "prettier --check . --ignore-path .prettierignore",
