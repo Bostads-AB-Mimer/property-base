@@ -1,5 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { map } from 'lodash'
+import { z } from 'zod'
 const prisma = new PrismaClient({})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
@@ -84,4 +85,12 @@ const getProperties = async (
   })
 }
 
-export { getPropertyById, getProperties }
+const searchProperties = (q: string) => {
+  return prisma.property.findMany({
+    where: {
+      designation: { contains: q },
+    },
+  })
+}
+
+export { getPropertyById, getProperties, searchProperties }

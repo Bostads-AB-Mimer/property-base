@@ -110,12 +110,12 @@ export function CompanyView() {
         </div>
 
         <div className="space-y-6">
-          <Card title="Karta" icon={MapPin}>
+          {/* <Card title="Karta" icon={MapPin}>
             <PropertyMap
               properties={propertiesQuery.data || []}
               companyName={company.name}
             />
-          </Card>
+          </Card> */}
           <Card title="Status" icon={Building2}>
             <div className="space-y-4">
               <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg opacity-50">
