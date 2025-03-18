@@ -73,4 +73,23 @@ const getBuildingById = async (
   })
 }
 
-export { getBuildings, getBuildingById }
+const searchBuildings = (q: string): Promise<BuildingWithRelations[]> => {
+  return prisma.building.findMany({
+    where: {
+      name: { contains: q },
+    },
+    include: {
+      buildingType: true,
+      marketArea: true,
+      propertyDesignation: true,
+      district: true,
+      propertyObject: {
+        include: {
+          property: true,
+        },
+      },
+    },
+  })
+}
+
+export { getBuildings, getBuildingById, searchBuildings }
