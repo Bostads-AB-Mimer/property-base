@@ -155,6 +155,7 @@ export const routes = (router: KoaRouter) => {
   })
 
   router.get('(.*)/buildings/search', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
     const queryParams = BuildingSearchQueryParamsSchema.safeParse(ctx.query)
 
     if (!queryParams.success) {
@@ -162,9 +163,6 @@ export const routes = (router: KoaRouter) => {
       ctx.body = { errors: queryParams.error.errors }
       return
     }
-
-    const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /buildings/search?q=${queryParams.data.q}`, metadata)
 
     try {
       const buildings = await searchBuildings(queryParams.data.q)

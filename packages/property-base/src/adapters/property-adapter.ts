@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client'
 import { map } from 'lodash'
-import { z } from 'zod'
+import { logger } from 'onecore-utilities'
 const prisma = new PrismaClient({})
 
 export type PropertyWithObject = Prisma.PropertyGetPayload<{
@@ -88,11 +88,16 @@ const getProperties = async (
 const searchProperties = (
   q: string
 ): Promise<Prisma.PropertyGetPayload<undefined>[]> => {
-  return prisma.property.findMany({
-    where: {
-      designation: { contains: q },
-    },
-  })
+  try {
+    return prisma.property.findMany({
+      where: {
+        designation: { contains: q },
+      },
+    })
+  } catch (err) {
+    logger.error({ err }, 'property-adapter.searchProperties')
+    throw err
+  }
 }
 
 export { getPropertyById, getProperties, searchProperties }
