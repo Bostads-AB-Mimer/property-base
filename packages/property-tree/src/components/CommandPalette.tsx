@@ -44,9 +44,7 @@ export function CommandPalette() {
     if (isOpen) {
       setQuery('')
       setSelectedIndex(0)
-      requestAnimationFrame(() => {
-        inputRef.current?.focus()
-      })
+      inputRef.current?.focus()
     }
   }, [isOpen])
 
@@ -84,7 +82,7 @@ export function CommandPalette() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50"
+            className="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-50 flex items-center justify-center"
             onClick={close}
           />
           <motion.div
@@ -92,23 +90,20 @@ export function CommandPalette() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.1 }}
-            className="fixed left-1/2 top-[20%] -translate-x-1/2 w-full max-w-xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50"
+            className="fixed left-[calc(50%-350px)] top-[20%] w-[700px] border border-gray-200 bg-white dark:bg-gray-800 rounded-xl shadow-2xl dark:border-gray-700 overflow-hidden z-50"
           >
-            <div className="p-4 border-b dark:border-gray-700">
-              <div className="flex items-center space-x-3">
-                <Command className="h-5 w-5 text-gray-400" />
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  onKeyDown={handleKeyDown}
-                  placeholder="Sök efter fastigheter, lägenheter eller hyresgäster..."
-                  className="flex-1 bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400"
-                />
-              </div>
+            <div className="p-4 border-b dark:border-gray-700 flex items-center space-x-3">
+              <Command className="h-5 w-5 text-gray-400" />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Sök efter fastigheter, lägenheter eller hyresgäster..."
+                className="flex-1 bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400"
+              />
             </div>
-
             <div className="max-h-[60vh] overflow-y-auto">
               {results.length > 0 ? (
                 <div className="p-2">
