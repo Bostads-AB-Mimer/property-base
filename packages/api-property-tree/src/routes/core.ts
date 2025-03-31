@@ -1,9 +1,26 @@
-import Router from '@koa/router'
+import proxy from 'koa-proxies'
+import { logger } from 'onecore-utilities'
 
-const router = new Router({ prefix: '/core' })
+import { config } from '../config'
 
-router.get('/', async (ctx) => {
-  ctx.body = 'Hello World'
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ5Z2NvcmUiLCJ1c2VybmFtZSI6InlnY29yZSIsImlhdCI6MTc0MzQzMjgwMCwiZXhwIjoxNzQzNDQzNjAwfQ.1RZVQTVIqAHvRqaGKF11GkW4T-1JUzLNrjrmtST5JW4'
+
+export const coreProxy = proxy('/core', () => {
+  return {
+    target: config.CORE_API_URL,
+    changeOrigin: true,
+    rewrite: (path) => path.replace(/^\/core/, ''),
+    logs: (ctx, target) =>
+      logger.info(
+        '[proxy] %s %s -> %s',
+        ctx.req.method,
+        //@ts-expect-error
+        ctx.req.oldPath,
+        new URL(ctx.request.url, target),
+      ),
+    headers: {
+      authorization: `Bearer ${token}`,
+    },
+  }
 })
-
-export default router
