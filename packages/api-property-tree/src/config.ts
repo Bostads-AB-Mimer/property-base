@@ -1,0 +1,39 @@
+import assert from 'node:assert'
+
+const CORE_API_URL = process.env.CORE__API_URL
+const CORE_USERNAME = process.env.CORE__USERNAME
+const CORE_PASSWORD = process.env.CORE__PASSWORD
+const MSAL__CLIENT_ID = process.env.MSAL__CLIENT_ID
+const MSAL__CLIENT_SECRET = process.env.MSAL__CLIENT_SECRET
+const MSAL__POST_LOGOUT_REDIRECT_URI =
+  process.env.MSAL__POST_LOGOUT_REDIRECT_URI
+const MSAL__CLOUD_INSTANCE = process.env.MSAL__CLOUD_INSTANCE
+const MSAL__REDIRECT_URI = process.env.MSAL__REDIRECT_URI
+const MSAL__TENANT_ID = process.env.MSAL__TENANT_ID
+const DISABLE_AUTHENTICATION = process.env.DISABLE_AUTHENTICATION
+
+assert(CORE_API_URL, 'CORE__API_URL is required')
+assert(CORE_USERNAME, 'CORE__USERNAME is required')
+assert(CORE_PASSWORD, 'CORE__PASSWORD is required')
+assert(MSAL__CLIENT_ID, 'MSAL__CLIENT_ID is required')
+assert(MSAL__CLIENT_SECRET, 'MSAL__CLIENT_SECRET is required')
+assert(
+  MSAL__POST_LOGOUT_REDIRECT_URI,
+  'MSAL__POST_LOGOUT_REDIRECT_URI is required',
+)
+assert(MSAL__CLOUD_INSTANCE, 'MSAL__CLOUD_INSTANCE is required')
+assert(MSAL__REDIRECT_URI, 'MSAL__REDIRECT_URI is required')
+assert(MSAL__TENANT_ID, 'MSAL__TENANT_ID is required')
+
+export const config = {
+  CORE_API_URL,
+  CORE_USERNAME,
+  CORE_PASSWORD,
+  MSAL__CLIENT_ID,
+  MSAL__CLIENT_SECRET,
+  MSAL__POST_LOGOUT_REDIRECT_URI,
+  MSAL__CLOUD_INSTANCE,
+  MSAL__REDIRECT_URI,
+  MSAL__TENANT_ID,
+  DISABLE_AUTHENTICATION,
+}
