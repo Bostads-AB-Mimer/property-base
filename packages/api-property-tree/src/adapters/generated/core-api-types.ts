@@ -1652,7 +1652,7 @@ export interface paths {
       parameters: {
         query: {
           /** @description The search query string */
-          q: components["schemas"]["SearchQueryParams"];
+          q: string;
         };
       };
       responses: {
