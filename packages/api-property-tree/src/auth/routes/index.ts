@@ -1,7 +1,7 @@
 import Router from '@koa/router'
 import { generateRouteMetadata } from 'onecore-utilities'
 
-import { login, handleRedirect, logout } from '../adapters/auth'
+import { login, handleRedirect, logout } from '../../adapters/auth'
 
 const router = new Router({ prefix: '/auth' })
 

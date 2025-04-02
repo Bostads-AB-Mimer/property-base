@@ -5,8 +5,8 @@ import session from 'koa-session'
 import bodyParser from 'koa-body'
 import { logger, loggerMiddlewares } from 'onecore-utilities'
 
-import authRouter from './routes/auth'
-import { coreProxy } from './routes/core'
+import authRouter from './auth/routes'
+import coreRouter from './core/routes'
 
 const CONFIG = {
   key: 'koa.sess' /** (string) cookie key (default is koa.sess) */,
@@ -57,7 +57,7 @@ app.use(loggerMiddlewares.pre)
 app.use(loggerMiddlewares.post)
 
 router.use(authRouter.routes())
+router.use(coreRouter.routes())
 app.use(router.routes())
-app.use(coreProxy)
 
 export default app

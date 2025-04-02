@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node --import tsx --env-file=.env src/index.ts",
-    "dev": "node --import tsx --env-file=.env --watch src/index.ts"
+    "dev": "node --import tsx --env-file=.env --watch src/index.ts",
+    "generate-api-types:core": "npx openapi-typescript http://localhost:5010/swagger.json -o ./src/adapters/generated/core-api-types.ts"
   },
   "keywords": [],
   "author": "",
@@ -22,10 +23,12 @@
     "@azure/msal-node": "^3.4.1",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^12.0.1",
+    "axios": "^1.8.4",
     "koa": "^2.16.0",
     "koa-body": "^6.0.1",
     "koa-proxies": "^0.12.4",
     "koa-session": "^7.0.2",
-    "onecore-utilities": "^1.1.0"
+    "onecore-utilities": "^1.1.0",
+    "openapi-fetch": "^0.13.5"
   }
 }
