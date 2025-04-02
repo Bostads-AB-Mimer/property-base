@@ -14,6 +14,12 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
+      '/core/api': {
+        target: process.env.VITE_CORE_API_URL || 'http://localhost:5010',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/core\/api/, ''),
+      },
     },
   },
   resolve: {
