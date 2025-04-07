@@ -5,7 +5,7 @@ type SearchResult = components['schemas']['SearchResult']
 
 async function search(q: string): Promise<Array<SearchResult>> {
   const { data, error } = await GET('/search', {
-    params: { query: { q: { q } } },
+    params: { query: { q } },
   })
 
   if (error) throw error

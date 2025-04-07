@@ -600,6 +600,123 @@ export interface paths {
       };
     };
   };
+  "/applicants/validate-rental-rules/property/{contactCode}/{rentalObjectCode}": {
+    /**
+     * Validate property rental rules for applicant
+     * @description Validate property rental rules for an applicant based on contact code and listing ID.
+     */
+    get: {
+      parameters: {
+        path: {
+          /** @description The contact code of the applicant. */
+          contactCode: string;
+          /** @description The xpand rental object code of the property. */
+          rentalObjectCode: number;
+        };
+      };
+      responses: {
+        /** @description No property rental rules apply to this property. */
+        200: {
+          content: {
+            "application/json": {
+              /** @example Additional - applicant is eligible for applying for an additional parking space. Replace - applicant is eligible for replacing their current parking space in the same residential area or property. */
+              applicationType?: string;
+              /** @example No property rental rules applies to this property. */
+              reason?: string;
+            };
+          };
+        };
+        /** @description Rental object code is not a parking space. */
+        400: {
+          content: {
+            "application/json": {
+              /** @example Rental object code entity is not a parking space. */
+              reason?: string;
+            };
+          };
+        };
+        /** @description Applicant is not eligible for the property based on property rental rules. */
+        403: {
+          content: {
+            "application/json": {
+              reason?: string;
+            };
+          };
+        };
+        /** @description Listing, property info, or applicant not found. */
+        404: {
+          content: {
+            "application/json": {
+              reason?: string;
+            };
+          };
+        };
+        /** @description An error occurred while validating property rental rules. */
+        500: {
+          content: {
+            "application/json": {
+              /** @example An error occurred while validating property rental rules. */
+              error?: string;
+            };
+          };
+        };
+      };
+    };
+  };
+  "/applicants/validate-rental-rules/residential-area/{contactCode}/{districtCode}": {
+    /**
+     * Validate residential area rental rules for applicant
+     * @description Validate residential area rental rules for an applicant based on contact code and district code.
+     */
+    get: {
+      parameters: {
+        path: {
+          /** @description The contact code of the applicant. */
+          contactCode: string;
+          /** @description The xpand district code of the residential area to validate against. */
+          districtCode: string;
+        };
+      };
+      responses: {
+        /** @description Either no residential area rental rules apply or applicant is eligible to apply for parking space. */
+        200: {
+          content: {
+            "application/json": {
+              /** @example Additional - applicant is eligible for applying for an additional parking space. Replace - applicant is eligible for replacing their current parking space in the same residential area or property. */
+              applicationType?: string;
+              reason?: string;
+            };
+          };
+        };
+        /** @description Applicant is not eligible for the listing based on residential area rental rules. */
+        403: {
+          content: {
+            "application/json": {
+              /** @example Applicant does not have any current or upcoming housing contracts in the residential area. */
+              reason?: string;
+            };
+          };
+        };
+        /** @description Listing or applicant not found. */
+        404: {
+          content: {
+            "application/json": {
+              reason?: string;
+            };
+          };
+        };
+        /** @description An error occurred while validating residential area rental rules. */
+        500: {
+          content: {
+            "application/json": {
+              /** @example An error occurred while validating residential area rental rules. */
+              error?: string;
+            };
+          };
+        };
+      };
+    };
+  };
   "/applicants-with-listings/{contactCode}": {
     /**
      * Get applicants with listings by contact code
@@ -1535,7 +1652,7 @@ export interface paths {
       parameters: {
         query: {
           /** @description The search query string */
-          q: components["schemas"]["SearchQueryParams"];
+          q: string;
         };
       };
       responses: {
