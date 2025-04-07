@@ -17,6 +17,7 @@ export function createCoreAuthMiddleware(params: {
       } catch (error) {
         console.error(error)
         res.statusCode = 500
+        return res.end()
       }
     }
 
