@@ -9,8 +9,10 @@ import {
   ArrowRight,
   User2,
 } from 'lucide-react'
+
 import { useSearch } from './hooks/useSearch'
 import { useCommandPalette } from './hooks/useCommandPalette'
+import { debounce } from '@/utils/debounce'
 
 const routeMap = {
   property: '/properties',
@@ -34,7 +36,11 @@ export function CommandPalette() {
   const [query, setQuery] = React.useState('')
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
-  const { results } = useSearch(query)
+  const searchQuery = useSearch(query)
+  const results = searchQuery.data || []
+
+  const handleSearch = React.useCallback((v: string) => setQuery(v), [])
+  const onSearch = debounce(handleSearch, 300)
 
   React.useEffect(() => {
     setSelectedIndex(0)
@@ -97,8 +103,7 @@ export function CommandPalette() {
               <input
                 ref={inputRef}
                 type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => onSearch(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Sök efter fastigheter, lägenheter eller hyresgäster..."
                 className="flex-1 bg-transparent border-0 focus:outline-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400"
@@ -114,7 +119,6 @@ export function CommandPalette() {
                         key={item.id}
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.03 }}
                         className={`
                           w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-sm
                           ${
