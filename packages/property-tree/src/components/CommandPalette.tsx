@@ -8,6 +8,7 @@ import {
   Home,
   ArrowRight,
   User2,
+  Loader2,
 } from 'lucide-react'
 
 import { useSearch } from './hooks/useSearch'
@@ -110,9 +111,24 @@ export function CommandPalette() {
               />
             </div>
             <div className="max-h-[60vh] overflow-y-auto">
-              {results.length > 0 ? (
+              {!query && (
+                <div className="p-4 text-center text-gray-500">
+                  Börja skriva för att söka...
+                </div>
+              )}
+              {searchQuery.isLoading && (
+                <div className="p-4 flex justify-center items-center text-gray-500">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </div>
+              )}
+              {searchQuery.isFetched && searchQuery.data?.length === 0 && (
+                <div className="p-4 text-center text-gray-500">
+                  Inga resultat hittades
+                </div>
+              )}
+              {searchQuery.data?.length > 0 && (
                 <div className="p-2">
-                  {results.map((item, index) => {
+                  {searchQuery.data.map((item, index) => {
                     const Icon = iconMap[item.type] || Home
                     return (
                       <motion.button
@@ -141,14 +157,6 @@ export function CommandPalette() {
                       </motion.button>
                     )
                   })}
-                </div>
-              ) : query ? (
-                <div className="p-4 text-center text-gray-500">
-                  Inga resultat hittades
-                </div>
-              ) : (
-                <div className="p-4 text-center text-gray-500">
-                  Börja skriva för att söka...
                 </div>
               )}
             </div>
