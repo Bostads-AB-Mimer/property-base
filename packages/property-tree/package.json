@@ -13,7 +13,8 @@
     "build": "vite build",
     "generate-api-types": "npx openapi-typescript http://localhost:5050/swagger.json -o ./src/services/api/generated/api-types.ts",
     "generate-api-types:core": "npx openapi-typescript http://localhost:5010/swagger.json -o ./src/services/api/core/generated/api-types.ts",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "prettier-check": "prettier --check ."
   },
   "dependencies": {
     "@deck.gl/core": "^9.0.38",
