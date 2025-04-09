@@ -9,6 +9,7 @@ import {
   ArrowRight,
   User2,
   Loader2,
+  Building,
 } from 'lucide-react'
 
 import { useSearch } from './hooks/useSearch'
@@ -25,11 +26,11 @@ const routeMap = {
 const iconMap = {
   area: MapPin,
   property: Building2,
-  building: Building2,
+  building: Building,
   entrance: Home,
   apartment: Home,
   tenant: User2,
-}
+} as const
 
 export function CommandPalette() {
   const navigate = useNavigate()
