@@ -49,16 +49,16 @@ export interface paths {
   }
   '/residences': {
     /**
-     * Get residences by building code, optionally filtered by floor code.
-     * @description Returns all residences belonging to a specific building, optionally filtered by floor code.
+     * Get residences by building code, optionally filtered by staircase code.
+     * @description Returns all residences belonging to a specific building, optionally filtered by staircase code.
      */
     get: {
       parameters: {
         query: {
           /** @description The building code of the building. */
           buildingCode: string
-          /** @description The floor code of the staircase (optional). */
-          floorCode?: string
+          /** @description The code of the staircase (optional). */
+          staircaseCode?: string
         }
       }
       responses: {
@@ -125,6 +125,40 @@ export interface paths {
         query: {
           /** @description The code of the property. */
           propertyCode: string
+        }
+      }
+      responses: {
+        /** @description Successfully retrieved the buildings. */
+        200: {
+          content: {
+            'application/json': {
+              content?: components['schemas']['Building'][]
+            }
+          }
+        }
+        /** @description Invalid query parameters. */
+        400: {
+          content: never
+        }
+        /** @description Internal server error. */
+        500: {
+          content: never
+        }
+      }
+    }
+  }
+  '/buildings/search': {
+    /**
+     * Search buildings
+     * @description Retrieves all buildings associated with a given name.
+     * Returns detailed information about each building including its code, name,
+     * construction details, and associated property information.
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description The search query. */
+          q: string
         }
       }
       responses: {
@@ -217,6 +251,38 @@ export interface paths {
       }
     }
   }
+  '/properties/search': {
+    /**
+     * Search properties
+     * @description Retrieves a list of all real estate properties by name.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description The search query. */
+          q?: string
+        }
+      }
+      responses: {
+        /** @description Successfully retrieved list of properties. */
+        200: {
+          content: {
+            'application/json': {
+              content?: components['schemas']['Property'][]
+            }
+          }
+        }
+        /** @description Invalid query parameters. */
+        400: {
+          content: never
+        }
+        /** @description Internal server error. */
+        500: {
+          content: never
+        }
+      }
+    }
+  }
   '/properties/{id}': {
     /**
      * Get detailed information about a specific property
@@ -285,16 +351,16 @@ export interface paths {
   }
   '/rooms': {
     /**
-     * Get rooms by building code, floor code, and residence code.
-     * @description Returns all rooms belonging to a specific building, floor, and residence code.
+     * Get rooms by building code, staircase code, and residence code.
+     * @description Returns all rooms belonging to a specific building, staircase, and residence code.
      */
     get: {
       parameters: {
         query: {
           /** @description The building code of the building for the residence. */
           buildingCode: string
-          /** @description The floor code of the staircase. */
-          floorCode: string
+          /** @description The code of the staircase. */
+          staircaseCode: string
           /** @description The residence code where the rooms are located. */
           residenceCode: string
         }
@@ -400,6 +466,44 @@ export interface paths {
         /** @description Internal server error */
         500: {
           content: never
+        }
+      }
+    }
+  }
+  '/health': {
+    /**
+     * Check system health status
+     * @description Retrieves the health status of the system and its subsystems.
+     */
+    get: {
+      responses: {
+        /** @description Successful response with system health status */
+        200: {
+          content: {
+            'application/json': {
+              /**
+               * @description Name of the system.
+               * @example core
+               */
+              name?: string
+              /**
+               * @description Overall status of the system ('active', 'impaired', 'failure', 'unknown').
+               * @example active
+               */
+              status?: string
+              subsystems?: {
+                /** @description Name of the subsystem. */
+                name?: string
+                /**
+                 * @description Status of the subsystem.
+                 * @enum {string}
+                 */
+                status?: 'active' | 'impaired' | 'failure' | 'unknown'
+                /** @description Additional details about the subsystem status. */
+                details?: string
+              }[]
+            }
+          }
         }
       }
     }

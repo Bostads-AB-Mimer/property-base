@@ -55,7 +55,7 @@ export function ResidenceView() {
   })
 
   const buildingCode = state?.buildingCode
-  const floorCode = state?.floorCode
+  const staircaseCode = state?.staircaseCode
 
   const isLoading = residenceQuery.isLoading
   const error = residenceQuery.error
@@ -116,7 +116,7 @@ export function ResidenceView() {
         <div className="lg:col-span-2 space-y-6">
           <ResidenceRooms
             buildingCode={buildingCode}
-            floorCode={floorCode}
+            staircaseCode={staircaseCode}
             residenceId={residenceId}
           />
 
@@ -271,11 +271,10 @@ export function ResidenceView() {
               </div>
             </Grid>
           </Card>
-
           <ResidenceRooms
             residenceId={residence.id}
             buildingCode={buildingCode}
-            floorCode={floorCode}
+            staircaseCode={staircaseCode}
           />
         </div>
 
