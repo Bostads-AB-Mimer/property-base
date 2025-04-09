@@ -6,11 +6,11 @@ import { createCoreAuthMiddleware } from './core-auth-middleware'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd())
+  const env = loadEnv(mode, process.cwd(), '')
   const coreAuth = createCoreAuthMiddleware({
     url: env.VITE_CORE_API_URL,
-    username: env.VITE_CORE_USERNAME,
-    password: env.VITE_CORE_PASSWORD,
+    username: env.CORE_USERNAME,
+    password: env.CORE_PASSWORD,
   })
 
   return {
@@ -24,7 +24,7 @@ export default defineConfig(({ mode }) => {
       },
     ],
     server: {
-      port: Number(env.VITE_PORT) || 3000,
+      port: Number(env.PORT) || 3000,
       proxy: {
         '/api': {
           target: env.VITE_API_URL || 'http://localhost:5050',
