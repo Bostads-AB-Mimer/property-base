@@ -9,17 +9,11 @@
     "dev": "concurrently -k -n \"property-base,property-tree\" \"npm run dev --workspace=property-base\" \"npm run dev --workspace=property-tree\"",
     "lint": "npm run lint --workspaces --if-present",
     "lint:fix": "npm run lint:fix --workspaces --if-present",
-    "prettier": "prettier --check . --ignore-path .prettierignore",
-    "prettier:fix": "prettier --write . --ignore-path .prettierignore",
+    "prettier": "npm run prettier-check --workspaces --if-present",
     "type-check": "npm run type-check --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "ci": "npm run prettier && npm run lint && npm run type-check"
+    "test": "npm run test --workspaces --if-present"
   },
   "dependencies": {
-    "concurrently": "^9.1.2",
-    "maplibre-gl": "^5.1.0"
-  },
-  "devDependencies": {
-    "prettier": "^3.2.5"
+    "concurrently": "^9.1.2"
   }
 }
