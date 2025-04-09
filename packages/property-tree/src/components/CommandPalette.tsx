@@ -20,7 +20,7 @@ const routeMap = {
   building: '/buildings',
   staircase: '/staircases',
   residence: '/residences',
-}
+} as const
 
 const iconMap = {
   area: MapPin,
@@ -38,7 +38,6 @@ export function CommandPalette() {
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const inputRef = React.useRef<HTMLInputElement>(null)
   const searchQuery = useSearch(query)
-  const results = searchQuery.data || []
 
   const handleSearch = React.useCallback((v: string) => setQuery(v), [])
   const onSearch = debounce(handleSearch, 300)
@@ -56,18 +55,19 @@ export function CommandPalette() {
   }, [isOpen])
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!searchQuery.data) return
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault()
-        setSelectedIndex((i) => (i < results.length - 1 ? i + 1 : 0))
+        setSelectedIndex((i) => (i < searchQuery.data.length - 1 ? i + 1 : 0))
         break
       case 'ArrowUp':
         e.preventDefault()
-        setSelectedIndex((i) => (i > 0 ? i - 1 : results.length - 1))
+        setSelectedIndex((i) => (i > 0 ? i - 1 : searchQuery.data.length - 1))
         break
       case 'Enter':
-        if (results[selectedIndex]) {
-          const item = results[selectedIndex]
+        if (searchQuery.data[selectedIndex]) {
+          const item = searchQuery.data[selectedIndex]
           const basePath = routeMap[item.type]
           if (basePath) {
             navigate(`${basePath}/${item.id}`)
@@ -116,14 +116,19 @@ export function CommandPalette() {
                   Börja skriva för att söka...
                 </div>
               )}
-              {searchQuery.isLoading && (
-                <div className="p-4 flex justify-center items-center text-gray-500">
-                  <Loader2 className="h-4 w-4 animate-spin" />
+              {Boolean(query) && query.length < 3 && (
+                <div className="p-4 text-center text-gray-500">
+                  Inga resultat hittades
                 </div>
               )}
               {searchQuery.isFetched && searchQuery.data?.length === 0 && (
                 <div className="p-4 text-center text-gray-500">
                   Inga resultat hittades
+                </div>
+              )}
+              {searchQuery.isLoading && (
+                <div className="p-4 flex justify-center items-center text-gray-500">
+                  <Loader2 className="h-6 w-6 animate-spin" />
                 </div>
               )}
               {searchQuery.data?.length > 0 && (
