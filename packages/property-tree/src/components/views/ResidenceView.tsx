@@ -118,7 +118,7 @@ export function ResidenceView() {
           <ResidenceRooms
             buildingCode={buildingCode}
             staircaseCode={staircaseCode}
-            residenceId={residenceId}
+            residenceId={residenceId!}
           />
 
           <Card title="Egenskaper">
