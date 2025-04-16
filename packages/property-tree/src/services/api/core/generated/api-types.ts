@@ -1643,6 +1643,33 @@ export interface paths {
       };
     };
   };
+  "/propertyBase/companies": {
+    /**
+     * Get all companies
+     * @description Retrieves companies from property base
+     */
+    get: {
+      responses: {
+        /** @description Successfully retrieved companies */
+        200: {
+          content: {
+            "application/json": {
+              content?: components["schemas"]["Company"][];
+            };
+          };
+        };
+        /** @description Internal server error */
+        500: {
+          content: {
+            "application/json": {
+              /** @example Internal server error */
+              error?: string;
+            };
+          };
+        };
+      };
+    };
+  };
   "/propertyBase/residences": {
     /**
      * Get residences by building code and (optional) staircase code
@@ -1893,6 +1920,13 @@ export type webhooks = Record<string, never>;
 
 export interface components {
   schemas: {
+    Company: {
+      id: string;
+      propertyObjectId: string;
+      code: string;
+      name: string;
+      organizationNumber: string | null;
+    };
     Property: {
       id: string;
       propertyObjectId: string;
