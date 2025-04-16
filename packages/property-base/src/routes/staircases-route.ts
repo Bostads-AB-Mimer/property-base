@@ -5,6 +5,7 @@
  */
 import KoaRouter from '@koa/router'
 import { logger, generateRouteMetadata } from 'onecore-utilities'
+
 import { getStaircasesByBuildingCode } from '../adapters/staircase-adapter'
 import { staircasesQueryParamsSchema } from '../types/staircase'
 
