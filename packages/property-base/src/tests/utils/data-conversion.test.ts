@@ -1,4 +1,4 @@
-import { trimStrings } from '../../utils/data-conversion'
+import { trimStrings } from '@src/utils/data-conversion'
 
 describe(trimStrings, () => {
   it('trims single string', () => {
