@@ -1,8 +1,8 @@
 import { map } from 'lodash'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { logger } from 'onecore-utilities'
 
-const prisma = new PrismaClient({})
+import { prisma } from './db'
 
 export type BuildingWithRelations = Prisma.BuildingGetPayload<{
   include: {
