@@ -161,6 +161,11 @@ export const routes = (router: KoaRouter) => {
       // TODO: find out why building is null in residence
       //const building = await getBuildingByCode(residence.buildingCode)
 
+      const rentalId =
+        residence.propertyObject?.propertyStructures?.length > 0
+          ? residence.propertyObject.propertyStructures[0].rentalId
+          : null
+
       const parsedResidence = ResidenceDetailedSchema.parse({
         id: residence.id,
         code: residence.code,
@@ -229,6 +234,7 @@ export const routes = (router: KoaRouter) => {
               residence.propertyObject?.energyReceived || undefined,
             energyIndex: residence.propertyObject?.energyIndex?.toNumber(),
           },
+          rentalId,
         },
       } satisfies ResidenceDetails)
 
