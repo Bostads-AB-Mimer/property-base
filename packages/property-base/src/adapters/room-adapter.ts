@@ -1,7 +1,6 @@
-import { Prisma, PrismaClient, Room } from '@prisma/client'
 import { map } from 'lodash'
 
-const prisma = new PrismaClient({})
+import { prisma } from './db'
 
 //todo: add types
 

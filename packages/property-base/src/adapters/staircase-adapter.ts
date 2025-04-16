@@ -1,8 +1,6 @@
 import { map } from 'lodash'
-import { PrismaClient } from '@prisma/client'
 import { toBoolean } from '../utils/data-conversion'
-
-const prisma = new PrismaClient({})
+import { prisma } from './db'
 
 //todo: add types
 
