@@ -1,5 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client'
 
+import { trimStrings } from '@src/utils/data-conversion'
+
 const prisma = new PrismaClient({})
 
 export type CompanyBasicInfo = Prisma.CompanyGetPayload<{
@@ -15,16 +17,18 @@ const companyBasicInfoSelect = {
 }
 
 export const getCompanies = async (): Promise<CompanyBasicInfo[] | null> => {
-  return prisma.company.findMany({
-    select: companyBasicInfoSelect,
-  })
+  return prisma.company
+    .findMany({
+      select: companyBasicInfoSelect,
+    })
+    .then(trimStrings)
 }
 
 export type CompanyDetails = Prisma.CompanyGetPayload<{
   select: typeof companyDetailsSelect
 }>
 
-const companyDetailsSelect = {
+const companyDetailsSelect: Prisma.CompanySelect = {
   id: true,
   propertyObjectId: true,
   code: true,
@@ -57,8 +61,10 @@ const companyDetailsSelect = {
 export const getCompany = async (
   id: string
 ): Promise<CompanyDetails | null> => {
-  return prisma.company.findUnique({
-    where: { id },
-    select: companyDetailsSelect,
-  })
+  return prisma.company
+    .findUnique({
+      where: { id },
+      select: companyDetailsSelect,
+    })
+    .then(trimStrings)
 }
