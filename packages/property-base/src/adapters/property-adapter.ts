@@ -16,33 +16,38 @@ export type PropertyWithObject = Prisma.PropertyGetPayload<{
 const getPropertyById = async (
   id: string
 ): Promise<PropertyWithObject | null> => {
-  const result = await prisma.property.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      propertyObject: {
-        select: {
-          id: true,
-          deleteMark: true,
-          timestamp: true,
-          objectTypeId: true,
-          barcode: true,
-          barcodeType: true,
-          condition: true,
-          conditionInspectionDate: true,
-          vatAdjustmentPrinciple: true,
-          energyClass: true,
-          energyRegistered: true,
-          energyReceived: true,
-          energyIndex: true,
-          heatingNature: true,
+  try {
+    const result = await prisma.property.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        propertyObject: {
+          select: {
+            id: true,
+            deleteMark: true,
+            timestamp: true,
+            objectTypeId: true,
+            barcode: true,
+            barcodeType: true,
+            condition: true,
+            conditionInspectionDate: true,
+            vatAdjustmentPrinciple: true,
+            energyClass: true,
+            energyRegistered: true,
+            energyReceived: true,
+            energyIndex: true,
+            heatingNature: true,
+          },
         },
       },
-    },
-  })
+    })
 
-  return trimStrings(result)
+    return trimStrings(result)
+  } catch (err) {
+    logger.error({ err }, 'property-adapter.getPropertyById')
+    throw err
+  }
 }
 
 export type Property = Prisma.PropertyStructureGetPayload<{
