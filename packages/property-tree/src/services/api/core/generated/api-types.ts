@@ -2152,6 +2152,12 @@ export interface components {
       type: "building";
       /** @description Name of the building */
       name: string;
+      property?: ({
+        /** @description Property associated with the building */
+        name: string | null;
+        id: string;
+        code: string;
+      }) | null;
     };
     /** @description A search result that can be either a property or a building */
     SearchResult: {
@@ -2164,7 +2170,7 @@ export interface components {
       type: "property";
       /** @description Name or designation of the property */
       name: string;
-    } | {
+    } | ({
       /** @description Unique identifier for the search result */
       id: string;
       /**
@@ -2174,7 +2180,13 @@ export interface components {
       type: "building";
       /** @description Name of the building */
       name: string;
-    };
+      property?: ({
+        /** @description Property associated with the building */
+        name: string | null;
+        id: string;
+        code: string;
+      }) | null;
+    });
   };
   responses: never;
   parameters: never;

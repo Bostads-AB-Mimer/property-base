@@ -618,6 +618,11 @@ export interface components {
         value: number | null;
       };
       deleted: boolean;
+      property?: ({
+        name: string | null;
+        code: string;
+        id: string;
+      }) | null;
     };
     Component: {
       id: string;
@@ -831,7 +836,7 @@ export interface components {
       errorReportAdministration: number;
       mediaBilling: number;
       ownResponsibilityForInternalMaintenance: number;
-      subletPercentage: unknown;
+      subletPercentage: number;
       subletFeeAmount: number;
       disableQuantitiesBelowCompany: number;
       timestamp: string;
