@@ -54,7 +54,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
 
   if (isLoading) {
     return (
-      <Card title="Rum">
+      <Card title="Ärenden">
         <Grid cols={2}>
           {[...Array(4)].map((_, i) => (
             <div
