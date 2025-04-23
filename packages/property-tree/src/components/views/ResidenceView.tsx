@@ -10,7 +10,6 @@ import { StatCard } from '../shared/StatCard'
 import { residenceService } from '@/services/api'
 import { useQuery } from '@tanstack/react-query'
 import { Badge } from '@/components/ui/Badge'
-import { workOrderService } from '@/services/api/core/workOrderService'
 import { ResidenceWorkOrders } from '../shared/ResidenceWorkOrders'
 
 function LoadingSkeleton() {
