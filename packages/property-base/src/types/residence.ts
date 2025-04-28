@@ -21,6 +21,25 @@ export const ResidenceSchema = z.object({
   }),
 })
 
+export const ResidenceSearchResultSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string().nullable(),
+  deleted: z.boolean(),
+  validityPeriod: z.object({
+    fromDate: z.date(),
+    toDate: z.date(),
+  }),
+  property: z.object({
+    code: z.string().nullable(),
+    name: z.string().nullable(),
+  }),
+  building: z.object({
+    code: z.string().nullable(),
+    name: z.string().nullable(),
+  }),
+})
+
 export const ResidenceDetailedSchema = ResidenceSchema.extend({
   id: z.string(),
   code: z.string(),
@@ -92,3 +111,4 @@ export const ResidenceDetailedSchema = ResidenceSchema.extend({
 
 export type ExternalResidence = z.infer<typeof ResidenceSchema>
 export type Residence = ExternalResidence
+export type ResidenceSearchResult = z.infer<typeof ResidenceSearchResultSchema>

@@ -130,35 +130,50 @@ export const getResidencesByBuildingCodeAndStaircaseCode = async (
     .then(trimStrings)
 }
 
+export type ResidenceSearchResult = Prisma.ResidenceGetPayload<{
+  include: {
+    propertyObject: {
+      include: {
+        propertyStructures: {
+          select: {
+            propertyCode: true
+            propertyName: true
+            buildingCode: true
+            buildingName: true
+          }
+        }
+      }
+    }
+  }
+}>
+
 export const searchResidences = async (
   q: string
-): Promise<Array<Residence>> => {
+): Promise<Array<ResidenceSearchResult>> => {
   try {
-    const result = await prisma.residence
-      .findMany({
-        where: {
-          propertyObject: {
-            propertyStructures: { every: { rentalId: { contains: q } } },
-          },
+    const result = await prisma.residence.findMany({
+      where: {
+        propertyObject: {
+          propertyStructures: { every: { rentalId: { contains: q } } },
         },
-        include: {
-          residenceType: true,
-          propertyObject: {
-            include: {
-              property: true,
-              building: true,
-              propertyStructures: {
-                select: {
-                  rentalId: true,
-                },
+      },
+      include: {
+        propertyObject: {
+          include: {
+            propertyStructures: {
+              select: {
+                propertyCode: true,
+                propertyName: true,
+                buildingCode: true,
+                buildingName: true,
               },
             },
           },
         },
-      })
-      .then(trimStrings)
+      },
+    })
 
-    return result
+    return trimStrings(result)
   } catch (err) {
     logger.error({ err }, 'residence-adapter.searchResidences')
     throw err

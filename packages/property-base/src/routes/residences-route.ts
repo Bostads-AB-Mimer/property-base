@@ -12,6 +12,7 @@ import {
   residencesQueryParamsSchema,
   ResidenceSchema,
   ResidenceDetailedSchema,
+  ResidenceSearchResult,
 } from '../types/residence'
 import { parseRequest } from '../middleware/parse-request'
 
@@ -114,6 +115,38 @@ export const routes = (router: KoaRouter) => {
     }
   )
 
+  /**
+   * @swagger
+   * /residences/search:
+   *   get:
+   *     summary: Search residences
+   *     description: |
+   *       Retrieves a list of all real estate residences by rental object id.
+   *     tags:
+   *       - Residences
+   *     parameters:
+   *       - in: query
+   *         name: q
+   *         schema:
+   *           type: string
+   *         description: The search query.
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved list of residences.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/ResidenceSearchResult'
+   *       400:
+   *         description: Invalid query parameters.
+   *       500:
+   *         description: Internal server error.
+   */
   const ResidenceSearchQueryParamsSchema = z.object({
     q: z.string().min(3),
   })
@@ -128,8 +161,25 @@ export const routes = (router: KoaRouter) => {
       try {
         const residences = await searchResidences(q)
 
+        ctx.status = 200
         ctx.body = {
-          content: residences,
+          content: residences.map(
+            (r): ResidenceSearchResult => ({
+              id: r.id,
+              code: r.code,
+              name: r.name || '',
+              deleted: Boolean(r.deleted),
+              validityPeriod: { fromDate: r.fromDate, toDate: r.toDate },
+              property: {
+                code: r.propertyObject.propertyStructures[0].propertyCode,
+                name: r.propertyObject.propertyStructures[0].propertyName,
+              },
+              building: {
+                code: r.propertyObject.propertyStructures[0].buildingCode,
+                name: r.propertyObject.propertyStructures[0].buildingName,
+              },
+            })
+          ),
           ...metadata,
         }
       } catch (err) {
