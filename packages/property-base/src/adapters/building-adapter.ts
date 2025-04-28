@@ -81,6 +81,21 @@ const getBuildingById = async (
     .then(trimStrings)
 }
 
+/**
+ * Searches buildings by name
+ * At the moment this function has an "under investigation" approach to fetchin
+ * property based on building.
+ * We currently fetch property id (and name and code) based on the building id.
+ * We do this via property structure (babuf).
+ * 1. Find the buildings ID by name
+ * 2. Find property structure by building property object ID
+ * 3. Find property by property structure property ID
+ * 4. Map the buildings and add the property information
+ *
+ * This is the shortest way to get the property id that _i currently know of_.
+ * Keeping this implementation while we learn more about the database structure
+ *
+ */
 const searchBuildings = async (
   q: string
 ): Promise<
@@ -88,9 +103,6 @@ const searchBuildings = async (
     property: { name: string | null; code: string; id: string }
   })[]
 > => {
-  // 1. Find the building by ID
-  // 2. Find property structure by building property object ID
-  // 3. Find property by property structure property ID
   try {
     const buildings = await prisma.building
       .findMany({
