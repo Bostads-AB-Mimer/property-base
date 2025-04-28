@@ -6,6 +6,7 @@ import {
   getResidenceById,
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndStaircaseCode,
+  searchResidences,
 } from '../adapters/residence-adapter'
 import {
   residencesQueryParamsSchema,
@@ -105,6 +106,33 @@ export const routes = (router: KoaRouter) => {
         }
       } catch (err) {
         logger.error({ err }, 'residences route error')
+        ctx.status = 500
+        const errorMessage =
+          err instanceof Error ? err.message : 'unknown error'
+        ctx.body = { reason: errorMessage, ...metadata }
+      }
+    }
+  )
+
+  const ResidenceSearchQueryParamsSchema = z.object({
+    q: z.string().min(3),
+  })
+
+  router.get(
+    '(.*)/residences/search',
+    parseRequest({ query: ResidenceSearchQueryParamsSchema }),
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      const { q } = ctx.request.parsedQuery
+
+      try {
+        const residences = await searchResidences(q)
+
+        ctx.body = {
+          content: residences,
+          ...metadata,
+        }
+      } catch (err) {
         ctx.status = 500
         const errorMessage =
           err instanceof Error ? err.message : 'unknown error'
