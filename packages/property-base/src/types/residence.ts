@@ -30,6 +30,7 @@ export const ResidenceSearchResultSchema = z.object({
     fromDate: z.date(),
     toDate: z.date(),
   }),
+  rentalId: z.string().nullable(),
   property: z.object({
     code: z.string().nullable(),
     name: z.string().nullable(),

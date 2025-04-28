@@ -170,6 +170,7 @@ export const routes = (router: KoaRouter) => {
               name: r.name || '',
               deleted: Boolean(r.deleted),
               validityPeriod: { fromDate: r.fromDate, toDate: r.toDate },
+              rentalId: r.propertyObject.propertyStructures[0].rentalId,
               property: {
                 code: r.propertyObject.propertyStructures[0].propertyCode,
                 name: r.propertyObject.propertyStructures[0].propertyName,

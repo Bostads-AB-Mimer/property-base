@@ -136,6 +136,7 @@ export type ResidenceSearchResult = Prisma.ResidenceGetPayload<{
       include: {
         propertyStructures: {
           select: {
+            rentalId: true
             propertyCode: true
             propertyName: true
             buildingCode: true
@@ -162,10 +163,20 @@ export const searchResidences = async (
           include: {
             propertyStructures: {
               select: {
+                rentalId: true,
                 propertyCode: true,
                 propertyName: true,
                 buildingCode: true,
                 buildingName: true,
+              },
+              where: {
+                NOT: {
+                  rentalId: null,
+                  propertyCode: null,
+                  propertyName: null,
+                  buildingCode: null,
+                  buildingName: null,
+                },
               },
             },
           },
