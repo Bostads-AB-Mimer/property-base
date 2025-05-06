@@ -936,6 +936,51 @@ export interface paths {
         };
       };
     };
+  };
+  "/contacts/{contactCode}/application-profile/admin": {
+    /**
+     * Creates or updates an application profile by contact code
+     * @description Create or update application profile information by contact code.
+     */
+    post: {
+      parameters: {
+        path: {
+          /** @description The contact code associated with the application profile. */
+          contactCode: string;
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      responses: {
+        /** @description Successfully updated application profile. */
+        200: {
+          content: {
+            "application/json": {
+              /** @description The application profile data. */
+              data?: Record<string, never>;
+            };
+          };
+        };
+        /** @description Successfully created application profile. */
+        201: {
+          content: {
+            "application/json": {
+              /** @description The application profile data. */
+              data?: Record<string, never>;
+            };
+          };
+        };
+        /** @description Internal server error. Failed to update application profile information. */
+        500: {
+          content: never;
+        };
+      };
+    };
+  };
+  "/contacts/{contactCode}/application-profile/client": {
     /**
      * Creates or updates an application profile by contact code
      * @description Create or update application profile information by contact code.
