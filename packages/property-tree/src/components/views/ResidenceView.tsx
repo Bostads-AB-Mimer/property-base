@@ -10,40 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/v2/Tabs'
 import { Card, CardContent } from '../ui/v2/Card'
 import { RoomInfo } from '../residence/RoomInfo'
 
-function LoadingSkeleton() {
-  return (
-    <div className="p-8 animate-in">
-      <div className="mb-8">
-        <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2" />
-        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
-      </div>
-
-      <Grid cols={4} className="mb-8">
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-          />
-        ))}
-      </Grid>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <div className="grid grid-cols-2 gap-4">
-            {[...Array(4)].map((_, i) => (
-              <div
-                key={i}
-                className="h-48 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-              />
-            ))}
-          </div>
-        </div>
-        <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
-      </div>
-    </div>
-  )
-}
-
 export function ResidenceView() {
   const { residenceId } = useParams()
 
@@ -85,17 +51,26 @@ export function ResidenceView() {
               Rumsinformation
             </TabsTrigger>
             <TabsTrigger
+              disabled
               value="inspections"
               className="flex items-center gap-1.5"
             >
               <ClipboardList className="h-4 w-4" />
               Besiktningar
             </TabsTrigger>
-            <TabsTrigger value="tenant" className="flex items-center gap-1.5">
+            <TabsTrigger
+              disabled
+              value="tenant"
+              className="flex items-center gap-1.5"
+            >
               <Users className="h-4 w-4" />
               Hyresgäst
             </TabsTrigger>
-            <TabsTrigger value="issues" className="flex items-center gap-1.5">
+            <TabsTrigger
+              disabled
+              value="issues"
+              className="flex items-center gap-1.5"
+            >
               <MessageSquare className="h-4 w-4" />
               Ärenden
             </TabsTrigger>
@@ -113,6 +88,40 @@ export function ResidenceView() {
         {residence.propertyObject.rentalId && (
           <ResidenceWorkOrders rentalId={residence.propertyObject.rentalId} />
         )}
+      </div>
+    </div>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="p-8 animate-in">
+      <div className="mb-8">
+        <div className="h-8 w-48 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse mb-2" />
+        <div className="h-4 w-32 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse" />
+      </div>
+
+      <Grid cols={4} className="mb-8">
+        {[...Array(4)].map((_, i) => (
+          <div
+            key={i}
+            className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
+          />
+        ))}
+      </Grid>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="grid grid-cols-2 gap-4">
+            {[...Array(4)].map((_, i) => (
+              <div
+                key={i}
+                className="h-48 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
+              />
+            ))}
+          </div>
+        </div>
+        <div className="h-96 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
       </div>
     </div>
   )

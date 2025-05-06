@@ -218,12 +218,8 @@ function LoadingSkeleton() {
   return (
     <div className="animate-in">
       <Grid cols={2}>
-        {[...Array(2)].map((_, i) => (
-          <div
-            key={i}
-            className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-          />
-        ))}
+        <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+        <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
       </Grid>
     </div>
   )
