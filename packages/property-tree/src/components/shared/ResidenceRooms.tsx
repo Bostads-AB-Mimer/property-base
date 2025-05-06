@@ -6,23 +6,12 @@ import { roomService } from '@/services/api'
 
 interface ResidenceRoomsProps {
   residenceId: string
-  buildingCode: string
-  staircaseCode: string
 }
 
-export function ResidenceRooms({
-  residenceId,
-  buildingCode,
-  staircaseCode,
-}: ResidenceRoomsProps) {
+export function ResidenceRooms({ residenceId }: ResidenceRoomsProps) {
   const { data: rooms, isLoading } = useQuery({
     queryKey: ['rooms', residenceId],
-    queryFn: () =>
-      roomService.getByBuildingAndStaircaseAndResidence(
-        buildingCode,
-        staircaseCode,
-        residenceId
-      ),
+    queryFn: () => roomService.getByResidenceId(residenceId),
   })
 
   if (isLoading) {

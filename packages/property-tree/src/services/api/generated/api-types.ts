@@ -385,18 +385,14 @@ export interface paths {
   };
   "/rooms": {
     /**
-     * Get rooms by building code, staircase code, and residence code.
-     * @description Returns all rooms belonging to a specific building, staircase, and residence code.
+     * Get rooms by residence id.
+     * @description Returns all rooms belonging to a residence.
      */
     get: {
       parameters: {
         query: {
-          /** @description The building code of the building for the residence. */
-          buildingCode: string;
-          /** @description The code of the staircase. */
-          staircaseCode: string;
-          /** @description The residence code where the rooms are located. */
-          residenceCode: string;
+          /** @description The id of the residence. */
+          residenceId: string;
         };
       };
       responses: {
@@ -847,8 +843,8 @@ export interface components {
       deleted: boolean;
       timestamp: string;
       roomType: ({
-        roomTypeId: string;
-        roomTypeCode: string;
+        id: string;
+        code: string;
         name: string | null;
         use: number;
         optionAllowed: number;

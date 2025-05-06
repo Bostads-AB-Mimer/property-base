@@ -47,7 +47,6 @@ function LoadingSkeleton() {
 
 export function ResidenceView() {
   const { residenceId } = useParams()
-  const { state } = useLocation()
 
   const residenceQuery = useQuery({
     queryKey: ['residence', residenceId],
