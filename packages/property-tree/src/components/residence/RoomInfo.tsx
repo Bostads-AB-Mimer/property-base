@@ -3,17 +3,39 @@ import { ChevronDown, ChevronUp } from 'lucide-react'
 
 import { useIsMobile } from '../hooks/useMobile'
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/v2/Card'
-import type { Room } from '@/services/types'
+import { useQuery } from '@tanstack/react-query'
+import { roomService } from '@/services/api'
+import { getOrientationText } from './get-room-orientation'
+import { Grid } from '../ui/Grid'
 
 interface RoomInfoProps {
-  rooms: Room[]
-  getOrientationText: (orientation: number) => string
+  residenceId: string
 }
 
 export const RoomInfo = (props: RoomInfoProps) => {
+  const roomsQuery = useQuery({
+    queryKey: ['rooms', props.residenceId],
+    queryFn: () => roomService.getByResidenceId(props.residenceId),
+  })
+
   const [expandedRoomId, setExpandedRoomId] = useState<string | null>(null)
   const isMobile = useIsMobile()
 
+  if (roomsQuery.isLoading) {
+    return <LoadingSkeleton />
+  }
+
+  if (roomsQuery.error || !roomsQuery.data) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Rum hittades inte
+        </h2>
+      </div>
+    )
+  }
+
+  const rooms = roomsQuery.data
   return (
     <>
       <div
@@ -25,13 +47,13 @@ export const RoomInfo = (props: RoomInfoProps) => {
           </CardHeader>
           <CardContent>
             <div className="text-sm text-muted-foreground mb-4">
-              Totalt antal rum: {props.rooms.length}
+              Totalt antal rum: {rooms.length}
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Uppvärmda rum</p>
                 <p className="font-medium">
-                  {props.rooms.filter((room) => room.features.isHeated).length}
+                  {rooms.filter((room) => room.features.isHeated).length}
                 </p>
               </div>
               <div>
@@ -40,9 +62,8 @@ export const RoomInfo = (props: RoomInfoProps) => {
                 </p>
                 <p className="font-medium">
                   {
-                    props.rooms.filter(
-                      (room) => room.features.hasThermostatValve
-                    ).length
+                    rooms.filter((room) => room.features.hasThermostatValve)
+                      .length
                   }
                 </p>
               </div>
@@ -59,11 +80,11 @@ export const RoomInfo = (props: RoomInfoProps) => {
               {[1, 2, 3, 4].map((orientation) => (
                 <div key={orientation}>
                   <p className="text-sm text-muted-foreground">
-                    {props.getOrientationText(orientation)}
+                    {getOrientationText(orientation)}
                   </p>
                   <p className="font-medium">
                     {
-                      props.rooms.filter(
+                      rooms.filter(
                         (room) => room.features.orientation === orientation
                       ).length
                     }{' '}
@@ -82,7 +103,7 @@ export const RoomInfo = (props: RoomInfoProps) => {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 gap-2">
-            {props.rooms.map((room) => (
+            {rooms.map((room) => (
               <div key={room.id}>
                 <button
                   className="w-full bg-card hover:bg-accent/50 border rounded-lg p-3 sm:p-4 transition-colors text-left"
@@ -127,7 +148,7 @@ export const RoomInfo = (props: RoomInfoProps) => {
                           Orientering
                         </p>
                         <p className="font-medium">
-                          {props.getOrientationText(room.features.orientation)}
+                          {getOrientationText(room.features.orientation)}
                         </p>
                       </div>
                       <div>
@@ -190,5 +211,20 @@ export const RoomInfo = (props: RoomInfoProps) => {
         </CardContent>
       </Card>
     </>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="animate-in">
+      <Grid cols={2}>
+        {[...Array(2)].map((_, i) => (
+          <div
+            key={i}
+            className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
+          />
+        ))}
+      </Grid>
+    </div>
   )
 }

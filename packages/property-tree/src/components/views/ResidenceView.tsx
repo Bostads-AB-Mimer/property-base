@@ -1,4 +1,4 @@
-import { useParams, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { Info, ClipboardList, Users, MessageSquare } from 'lucide-react'
 
@@ -9,7 +9,6 @@ import { ResidenceBasicInfo } from '../residence/ResidenceBasicInfo'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/v2/Tabs'
 import { Card, CardContent } from '../ui/v2/Card'
 import { RoomInfo } from '../residence/RoomInfo'
-import { getOrientationText } from '../residence/get-room-orientation'
 
 function LoadingSkeleton() {
   return (
@@ -104,7 +103,7 @@ export function ResidenceView() {
           <TabsContent value="rooms">
             <Card>
               <CardContent className="p-4">
-                <RoomInfo rooms={[]} getOrientationText={getOrientationText} />
+                <RoomInfo residenceId={residence.id} />
               </CardContent>
             </Card>
           </TabsContent>
