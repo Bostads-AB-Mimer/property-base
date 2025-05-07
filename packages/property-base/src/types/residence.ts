@@ -41,7 +41,7 @@ export const ResidenceSearchResultSchema = z.object({
   }),
 })
 
-export const ResidenceDetailedSchema = ResidenceSchema.extend({
+export const ResidenceDetailedSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string().nullable(),
