@@ -1,9 +1,9 @@
 import { Room } from '../types'
-import { GET } from './baseApi'
+import { GET } from '../api/core/base-api'
 
 export const roomService = {
   async getByResidenceId(residenceId: string): Promise<Room[]> {
-    const { data, error } = await GET('/rooms', {
+    const { data, error } = await GET('/propertyBase/rooms', {
       params: {
         query: {
           residenceId,
@@ -12,13 +12,5 @@ export const roomService = {
     })
     if (error) throw error
     return data?.content || []
-  },
-
-  async getById(id: string): Promise<Room> {
-    const { data, error } = await GET('/rooms/{id}', {
-      params: { path: { id } },
-    })
-    if (error) throw error
-    return data
   },
 }

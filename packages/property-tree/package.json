@@ -8,7 +8,7 @@
     "format": "prettier --write .",
     "start:server": "node --import tsx src/server/api.ts",
     "type-check": "tsc --noEmit",
-    "type-watch": "tsc --noEmit --watch",
+    "ts:watch": "tsc --noEmit --watch",
     "start": "vite",
     "build": "vite build",
     "generate-api-types": "npx openapi-typescript http://localhost:5050/swagger.json -o ./src/services/api/generated/api-types.ts",
