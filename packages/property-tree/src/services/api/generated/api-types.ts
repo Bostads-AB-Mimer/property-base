@@ -559,7 +559,7 @@ export interface components {
     ResidenceDetails: {
       id: string;
       code: string;
-      name: string;
+      name: string | null;
       deleted: boolean;
       validityPeriod: {
         /** Format: date-time */
@@ -567,7 +567,7 @@ export interface components {
         /** Format: date-time */
         toDate: string;
       };
-      location?: string;
+      location: string | null;
       accessibility: {
         wheelchairAccessible: boolean;
         residenceAdapted: boolean;
@@ -582,8 +582,8 @@ export interface components {
           location: string;
           type: string;
         };
-        patioLocation?: string;
-        hygieneFacility: string;
+        patioLocation: string | null;
+        hygieneFacility: string | null;
         sauna: boolean;
         extraToilet: boolean;
         sharedKitchen: boolean;
@@ -593,7 +593,7 @@ export interface components {
         smokeFree: boolean;
         asbestos: boolean;
       };
-      entrance: string;
+      entrance: string | null;
       partNo?: number | null;
       part?: string | null;
       residenceType: {
@@ -621,6 +621,14 @@ export interface components {
           energyIndex?: number;
         };
         rentalId: string | null;
+      };
+      property: {
+        name: string | null;
+        code: string | null;
+      };
+      building: {
+        name: string | null;
+        code: string | null;
       };
     };
     ResidenceSearchResult: {
