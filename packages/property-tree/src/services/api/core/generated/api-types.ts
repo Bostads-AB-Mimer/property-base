@@ -2078,8 +2078,8 @@ export interface components {
       leaseStartDate: string;
       /** Format: date-time */
       leaseEndDate?: string;
-      /** @enum {number} */
-      status: 0 | 1 | 2 | 3;
+      /** @enum {string} */
+      status: "Current" | "Upcoming" | "AboutToEnd" | "Ended";
       tenantContactIds?: string[];
       rentalPropertyId: string;
       rentalProperty?: {

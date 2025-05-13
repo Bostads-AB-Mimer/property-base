@@ -30,7 +30,7 @@ export function TenantInformation(props: Props) {
     )
   }
 
-  const lease = leasesQuery.data.find((lease) => lease.status === 0)
+  const lease = leasesQuery.data.find((lease) => lease.status === 'Current')
 
   if (!lease) {
     return (
