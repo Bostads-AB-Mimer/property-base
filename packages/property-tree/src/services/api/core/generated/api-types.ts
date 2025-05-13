@@ -138,6 +138,11 @@ export interface paths {
      */
     get: {
       parameters: {
+        query?: {
+          includeUpcomingLeases?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeUpcomingLeases"];
+          includeTerminatedLeases?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeTerminatedLeases"];
+          includeContacts?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeContacts"];
+        };
         path: {
           /** @description Property id of the building/residence to fetch leases for. */
           propertyId: string;
@@ -147,7 +152,15 @@ export interface paths {
         /** @description Successful response with leases and related entities */
         200: {
           content: {
-            "application/json": components["schemas"]["Lease"][];
+            "application/json": {
+              content?: components["schemas"]["Lease"][];
+            };
+          };
+        };
+        /** @description Invalid query parameters */
+        400: {
+          content: {
+            "application/json": Record<string, never>;
           };
         };
       };
@@ -2157,6 +2170,14 @@ export interface components {
           };
           specialAttention?: boolean;
         }[];
+    };
+    GetLeaseForPropertyIdQueryParams: {
+      /** @default false */
+      includeUpcomingLeases?: boolean;
+      /** @default false */
+      includeTerminatedLeases?: boolean;
+      /** @default false */
+      includeContacts?: boolean;
     };
     WorkOrder: {
       AccessCaption: string;
