@@ -1,45 +1,72 @@
-import { Separator } from '../ui/v2/separator'
+import { useQuery } from '@tanstack/react-query'
+
+import { leaseService } from '@/services/api/core'
+import { Separator } from '../ui/v2/Separator'
 import { LeaseInfo } from './LeaseInfo'
 import { TenantCard } from './TenantCard'
-
-type Tenant = any
-interface TenantInformationProps {
-  tenant: Tenant | Tenant[]
+import { Grid } from '../ui/Grid'
+interface Props {
+  propertyId: string
 }
 
-export function TenantInformation({ tenant }: TenantInformationProps) {
-  const tenants = Array.isArray(tenant) ? tenant : [tenant]
-  const primaryTenant = tenants.find((t) => t.isPrimaryTenant) || tenants[0]
-  const additionalTenants = tenants.filter((t) => t !== primaryTenant)
+export function TenantInformation(props: Props) {
+  const leasesQuery = useQuery({
+    queryKey: ['rooms', props.propertyId],
+    queryFn: () =>
+      leaseService.getByPropertyId(props.propertyId, { includeContacts: true }),
+  })
 
-  const isSecondaryRental = tenants.some(
-    (t) => t.relationshipType === 'secondaryTenant'
-  )
+  if (leasesQuery.isLoading) {
+    return <LoadingSkeleton />
+  }
 
-  const secondaryTenant = tenants.find(
-    (t) => t.relationshipType === 'secondaryTenant'
-  )
-  const secondaryContractNumber = secondaryTenant?.contractNumber
+  if (leasesQuery.error || !leasesQuery.data) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Kontrakt hittades inte
+        </h2>
+      </div>
+    )
+  }
+
+  const lease = leasesQuery.data.find((lease) => lease.status === 0)
+
+  if (!lease) {
+    return (
+      <div className="p-8 text-center">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-gray-100">
+          Kontrakt hittades inte
+        </h2>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
       <LeaseInfo
-        primaryContractNumber={primaryTenant.contractNumber}
-        secondaryContractNumber={secondaryContractNumber}
-        isSecondaryRental={isSecondaryRental}
+        primaryContractNumber={lease.leaseId}
+        isSecondaryRental={false}
       />
-
       <div className="space-y-6">
-        <TenantCard tenant={primaryTenant} />
-        {additionalTenants.length > 0 && (
+        {lease.tenants?.concat(lease.tenants).map((tenant, i) => (
           <>
-            <Separator />
-            {additionalTenants.map((additionalTenant, i) => (
-              <TenantCard tenant={additionalTenant} key={i} />
-            ))}
+            {i > 0 && <Separator />}
+            <TenantCard lease={lease} tenant={tenant} key={i} />
           </>
-        )}
+        ))}
       </div>
+    </div>
+  )
+}
+
+function LoadingSkeleton() {
+  return (
+    <div className="animate-in">
+      <Grid cols={2}>
+        <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+        <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+      </Grid>
     </div>
   )
 }

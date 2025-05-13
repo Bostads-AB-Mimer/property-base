@@ -1,203 +1,49 @@
-import { Phone, Mail, MessageSquare, User } from 'lucide-react'
+import { Users, User } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/v2/Card'
 import { Button } from '@/components/ui/v2/Button'
+import { TenantPersonalInfo } from './TenantPersonalInfo'
+import { TenantContactActions } from './TenantContactActions'
+import { components } from '@/services/api/core/generated/api-types'
 
-interface TenantCardProps {
-  tenant: {
-    firstName: string
-    lastName: string
-    phone: string
-    email: string
-    contractStatus: 'permanent' | 'terminated'
-    moveInDate: string
-    moveOutDate?: string
-    contractNumber: string
-    nationality?: string
-    language?: string
-    hasLegalGuardian?: boolean
-    portalCredentials?: {
-      username: string
-      password: string
-    }
-    loginCount?: number
-    lastLogin?: string
-  }
-}
+type Tenant = NonNullable<components['schemas']['Lease']['tenants']>[number]
+type Lease = components['schemas']['Lease']
 
-export function TenantCard({ tenant }: TenantCardProps) {
-  const handleCall = () => {
-    window.location.href = `tel:${tenant.phone.replace(/[\s-]/g, '')}`
-  }
+type Props = { lease: Lease; tenant: Tenant }
 
-  const handleSMS = () => {
-    window.location.href = `sms:${tenant.phone.replace(/[\s-]/g, '')}`
-  }
-
-  const handleEmail = () => {
-    window.location.href = `mailto:${tenant.email}`
-  }
+export function TenantCard(props: Props) {
+  const phone = props.tenant.phoneNumbers?.find((v) => v.isMainNumber)
 
   return (
-    <Card>
-      <CardHeader className="pb-4">
-        <CardTitle>Personuppgifter</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Namn</p>
-              <p className="font-medium">
-                {tenant.firstName} {tenant.lastName}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Telefon</p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">{tenant.phone}</p>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleCall}
-                    title="Ring"
-                  >
-                    <Phone className="h-4 w-4" />
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={handleSMS}
-                    title="Skicka SMS"
-                  >
-                    <MessageSquare className="h-4 w-4" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">E-post</p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">{tenant.email}</p>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={handleEmail}
-                  title="Skicka e-post"
-                >
-                  <Mail className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Nationalitet</p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">
-                  {tenant.nationality || 'Ej angivet'}
-                </p>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Språk</p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">{tenant.language || 'Svenska'}</p>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Kontraktsstatus</p>
-              <p className="font-medium">
-                {tenant.contractStatus === 'permanent'
-                  ? 'Tillsvidare'
-                  : 'Uppsagt'}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Inflyttningsdatum</p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">
-                  {new Date(tenant.moveInDate).toLocaleDateString('sv-SE')}
-                </p>
-              </div>
-            </div>
-            {tenant.moveOutDate && (
-              <div>
-                <p className="text-sm text-muted-foreground">
-                  Utflyttningsdatum
-                </p>
-                <div className="flex items-center gap-2">
-                  <p className="font-medium">
-                    {new Date(tenant.moveOutDate).toLocaleDateString('sv-SE')}
-                  </p>
-                </div>
-              </div>
-            )}
-            <div>
-              <p className="text-sm text-muted-foreground">
-                God man/Förvaltarskap
-              </p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">
-                  {tenant.hasLegalGuardian ? 'Ja' : 'Nej'}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="space-y-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Mina Sidor</p>
-              <div className="border rounded-md p-3 bg-muted/20 space-y-2 mt-1">
-                <div>
-                  <p className="text-xs text-muted-foreground">Användarnamn</p>
-                  <div className="flex items-center gap-2">
-                    <User className="h-4 w-4 text-muted-foreground" />
-                    <p className="font-medium">
-                      {tenant.portalCredentials?.username || 'Ej registrerad'}
-                    </p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">Lösenord</p>
-                  <p className="font-medium">••••••••</p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                Antal inloggningar
-              </p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">{tenant.loginCount || 0}</p>
-              </div>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">
-                Senaste inloggning
-              </p>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">
-                  {tenant.lastLogin
-                    ? new Date(tenant.lastLogin).toLocaleDateString('sv-SE', {
-                        year: 'numeric',
-                        month: 'numeric',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })
-                    : 'Aldrig'}
-                </p>
-              </div>
-            </div>
-          </div>
+    <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center">
+          <Users className="h-5 w-5 mr-2 text-slate-500" />
+          <h4 className="font-medium">Hyresgäst</h4>
         </div>
-      </CardContent>
-    </Card>
+        <Button variant="outline" asChild className="shrink-0" disabled>
+          <Link
+            to={`/tenants/detail/${props.tenant.nationalRegistrationNumber}`}
+          >
+            <User className="h-4 w-4 mr-2" />
+            Öppna kundkort
+          </Link>
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <TenantPersonalInfo
+          firstName={props.tenant.firstName}
+          lastName={props.tenant.lastName}
+          moveInDate={props.lease.leaseStartDate}
+          moveOutDate={props.lease.preferredMoveOutDate}
+          personalNumber={props.tenant.nationalRegistrationNumber}
+        />
+        <TenantContactActions
+          phone={phone?.phoneNumber || 'N/A'}
+          email={props.tenant.emailAddress || 'N/A'}
+        />
+      </div>
+    </div>
   )
 }

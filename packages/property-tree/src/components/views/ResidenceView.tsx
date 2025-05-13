@@ -82,7 +82,9 @@ export function ResidenceView() {
           <TabsContent value="tenant">
             <Card>
               <CardContent className="p-4">
-                <TenantInformation tenant={[]} />
+                <TenantInformation
+                  propertyId={residence.propertyObject.rentalId!}
+                />
               </CardContent>
             </Card>
           </TabsContent>

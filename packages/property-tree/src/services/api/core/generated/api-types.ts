@@ -109,29 +109,7 @@ export interface paths {
   };
   "security": {
   };
-  "/leases/for/{pnr}": {
-    /**
-     * Get leases with related entities for a specific Personal Number (PNR)
-     * @description Retrieves lease information along with related entities (such as tenants, properties, etc.) for the specified Personal Number (PNR).
-     */
-    get: {
-      parameters: {
-        path: {
-          /** @description Personal Number (PNR) of the individual to fetch leases for. */
-          pnr: string;
-        };
-      };
-      responses: {
-        /** @description Successful response with leases and related entities */
-        200: {
-          content: {
-            "application/json": Record<string, never>[];
-          };
-        };
-      };
-    };
-  };
-  "/leases/for/{propertyId}": {
+  "/leases/for/propertyId/{propertyId}": {
     /**
      * Get leases with related entities for a specific property id
      * @description Retrieves lease information along with related entities (such as tenants, properties, etc.) for the specified property id.
@@ -139,9 +117,12 @@ export interface paths {
     get: {
       parameters: {
         query?: {
-          includeUpcomingLeases?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeUpcomingLeases"];
-          includeTerminatedLeases?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeTerminatedLeases"];
-          includeContacts?: components["schemas"]["GetLeaseForPropertyIdQueryParams"]["includeContacts"];
+          /** @description Whether to include upcoming leases in the response */
+          includeUpcomingLeases?: boolean;
+          /** @description Whether to include terminated leases in the response */
+          includeTerminatedLeases?: boolean;
+          /** @description Whether to include contact information in the response */
+          includeContacts?: boolean;
         };
         path: {
           /** @description Property id of the building/residence to fetch leases for. */
@@ -161,6 +142,28 @@ export interface paths {
         400: {
           content: {
             "application/json": Record<string, never>;
+          };
+        };
+      };
+    };
+  };
+  "/leases/for/{pnr}": {
+    /**
+     * Get leases with related entities for a specific Personal Number (PNR)
+     * @description Retrieves lease information along with related entities (such as tenants, properties, etc.) for the specified Personal Number (PNR).
+     */
+    get: {
+      parameters: {
+        path: {
+          /** @description Personal Number (PNR) of the individual to fetch leases for. */
+          pnr: string;
+        };
+      };
+      responses: {
+        /** @description Successful response with leases and related entities */
+        200: {
+          content: {
+            "application/json": Record<string, never>[];
           };
         };
       };
@@ -2075,8 +2078,8 @@ export interface components {
       leaseStartDate: string;
       /** Format: date-time */
       leaseEndDate?: string;
-      /** @enum {string} */
-      status: "Current" | "Upcoming" | "AboutToEnd" | "Ended";
+      /** @enum {number} */
+      status: 0 | 1 | 2 | 3;
       tenantContactIds?: string[];
       rentalPropertyId: string;
       rentalProperty?: {
@@ -2170,14 +2173,6 @@ export interface components {
           };
           specialAttention?: boolean;
         }[];
-    };
-    GetLeaseForPropertyIdQueryParams: {
-      /** @default false */
-      includeUpcomingLeases?: boolean;
-      /** @default false */
-      includeTerminatedLeases?: boolean;
-      /** @default false */
-      includeContacts?: boolean;
     };
     WorkOrder: {
       AccessCaption: string;
