@@ -4,11 +4,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/v2/Card'
-import { ResidenceDetails } from '@/services/types'
 import { useIsMobile } from '../hooks/useMobile'
+import { components } from '@/services/api/core/generated/api-types'
 
 interface ResidenceBasicInfoProps {
-  residence: ResidenceDetails
+  residence: components['schemas']['ResidenceDetails']
 }
 
 export const ResidenceBasicInfo = ({ residence }: ResidenceBasicInfoProps) => {
@@ -47,7 +47,11 @@ export const ResidenceBasicInfo = ({ residence }: ResidenceBasicInfoProps) => {
             <div>
               <p className="text-sm text-muted-foreground">Status</p>
               <p className="font-medium">
-                {residence.deleted ? 'Borttagen' : 'Aktiv'}
+                {residence.status === 'LEASED'
+                  ? 'Uthyrd'
+                  : residence.status === 'VACANT'
+                    ? 'Vakant'
+                    : 'N/A'}
               </p>
             </div>
             <div>
