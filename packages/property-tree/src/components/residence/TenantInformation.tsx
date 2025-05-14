@@ -6,14 +6,16 @@ import { LeaseInfo } from './LeaseInfo'
 import { TenantCard } from './TenantCard'
 import { Grid } from '../ui/Grid'
 interface Props {
-  propertyId: string
+  rentalPropertyId: string
 }
 
 export function TenantInformation(props: Props) {
   const leasesQuery = useQuery({
-    queryKey: ['rooms', props.propertyId],
+    queryKey: ['rooms', props.rentalPropertyId],
     queryFn: () =>
-      leaseService.getByPropertyId(props.propertyId, { includeContacts: true }),
+      leaseService.getByRentalPropertyId(props.rentalPropertyId, {
+        includeContacts: true,
+      }),
   })
 
   if (leasesQuery.isLoading) {

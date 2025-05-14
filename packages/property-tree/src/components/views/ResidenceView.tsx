@@ -83,7 +83,7 @@ export function ResidenceView() {
             <Card>
               <CardContent className="p-4">
                 <TenantInformation
-                  propertyId={residence.propertyObject.rentalId!}
+                  rentalPropertyId={residence.propertyObject.rentalId!}
                 />
               </CardContent>
             </Card>

@@ -109,10 +109,10 @@ export interface paths {
   };
   "security": {
   };
-  "/leases/for/propertyId/{propertyId}": {
+  "/leases/by-rental-property-id/{rentalPropertyId}": {
     /**
-     * Get leases with related entities for a specific property id
-     * @description Retrieves lease information along with related entities (such as tenants, properties, etc.) for the specified property id.
+     * Get leases with related entities for a specific rental property id
+     * @description Retrieves lease information along with related entities (such as tenants, properties, etc.) for the specified rental property id.
      */
     get: {
       parameters: {
@@ -125,8 +125,8 @@ export interface paths {
           includeContacts?: boolean;
         };
         path: {
-          /** @description Property id of the building/residence to fetch leases for. */
-          propertyId: string;
+          /** @description Rental roperty id of the building/residence to fetch leases for. */
+          rentalPropertyId: string;
         };
       };
       responses: {
