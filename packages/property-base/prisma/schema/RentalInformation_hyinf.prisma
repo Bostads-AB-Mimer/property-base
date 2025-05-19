@@ -90,7 +90,7 @@ model RentalInformation {
   // quantityType3 cmvat_hyinf_keycmvat3Tocmvat cmvat? @relation("hyinf_keycmvat3Tocmvat", fields: [quantityTypeId3], references: [keycmvat], onDelete: NoAction, onUpdate: NoAction, map: "fkhyinfkeycmvat3")
   // quantityType4 cmvat_hyinf_keycmvat4Tocmvat cmvat? @relation("hyinf_keycmvat4Tocmvat", fields: [quantityTypeId4], references: [keycmvat], onDelete: NoAction, onUpdate: NoAction, map: "fkhyinfkeycmvat4")
   rentalInformationType RentalInformationType @relation(fields: [rentalInformationTypeId], references: [id], onUpdate: NoAction, map: "fkhyinfkeyhyint")
-
+  propertyObject PropertyObject @relation("PropertyObjectToRentalInformation", fields: [propertyObjectId], references: [id], map: "fkhyinfkeycmobj")
 // @@index([heatingId], map: "fkhyinfbahea")
 // @@index([shownByUserId], map: "fkhyinfbkvis")
 // @@index([creditTemplateId], map: "fkhyinfcmcte")
