@@ -39,22 +39,24 @@ export function AuthProvider({
 
   useEffect(() => {
     // Check if user is already authenticated
-    fetch(`${apiUrl}/user`, {
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (res.ok) return res.json()
-        throw new Error('Not authenticated')
-      })
-      .then((userData) => {
-        setUser(userData)
-      })
-      .catch(() => {
-        // User is not authenticated, that's okay
-      })
-      .finally(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${apiUrl}/user`, {
+          credentials: 'include',
+        })
+        
+        if (res.ok) {
+          const userData = await res.json()
+          setUser(userData)
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error)
+      } finally {
         setLoading(false)
-      })
+      }
+    }
+    
+    checkAuth()
   }, [apiUrl])
 
   const login = () => {
@@ -132,15 +134,21 @@ export function ProtectedRoute({
   children: React.ReactNode
   redirectTo?: string
 }) {
-  const { user, loading } = useAuth()
+  const { user, loading, login } = useAuth()
+  const [redirected, setRedirected] = React.useState(false)
 
   if (loading) {
     return <div className="flex items-center justify-center h-screen">Laddar...</div>
   }
 
+  if (!user && !redirected) {
+    setRedirected(true)
+    login()
+    return <div className="flex items-center justify-center h-screen">Omdirigerar till inloggning...</div>
+  }
+
   if (!user) {
-    window.location.href = redirectTo
-    return null
+    return <div className="flex items-center justify-center h-screen">Omdirigerar till inloggning...</div>
   }
 
   return <>{children}</>
