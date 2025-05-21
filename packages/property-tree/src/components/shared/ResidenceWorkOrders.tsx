@@ -27,8 +27,8 @@ const sortByStatus = (a: WorkOrder, b: WorkOrder) => {
     'Avslutad',
   ]
 
-  const statusA = statusOrder.indexOf(a.Status)
-  const statusB = statusOrder.indexOf(b.Status)
+  const statusA = statusOrder.indexOf(a.status)
+  const statusB = statusOrder.indexOf(b.status)
 
   if (statusA < statusB) {
     return -1
@@ -74,7 +74,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
     .sort(sortByStatus)
     .reduce<{ active: WorkOrder[]; historical: WorkOrder[] }>(
       (acc, curr) => {
-        if (curr.Status === 'Avslutad') {
+        if (curr.status === 'Avslutad') {
           acc.historical.push(curr)
           return acc
         } else {
@@ -104,7 +104,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
           {workOrders.active.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
               {workOrders.active.map((w) => (
-                <OrderCard key={w.Id} workOrder={w} />
+                <OrderCard key={w.id} workOrder={w} />
               ))}
             </div>
           ) : (
