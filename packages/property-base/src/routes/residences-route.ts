@@ -339,6 +339,7 @@ export const routes = (router: KoaRouter) => {
         ...metadata,
       }
     } catch (err) {
+      logger.error(err, 'Error fetching residence by ID')
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
       ctx.body = { reason: errorMessage, ...metadata }
