@@ -14,6 +14,8 @@ interface OrdersTableProps {
 }
 
 export function OrdersTable({ orders }: OrdersTableProps) {
+  const dateFormatter = new Intl.DateTimeFormat('sv-SE')
+
   return (
     <Table>
       <TableHeader>
@@ -30,8 +32,14 @@ export function OrdersTable({ orders }: OrdersTableProps) {
           <TableRow key={order.id}>
             <TableCell>{order.id}</TableCell>
             <TableCell>{order.caption}</TableCell>
-            <TableCell>{order.registered}</TableCell>
-            <TableCell>{'N/A'}</TableCell>
+            <TableCell>
+              {dateFormatter.format(new Date(order.registered))}
+            </TableCell>
+            <TableCell>
+              {order.dueDate
+                ? dateFormatter.format(new Date(order.dueDate))
+                : null}
+            </TableCell>
             <TableCell>
               <Badge variant="outline">{order.status}</Badge>
             </TableCell>
