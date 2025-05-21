@@ -7,8 +7,6 @@ import {
   workOrderService,
   WorkOrder,
 } from '@/services/api/core/workOrderService'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/v2/Tabs'
-import { OrderCard } from '../work-orders/OrderCard'
 import { OrdersTable } from '../work-orders/OrderTable'
 import { Button } from '../ui/v2/Button'
 
@@ -70,20 +68,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
     )
   }
 
-  const workOrders = Array.from(workOrdersQuery.data)
-    .sort(sortByStatus)
-    .reduce<{ active: WorkOrder[]; historical: WorkOrder[] }>(
-      (acc, curr) => {
-        if (curr.status === 'Avslutad') {
-          acc.historical.push(curr)
-          return acc
-        } else {
-          acc.historical.push(curr)
-          return acc
-        }
-      },
-      { active: [], historical: [] }
-    )
+  const workOrders = workOrdersQuery.data.sort(sortByStatus)
 
   return (
     <div className="space-y-4">
@@ -94,31 +79,11 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
         </Button>
       </div>
 
-      <Tabs defaultValue="active" className="w-full">
-        <TabsList className="mb-4 bg-slate-100/70 p-1 rounded-lg">
-          <TabsTrigger value="active">Aktiva ärenden</TabsTrigger>
-          <TabsTrigger value="history">Ärendehistorik</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="active">
-          {workOrders.active.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-1 lg:grid-cols-2">
-              {workOrders.active.map((w) => (
-                <OrderCard key={w.id} workOrder={w} />
-              ))}
-            </div>
-          ) : (
-            <p className="text-slate-500 p-2">Inga aktiva ärenden.</p>
-          )}
-        </TabsContent>
-        <TabsContent value="history">
-          {workOrders.historical.length > 0 ? (
-            <OrdersTable orders={workOrders.historical} />
-          ) : (
-            <p className="text-slate-500 p-2">Ingen ärendehistorik.</p>
-          )}
-        </TabsContent>
-      </Tabs>
+      {workOrders.length > 0 ? (
+        <OrdersTable orders={workOrdersQuery.data} />
+      ) : (
+        <p className="text-slate-500 p-2">Ingen ärendehistorik.</p>
+      )}
     </div>
   )
 }
