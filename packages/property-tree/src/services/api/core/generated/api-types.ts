@@ -2295,6 +2295,7 @@ export interface components {
       priority: string | null;
       /** Format: date-time */
       registered: string;
+      dueDate: ("null" | null) | string;
       rentalObjectCode: string;
       status: string;
     };
