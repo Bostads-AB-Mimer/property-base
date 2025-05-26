@@ -14,12 +14,12 @@ interface ResidenceWorkOrdersProps {
   rentalId: string
 }
 
-const sortByStatus = (a: WorkOrder, b: WorkOrder) => {
+const sortWorkOrders = (a: WorkOrder, b: WorkOrder) => {
   // TODO we should include the maintenance stage sequence in WorkOrder and sort by that
   const statusOrder = [
+    'Påbörjad',
     'Väntar på handläggning',
     'Resurs tilldelad',
-    'Påbörjad',
     'Väntar på beställda varor',
     'Utförd',
     'Avslutad',
@@ -31,9 +31,15 @@ const sortByStatus = (a: WorkOrder, b: WorkOrder) => {
   if (statusA < statusB) {
     return -1
   }
+
   if (statusA > statusB) {
     return 1
   }
+
+  if (a.dueDate && b.dueDate) {
+    return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+  }
+
   return 0
 }
 
@@ -68,7 +74,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
     )
   }
 
-  const workOrders = workOrdersQuery.data.sort(sortByStatus)
+  const workOrders = workOrdersQuery.data.sort(sortWorkOrders)
 
   return (
     <div className="space-y-4">
