@@ -51,16 +51,10 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
 
   if (workOrdersQuery.isLoading) {
     return (
-      <Card title="Ärenden">
-        <Grid cols={2}>
-          {[...Array(4)].map((_, i) => (
-            <div
-              key={i}
-              className="h-48 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse"
-            />
-          ))}
-        </Grid>
-      </Card>
+      <Grid cols={1}>
+        <div className="h-10 w-36 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+        <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
+      </Grid>
     )
   }
 
