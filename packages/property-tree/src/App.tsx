@@ -7,7 +7,11 @@ import {
 import { CommandPalette } from './components/CommandPalette'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CommandPaletteProvider } from './components/hooks/useCommandPalette'
-import { AuthProvider, ProtectedRoute } from './components/auth/useAuth'
+import {
+  AuthProvider,
+  ProtectedRoute,
+  useAuth,
+} from './components/auth/useAuth'
 import { Callback } from './components/auth/Callback'
 
 import { CompanyView } from './components/views/CompanyView'
@@ -76,7 +80,7 @@ function AppContent() {
               {user && (
                 <div className="flex items-center gap-4">
                   <span className="text-sm">{user.name}</span>
-                  <button 
+                  <button
                     onClick={logout}
                     className="text-sm text-gray-500 hover:text-gray-700"
                   >
@@ -120,9 +124,11 @@ function AppContent() {
 
 export default function App() {
   const authConfig = {
-    keycloakUrl: import.meta.env.VITE_KEYCLOAK_URL || 'http://localhost:8080/realms/onecore',
+    keycloakUrl:
+      import.meta.env.VITE_KEYCLOAK_URL ||
+      'http://localhost:8080/realms/onecore',
     clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'property-tree',
-    apiUrl: import.meta.env.VITE_API_URL || '/api',
+    apiUrl: import.meta.env.VITE_CORE_API_URL || '/api',
   }
 
   return (
@@ -132,11 +138,14 @@ export default function App() {
           <CommandPaletteProvider>
             <Routes>
               <Route path="/callback" element={<Callback />} />
-              <Route path="/*" element={
-                <ProtectedRoute>
-                  <AppContent />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/*"
+                element={
+                  <ProtectedRoute>
+                    <AppContent />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </CommandPaletteProvider>
         </Router>
