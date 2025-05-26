@@ -28,7 +28,7 @@ export function OrdersTable(props: OrdersTableProps) {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>ID</TableHead>
+            <TableHead>Ärendenummer</TableHead>
             <TableHead>Ärende</TableHead>
             <TableHead>Skapat</TableHead>
             <TableHead>Förfaller</TableHead>
