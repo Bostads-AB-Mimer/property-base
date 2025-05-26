@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import fetch from 'node-fetch'
 
 interface TokenResponse {
   access_token: string
@@ -50,10 +49,12 @@ export function createAuthMiddleware(config: {
         if (!response.ok) {
           const error = await response.text()
           console.error('Token exchange failed:', error)
-          return res.status(response.status).json({ error: 'Token exchange failed' })
+          return res
+            .status(response.status)
+            .json({ error: 'Token exchange failed' })
         }
 
-        const tokenData = await response.json() as TokenResponse
+        const tokenData = (await response.json()) as TokenResponse
 
         // Set tokens in cookies
         res.cookie('access_token', tokenData.access_token, {
@@ -77,15 +78,18 @@ export function createAuthMiddleware(config: {
         })
 
         if (!userInfoResponse.ok) {
-          return res.status(userInfoResponse.status).json({ error: 'Failed to get user info' })
+          return res
+            .status(userInfoResponse.status)
+            .json({ error: 'Failed to get user info' })
         }
 
-        const userInfo = await userInfoResponse.json() as UserInfo
+        const userInfo = (await userInfoResponse.json()) as UserInfo
 
         // Return user data to client
         return res.json({
           id: userInfo.sub,
-          name: userInfo.name || `${userInfo.given_name} ${userInfo.family_name}`,
+          name:
+            userInfo.name || `${userInfo.given_name} ${userInfo.family_name}`,
           email: userInfo.email,
           username: userInfo.preferred_username,
           roles: [], // You would extract roles from the token if needed
@@ -116,11 +120,12 @@ export function createAuthMiddleware(config: {
           return res.status(401).json({ error: 'Invalid token' })
         }
 
-        const userInfo = await userInfoResponse.json() as UserInfo
+        const userInfo = (await userInfoResponse.json()) as UserInfo
 
         return res.json({
           id: userInfo.sub,
-          name: userInfo.name || `${userInfo.given_name} ${userInfo.family_name}`,
+          name:
+            userInfo.name || `${userInfo.given_name} ${userInfo.family_name}`,
           email: userInfo.email,
           username: userInfo.preferred_username,
           roles: [], // You would extract roles from the token if needed
