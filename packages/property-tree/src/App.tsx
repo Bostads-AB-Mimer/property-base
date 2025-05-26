@@ -126,9 +126,9 @@ export default function App() {
   const authConfig = {
     keycloakUrl:
       import.meta.env.VITE_KEYCLOAK_URL ||
-      'http://localhost:8080/realms/onecore',
-    clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'property-tree',
-    apiUrl: import.meta.env.VITE_CORE_API_URL || '/api',
+      'https://auth-test.mimer.nu/realms/onecore-test',
+    clientId: import.meta.env.VITE_KEYCLOAK_CLIENT_ID || 'onecore-test',
+    apiUrl: import.meta.env.VITE_CORE_API_URL || 'http://localhost:5010',
   }
 
   return (
