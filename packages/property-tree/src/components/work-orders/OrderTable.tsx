@@ -1,4 +1,5 @@
 import React from 'react'
+import { ExternalLink } from 'lucide-react'
 
 import {
   Table,
@@ -32,13 +33,14 @@ export function OrdersTable(props: OrdersTableProps) {
             <TableHead>Skapat</TableHead>
             <TableHead>Förfaller</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Typ</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {orders.map((order) =>
             order._tag === 'internal' ? (
               <TableRow key={order.id}>
-                <TableCell>{order.id}</TableCell>
+                <TableCell>{order.code}</TableCell>
                 <TableCell>{order.caption}</TableCell>
                 <TableCell>
                   {dateFormatter.format(new Date(order.registered))}
@@ -50,10 +52,17 @@ export function OrdersTable(props: OrdersTableProps) {
                 </TableCell>
                 <TableCell>
                   <Badge variant="outline">{order.status}</Badge>
+                </TableCell>
+                <TableCell>
+                  <a key={order.id} href={order.url} target="_blank">
+                    <div className="flex items-center gap-2">
+                      Odoo <ExternalLink size="18" />
+                    </div>
+                  </a>
                 </TableCell>
               </TableRow>
             ) : (
-              <TableRow key={order.id}>
+              <TableRow key={order.id} className="bg-gray-50">
                 <TableCell>{order.id}</TableCell>
                 <TableCell>{order.caption}</TableCell>
                 <TableCell>
@@ -67,6 +76,7 @@ export function OrdersTable(props: OrdersTableProps) {
                 <TableCell>
                   <Badge variant="outline">{order.status}</Badge>
                 </TableCell>
+                <TableCell>Xpand</TableCell>
               </TableRow>
             )
           )}
@@ -76,6 +86,7 @@ export function OrdersTable(props: OrdersTableProps) {
         <Button
           onClick={() => setShowAll(!showAll)}
           variant="default"
+          className="mt-4"
           size="sm"
         >
           {showAll ? 'Visa färre' : 'Visa alla'}
