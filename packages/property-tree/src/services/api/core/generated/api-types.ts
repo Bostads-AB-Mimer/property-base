@@ -67,6 +67,72 @@ export interface paths {
       };
     };
   };
+  "/auth/login": {
+    /**
+     * Redirects to Keycloak login
+     * @description Redirects the user to the Keycloak login page
+     */
+    get: {
+      responses: {
+        /** @description Redirect to Keycloak login */
+        302: {
+          content: never;
+        };
+      };
+    };
+  };
+  "/auth/callback": {
+    /**
+     * OAuth callback endpoint
+     * @description Handles the OAuth callback from Keycloak
+     */
+    get: {
+      parameters: {
+        query: {
+          /** @description Authorization code from Keycloak */
+          code: string;
+        };
+      };
+      responses: {
+        /** @description Redirect to dashboard on success */
+        302: {
+          content: never;
+        };
+      };
+    };
+  };
+  "/auth/logout": {
+    /**
+     * Logout endpoint
+     * @description Clears authentication cookies and redirects to Keycloak logout
+     */
+    get: {
+      responses: {
+        /** @description Redirect to login page */
+        302: {
+          content: never;
+        };
+      };
+    };
+  };
+  "/auth/profile": {
+    /**
+     * Get user profile
+     * @description Returns the authenticated user's profile information
+     */
+    get: {
+      responses: {
+        /** @description User profile information */
+        200: {
+          content: never;
+        };
+        /** @description Unauthorized */
+        401: {
+          content: never;
+        };
+      };
+    };
+  };
   "openapi": {
   };
   "/health": {

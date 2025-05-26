@@ -41,10 +41,10 @@ export function AuthProvider({
     // Check if user is already authenticated
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${apiUrl}/user`, {
+        const res = await fetch(`${apiUrl}/auth/profile`, {
           credentials: 'include',
         })
-        
+
         if (res.ok) {
           const userData = await res.json()
           setUser(userData)
@@ -55,29 +55,31 @@ export function AuthProvider({
         setLoading(false)
       }
     }
-    
+
     checkAuth()
   }, [apiUrl])
 
   const login = () => {
-    const authUrl = new URL(`${config.keycloakUrl}/protocol/openid-connect/auth`)
+    const authUrl = new URL(
+      `${config.keycloakUrl}/protocol/openid-connect/auth`
+    )
     authUrl.searchParams.append('client_id', config.clientId)
     authUrl.searchParams.append('redirect_uri', redirectUri)
     authUrl.searchParams.append('response_type', 'code')
     authUrl.searchParams.append('scope', 'openid profile email')
-    
+
     window.location.href = authUrl.toString()
   }
 
   const handleCallback = async (code: string, customRedirectUri?: string) => {
-    const response = await fetch(`${apiUrl}/token`, {
+    const response = await fetch(`${apiUrl}/auth/callback`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         code,
-        redirect_uri: customRedirectUri || redirectUri,
+        redirectUri: customRedirectUri || redirectUri,
       }),
       credentials: 'include',
     })
@@ -91,16 +93,8 @@ export function AuthProvider({
   }
 
   const logout = async () => {
-    await fetch(`${apiUrl}/logout`, {
-      credentials: 'include',
-    })
-    setUser(null)
-    
     // Redirect to Keycloak logout
-    const logoutUrl = new URL(`${config.keycloakUrl}/protocol/openid-connect/logout`)
-    logoutUrl.searchParams.append('client_id', config.clientId)
-    logoutUrl.searchParams.append('redirect_uri', window.location.origin)
-    
+    const logoutUrl = new URL(`${apiUrl}/auth/logout`)
     window.location.href = logoutUrl.toString()
   }
 
@@ -138,17 +132,27 @@ export function ProtectedRoute({
   const [redirected, setRedirected] = React.useState(false)
 
   if (loading) {
-    return <div className="flex items-center justify-center h-screen">Laddar...</div>
+    return (
+      <div className="flex items-center justify-center h-screen">Laddar...</div>
+    )
   }
 
   if (!user && !redirected) {
     setRedirected(true)
     login()
-    return <div className="flex items-center justify-center h-screen">Omdirigerar till inloggning...</div>
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Omdirigerar till inloggning...
+      </div>
+    )
   }
 
   if (!user) {
-    return <div className="flex items-center justify-center h-screen">Omdirigerar till inloggning...</div>
+    return (
+      <div className="flex items-center justify-center h-screen">
+        Omdirigerar till inloggning...
+      </div>
+    )
   }
 
   return <>{children}</>
