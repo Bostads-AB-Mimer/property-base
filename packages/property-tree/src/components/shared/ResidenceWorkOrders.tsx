@@ -1,13 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
 import { FilePlus } from 'lucide-react'
 
-import { Card } from '@/components/ui/Card'
 import { Grid } from '@/components/ui/Grid'
 import {
   workOrderService,
   WorkOrder,
 } from '@/services/api/core/workOrderService'
-import { OrdersTable } from '../work-orders/OrderTable'
+import { WorkOrdersTable } from '../work-orders/WorkOrdersTable'
 import { Button } from '../ui/v2/Button'
 
 interface ResidenceWorkOrdersProps {
@@ -80,7 +79,7 @@ export function ResidenceWorkOrders({ rentalId }: ResidenceWorkOrdersProps) {
       </div>
 
       {workOrders.length > 0 ? (
-        <OrdersTable orders={workOrdersQuery.data} />
+        <WorkOrdersTable orders={workOrdersQuery.data} />
       ) : (
         <p className="text-slate-500 p-2">Ingen ärendehistorik.</p>
       )}

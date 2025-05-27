@@ -13,11 +13,11 @@ import { Badge } from '@/components/ui/v2/Badge'
 import { WorkOrder } from '@/services/api/core/workOrderService'
 import { Button } from '../ui/v2/Button'
 
-interface OrdersTableProps {
+interface WorkOrdersTableProps {
   orders: WorkOrder[]
 }
 
-export function OrdersTable(props: OrdersTableProps) {
+export function WorkOrdersTable(props: WorkOrdersTableProps) {
   const [showAll, setShowAll] = React.useState(false)
   const dateFormatter = new Intl.DateTimeFormat('sv-SE')
 
