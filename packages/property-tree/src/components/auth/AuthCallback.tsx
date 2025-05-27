@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './useAuth'
 
-export function Callback() {
+export function AuthCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const { handleCallback } = useAuth()

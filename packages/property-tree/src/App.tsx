@@ -12,7 +12,7 @@ import {
   ProtectedRoute,
   useAuth,
 } from './components/auth/useAuth'
-import { Callback } from './components/auth/Callback'
+import { AuthCallback } from './components/auth/AuthCallback'
 
 import { CompanyView } from './components/views/CompanyView'
 import { PropertyView } from './components/views/PropertyView'
@@ -137,7 +137,7 @@ export default function App() {
         <Router>
           <CommandPaletteProvider>
             <Routes>
-              <Route path="/callback" element={<Callback />} />
+              <Route path="/callback" element={<AuthCallback />} />
               <Route
                 path="/*"
                 element={
