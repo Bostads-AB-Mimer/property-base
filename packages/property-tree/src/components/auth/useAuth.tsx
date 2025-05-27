@@ -123,35 +123,21 @@ export function useAuth() {
 
 export function ProtectedRoute({
   children,
-  redirectTo = '/',
 }: {
   children: React.ReactNode
   redirectTo?: string
 }) {
   const { user, loading, login } = useAuth()
-  const [redirected, setRedirected] = React.useState(false)
 
-  if (loading) {
+  useEffect(() => {
+    if (!user && !loading) {
+      login()
+    }
+  }, [loading, login, user])
+
+  if (loading || !user) {
     return (
       <div className="flex items-center justify-center h-screen">Laddar...</div>
-    )
-  }
-
-  if (!user && !redirected) {
-    setRedirected(true)
-    login()
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Omdirigerar till inloggning...
-      </div>
-    )
-  }
-
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        Omdirigerar till inloggning...
-      </div>
     )
   }
 
