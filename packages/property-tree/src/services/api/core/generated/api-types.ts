@@ -86,16 +86,18 @@ export interface paths {
      * OAuth callback endpoint
      * @description Handles the OAuth callback from Keycloak
      */
-    get: {
-      parameters: {
-        query: {
-          /** @description Authorization code from Keycloak */
-          code: string;
+    post: {
+      requestBody: {
+        content: {
+          "application/json": {
+            code?: string;
+            redirectUri?: string;
+          };
         };
       };
       responses: {
-        /** @description Redirect to dashboard on success */
-        302: {
+        /** @description User profile information */
+        200: {
           content: never;
         };
       };
