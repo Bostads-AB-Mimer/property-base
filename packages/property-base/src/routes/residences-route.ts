@@ -5,6 +5,7 @@ import { z } from 'zod'
 import {
   getResidenceById,
   getResidenceSizeByRentalId,
+  getResidenceRentalPropertyInfoByRentalId,
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndStaircaseCode,
   searchResidences,
@@ -224,6 +225,35 @@ export const routes = (router: KoaRouter) => {
    *         description: Internal server error
    */
   type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
+  router.get('(.*)/residences/rental-id/:rentalId', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(`GET /residences/${ctx.params.rentalId}`, metadata)
+
+    try {
+      const residence = await getResidenceRentalPropertyInfoByRentalId(
+        ctx.params.rentalId
+      )
+      console.log(ctx.params.rentalId, residence)
+      if (!residence) {
+        ctx.status = 404
+        return
+      }
+
+      // TODO: find out why building is null in residence
+
+      ctx.status = 200
+      ctx.body = {
+        content: residence,
+        ...metadata,
+      }
+    } catch (err) {
+      logger.error(err, 'Error fetching residence by ID')
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
   router.get('(.*)/residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
