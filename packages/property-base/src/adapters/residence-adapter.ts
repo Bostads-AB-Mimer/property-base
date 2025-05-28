@@ -59,6 +59,58 @@ const residenceSelect: Prisma.ResidenceSelect = {
   toDate: true,
 }
 
+export const getResidenceRentalPropertyInfoByRentalId = async (
+  rentalId: string
+) => {
+  const propertyStructure = await prisma.propertyStructure.findFirst({
+    where: {
+      rentalId,
+      propertyObject: { objectTypeId: 'balgh' },
+    },
+    select: {
+      name: true,
+      staircaseCode: true,
+      propertyCode: true,
+      propertyName: true,
+      buildingCode: true,
+      buildingName: true,
+      localeCode: true,
+      parkingSpaceCode: true,
+      residenceCode: true,
+      propertyObject: {
+        select: {
+          residence: {
+            select: {
+              entrance: true,
+              elevator: true,
+              hygieneFacility: true,
+              residenceType: {
+                select: {
+                  code: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          rentalInformation: {
+            include: {
+              rentalInformationType: {
+                select: {
+                  code: true,
+                  id: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return trimStrings(propertyStructure)
+}
+
 export const getResidenceById = async (
   id: string
 ): Promise<ResidenceWithRelations | null> => {
