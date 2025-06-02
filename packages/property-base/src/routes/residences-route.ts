@@ -256,7 +256,7 @@ export const routes = (router: KoaRouter) => {
           rentalType:
             result.propertyObject.rentalInformation.rentalInformationType.name,
           address: result.name,
-          code: result.propertyObject.id,
+          code: result.residenceCode,
           number: result.propertyObject.residence.residenceType.code,
           type: result.propertyObject.residence.residenceType.name,
           roomTypeCode: result.propertyObject.residence.residenceType.code,
