@@ -250,6 +250,9 @@ export const routes = (router: KoaRouter) => {
           return
         }
 
+        // TODO: These fields are currently renamed into what they are called
+        // in onecore-type "ApartmentInfo". We should probably strive for not having
+        // different names for stuff.
         const mapped = {
           rentalTypeCode:
             result.propertyObject.rentalInformation.rentalInformationType.code,
