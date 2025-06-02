@@ -75,8 +75,6 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
       propertyName: true,
       buildingCode: true,
       buildingName: true,
-      localeCode: true,
-      parkingSpaceCode: true,
       residenceCode: true,
       propertyObject: {
         select: {
@@ -110,7 +108,13 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
     },
   })
 
-  if (!propertyInfo || !propertyInfo.propertyCode) {
+  const propertyCode = propertyInfo?.propertyCode
+  const propertyObject = propertyInfo?.propertyObject
+  const residence = propertyObject?.residence
+  const rentalInformation = propertyObject?.rentalInformation
+
+  if (!propertyInfo || !propertyCode || !residence || !rentalInformation) {
+    // TODO: Do something better here
     return null
   }
 
@@ -121,7 +125,18 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
     },
   })
 
-  return trimStrings({ ...propertyInfo, areaSize: areaSize?.value ?? null })
+  return trimStrings({
+    ...propertyInfo,
+    propertyObject: {
+      ...propertyObject,
+      rentalInformation: rentalInformation,
+      residence: residence,
+    },
+    areaSize: areaSize?.value ?? null,
+    rentalTypeCode: rentalInformation.rentalInformationType.code,
+    rentalType: rentalInformation.rentalInformationType.name,
+    address: propertyInfo.name,
+  })
 }
 
 export const getResidenceById = async (
