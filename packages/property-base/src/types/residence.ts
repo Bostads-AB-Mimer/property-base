@@ -128,6 +128,25 @@ export const ResidenceDetailedSchema = z.object({
   size: z.number().nullable(),
 })
 
+export const ResidenceRentalPropertyInfoSchema = z.object({
+  rentalTypeCode: z.string(),
+  rentalType: z.string().nullable(),
+  address: z.string().nullable(),
+  code: z.string().nullable(),
+  number: z.string(),
+  type: z.string().nullable(),
+  roomTypeCode: z.string(),
+  entrance: z.string().nullable(),
+  floor: z.string().nullable(),
+  hasElevator: z.boolean().nullable(),
+  washSpace: z.string().nullable(),
+  area: z.number().nullable(),
+  estateCode: z.string().nullable(),
+  estate: z.string().nullable(),
+  buildingCode: z.string().nullable(),
+  building: z.string().nullable(),
+})
+
 export type ExternalResidence = z.infer<typeof ResidenceSchema>
 export type Residence = ExternalResidence
 export type ResidenceSearchResult = z.infer<typeof ResidenceSearchResultSchema>

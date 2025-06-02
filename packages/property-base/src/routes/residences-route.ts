@@ -5,6 +5,7 @@ import { z } from 'zod'
 import {
   getResidenceById,
   getResidenceSizeById,
+  getResidenceRentalPropertyInfoByRentalId,
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndStaircaseCode,
   searchResidences,
@@ -14,8 +15,15 @@ import {
   ResidenceSchema,
   ResidenceDetailedSchema,
   ResidenceSearchResult,
+  ResidenceRentalPropertyInfoSchema,
 } from '../types/residence'
 import { parseRequest } from '../middleware/parse-request'
+
+type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
+
+type ResidenceRentalPropertyInfo = z.infer<
+  typeof ResidenceRentalPropertyInfoSchema
+>
 
 /**
  * @swagger
@@ -195,35 +203,95 @@ export const routes = (router: KoaRouter) => {
 
   /**
    * @swagger
-   * /residences/{id}:
+   * /residences/rental-property-info/rental-id/{rentalId}:
    *   get:
-   *     summary: Get a residence by ID
-   *     description: Returns a residence with the specified ID
+   *     summary: Gets a residence rental property info by rental id
+   *     description: Returns residence rental property info
    *     tags:
    *       - Residences
    *     parameters:
    *       - in: path
-   *         name: id
+   *         name: rentalId
    *         required: true
    *         schema:
    *           type: string
-   *         description: The ID of the residence
+   *         description: The rental id of the residence
    *     responses:
    *       200:
-   *         description: Successfully retrieved the residence
+   *         description: Successfully retrieved the residence rental info
    *         content:
    *           application/json:
    *             schema:
    *               type: object
    *               properties:
    *                 content:
-   *                   $ref: '#/components/schemas/ResidenceDetails'
+   *                   $ref: '#/components/schemas/ResidenceRentalPropertyInfo'
    *       404:
-   *         description: Residence not found
+   *         description: Residence rental info not found
    *       500:
    *         description: Internal server error
    */
-  type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
+  router.get(
+    '(.*)/residences/rental-property-info/rental-id/:rentalId',
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      logger.info(
+        `GET /residences/rental-property-info/rental-id/${ctx.params.rentalId}`,
+        metadata
+      )
+
+      try {
+        const result = await getResidenceRentalPropertyInfoByRentalId(
+          ctx.params.rentalId
+        )
+
+        if (!result) {
+          ctx.status = 404
+          return
+        }
+
+        // TODO: These fields are currently renamed into what they are called
+        // in onecore-type "ApartmentInfo". We should probably strive for not having
+        // different names for stuff.
+        const mapped = {
+          rentalTypeCode:
+            result.propertyObject.rentalInformation.rentalInformationType.code,
+          rentalType:
+            result.propertyObject.rentalInformation.rentalInformationType.name,
+          address: result.name,
+          code: result.residenceCode,
+          number: result.propertyObject.residence.residenceType.code,
+          type: result.propertyObject.residence.residenceType.name,
+          roomTypeCode: result.propertyObject.residence.residenceType.code,
+          entrance: result.staircaseCode,
+          floor: result.propertyObject.residence.entrance,
+          hasElevator:
+            result.propertyObject.residence.elevator === null
+              ? null
+              : Boolean(result.propertyObject.residence.elevator),
+          washSpace: result.propertyObject.residence.hygieneFacility,
+          area: result.areaSize,
+          estateCode: result.propertyCode,
+          building: result.buildingName,
+          buildingCode: result.buildingCode,
+          estate: result.propertyName,
+        } satisfies ResidenceRentalPropertyInfo
+
+        ctx.status = 200
+        ctx.body = {
+          content: mapped,
+          ...metadata,
+        }
+      } catch (err) {
+        logger.error(err, 'Error fetching residence rental property info')
+        ctx.status = 500
+        const errorMessage =
+          err instanceof Error ? err.message : 'unknown error'
+        ctx.body = { reason: errorMessage, ...metadata }
+      }
+    }
+  )
+
   router.get('(.*)/residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)
     const id = ctx.params.id
@@ -344,6 +412,7 @@ export const routes = (router: KoaRouter) => {
         ...metadata,
       }
     } catch (err) {
+      logger.error(err, 'Error fetching residence by ID')
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
       ctx.body = { reason: errorMessage, ...metadata }

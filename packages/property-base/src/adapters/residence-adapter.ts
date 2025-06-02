@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { map } from 'lodash'
+import { logger } from 'onecore-utilities'
 
 import { trimStrings } from '@src/utils/data-conversion'
 
 import { prisma } from './db'
-import { logger } from 'onecore-utilities'
 
 //todo: add types
 
@@ -57,6 +57,85 @@ const residenceSelect: Prisma.ResidenceSelect = {
   deleted: true,
   fromDate: true,
   toDate: true,
+}
+
+export const getResidenceRentalPropertyInfoByRentalId = async (
+  rentalId: string
+) => {
+  const propertyInfo = await prisma.propertyStructure.findFirst({
+    where: {
+      rentalId,
+      propertyObject: { objectTypeId: 'balgh' },
+      NOT: { propertyCode: null },
+    },
+    select: {
+      name: true,
+      staircaseCode: true,
+      propertyCode: true,
+      propertyName: true,
+      buildingCode: true,
+      buildingName: true,
+      residenceCode: true,
+      propertyObject: {
+        select: {
+          id: true,
+          residence: {
+            select: {
+              entrance: true,
+              elevator: true,
+              hygieneFacility: true,
+              residenceType: {
+                select: {
+                  code: true,
+                  name: true,
+                },
+              },
+            },
+          },
+          rentalInformation: {
+            include: {
+              rentalInformationType: {
+                select: {
+                  code: true,
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  const propertyCode = propertyInfo?.propertyCode
+  const propertyObject = propertyInfo?.propertyObject
+  const residence = propertyObject?.residence
+  const rentalInformation = propertyObject?.rentalInformation
+
+  if (!propertyInfo || !propertyCode || !residence || !rentalInformation) {
+    // TODO: Do something better here
+    return null
+  }
+
+  const areaSize = await prisma.quantityValue.findFirst({
+    where: {
+      code: propertyInfo.propertyObject.id,
+      quantityTypeId: 'BOA',
+    },
+  })
+
+  return trimStrings({
+    ...propertyInfo,
+    propertyObject: {
+      ...propertyObject,
+      rentalInformation: rentalInformation,
+      residence: residence,
+    },
+    areaSize: areaSize?.value ?? null,
+    rentalTypeCode: rentalInformation.rentalInformationType.code,
+    rentalType: rentalInformation.rentalInformationType.name,
+    address: propertyInfo.name,
+  })
 }
 
 export const getResidenceById = async (
