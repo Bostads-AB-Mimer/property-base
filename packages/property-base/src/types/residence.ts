@@ -132,7 +132,7 @@ export const ResidenceRentalPropertyInfoSchema = z.object({
   rentalTypeCode: z.string(),
   rentalType: z.string().nullable(),
   address: z.string().nullable(),
-  code: z.string(),
+  code: z.string().nullable(),
   number: z.string(),
   type: z.string().nullable(),
   roomTypeCode: z.string(),
