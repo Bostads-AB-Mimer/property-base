@@ -252,22 +252,35 @@ export const routes = (router: KoaRouter) => {
 
         const mapped = {
           rentalTypeCode:
-            result.propertyObject.rentalInformation?.rentalInformationType.code,
-          rentalType: result.propertyObject.rentalInformation?.rentalInformationType.name,
-          address: result.,
-          code: result.code,
-          number: result.number,
-          type: result.type,
-          roomTypeCode: result.roomTypeCode,
-          entrance: result.entrance,
+            result.propertyObject.rentalInformation.rentalInformationType.code,
+          rentalType:
+            result.propertyObject.rentalInformation.rentalInformationType.name,
+          address: result.name,
+          code: result.propertyObject.id,
+          number: result.propertyObject.residence.residenceType.code,
+          type: result.propertyObject.residence.residenceType.name,
+          roomTypeCode: result.propertyObject.residence.residenceType.code,
+          entrance: result.staircaseCode,
+          floor: result.propertyObject.residence.entrance,
+          hasElevator:
+            result.propertyObject.residence.elevator === null
+              ? null
+              : Boolean(result.propertyObject.residence.elevator),
+          washSpace: result.propertyObject.residence.hygieneFacility,
+          area: result.areaSize,
+          estateCode: result.propertyCode,
+          building: result.buildingName,
+          buildingCode: result.buildingCode,
+          estate: result.propertyName,
         } satisfies ResidenceRentalPropertyInfo
+
         ctx.status = 200
         ctx.body = {
-          content: result,
+          content: mapped,
           ...metadata,
         }
       } catch (err) {
-        logger.error(err, 'Error fetching residence ')
+        logger.error(err, 'Error fetching residence rental property info')
         ctx.status = 500
         const errorMessage =
           err instanceof Error ? err.message : 'unknown error'
