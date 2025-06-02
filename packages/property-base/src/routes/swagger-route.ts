@@ -3,6 +3,7 @@ import swaggerJsdoc from 'swagger-jsdoc'
 import { swaggerSpec } from '../swagger'
 import {
   ResidenceDetailedSchema,
+  ResidenceRentalPropertyInfoSchema,
   ResidenceSchema,
   ResidenceSearchResultSchema,
 } from '../types/residence'
@@ -57,6 +58,10 @@ const schemas = {
   }).definitions,
   ...zodToJsonSchema(CompanyDetailsSchema, {
     name: 'CompanyDetails',
+    target: 'openApi3',
+  }).definitions,
+  ...zodToJsonSchema(ResidenceRentalPropertyInfoSchema, {
+    name: 'ResidenceRentalPropertyInfo',
     target: 'openApi3',
   }).definitions,
 }
