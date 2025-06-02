@@ -15,8 +15,15 @@ import {
   ResidenceSchema,
   ResidenceDetailedSchema,
   ResidenceSearchResult,
+  ResidenceRentalPropertyInfoSchema,
 } from '../types/residence'
 import { parseRequest } from '../middleware/parse-request'
+
+type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
+
+type ResidenceRentalPropertyInfo = z.infer<
+  typeof ResidenceRentalPropertyInfoSchema
+>
 
 /**
  * @swagger
@@ -224,35 +231,50 @@ export const routes = (router: KoaRouter) => {
    *       500:
    *         description: Internal server error
    */
-  type ResidenceDetails = z.infer<typeof ResidenceDetailedSchema>
-  router.get('(.*)/residences/rental-id/:rentalId', async (ctx) => {
-    const metadata = generateRouteMetadata(ctx)
-    logger.info(`GET /residences/${ctx.params.rentalId}`, metadata)
-
-    try {
-      const residence = await getResidenceRentalPropertyInfoByRentalId(
-        ctx.params.rentalId
+  router.get(
+    '(.*)/residences/rental-property-info/rental-id/:rentalId',
+    async (ctx) => {
+      const metadata = generateRouteMetadata(ctx)
+      logger.info(
+        `GET /residences/rental-property-info/rental-id/${ctx.params.rentalId}`,
+        metadata
       )
-      console.log(ctx.params.rentalId, residence)
-      if (!residence) {
-        ctx.status = 404
-        return
-      }
 
-      // TODO: find out why building is null in residence
+      try {
+        const result = await getResidenceRentalPropertyInfoByRentalId(
+          ctx.params.rentalId
+        )
 
-      ctx.status = 200
-      ctx.body = {
-        content: residence,
-        ...metadata,
+        if (!result) {
+          ctx.status = 404
+          return
+        }
+
+        const mapped = {
+          rentalTypeCode:
+            result.propertyObject.rentalInformation?.rentalInformationType.code,
+          rentalType: result.propertyObject.rentalInformation?.rentalInformationType.name,
+          address: result.,
+          code: result.code,
+          number: result.number,
+          type: result.type,
+          roomTypeCode: result.roomTypeCode,
+          entrance: result.entrance,
+        } satisfies ResidenceRentalPropertyInfo
+        ctx.status = 200
+        ctx.body = {
+          content: result,
+          ...metadata,
+        }
+      } catch (err) {
+        logger.error(err, 'Error fetching residence ')
+        ctx.status = 500
+        const errorMessage =
+          err instanceof Error ? err.message : 'unknown error'
+        ctx.body = { reason: errorMessage, ...metadata }
       }
-    } catch (err) {
-      logger.error(err, 'Error fetching residence by ID')
-      ctx.status = 500
-      const errorMessage = err instanceof Error ? err.message : 'unknown error'
-      ctx.body = { reason: errorMessage, ...metadata }
     }
-  })
+  )
 
   router.get('(.*)/residences/:id', async (ctx) => {
     const metadata = generateRouteMetadata(ctx)

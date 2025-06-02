@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { map } from 'lodash'
+import { logger } from 'onecore-utilities'
 
 import { trimStrings } from '@src/utils/data-conversion'
 
 import { prisma } from './db'
-import { logger } from 'onecore-utilities'
 
 //todo: add types
 
@@ -80,6 +80,7 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
       residenceCode: true,
       propertyObject: {
         select: {
+          id: true,
           residence: {
             select: {
               entrance: true,
@@ -115,12 +116,12 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
 
   const areaSize = await prisma.quantityValue.findFirst({
     where: {
-      code: propertyInfo.propertyCode,
+      code: propertyInfo.propertyObject.id,
       quantityTypeId: 'BOA',
     },
   })
 
-  return trimStrings(propertyInfo)
+  return trimStrings({ ...propertyInfo, areaSize: areaSize?.value ?? null })
 }
 
 export const getResidenceById = async (
