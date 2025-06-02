@@ -97,7 +97,6 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
               rentalInformationType: {
                 select: {
                   code: true,
-                  id: true,
                   name: true,
                 },
               },
