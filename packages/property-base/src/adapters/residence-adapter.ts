@@ -66,38 +66,55 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
     where: {
       rentalId,
       propertyObject: { objectTypeId: 'balgh' },
-      NOT: { propertyCode: null },
     },
     select: {
-      name: true,
-      staircaseCode: true,
-      propertyCode: true,
-      propertyName: true,
-      buildingCode: true,
-      buildingName: true,
-      residenceCode: true,
       propertyObject: {
         select: {
           id: true,
+          rentalInformation: {
+            select: {
+              apartmentNumber: true,
+              rentalInformationType: { select: { name: true, code: true } },
+            },
+          },
+        },
+      },
+    },
+  })
+
+  return trimStrings(propertyInfo)
+}
+
+export const getResidenceByRentalId = async (rentalId: string) => {
+  const propertyStructure = await prisma.propertyStructure.findFirst({
+    where: {
+      rentalId,
+      propertyObject: { objectTypeId: 'balgh' },
+    },
+    select: {
+      buildingCode: true,
+      buildingName: true,
+      propertyCode: true,
+      propertyName: true,
+      propertyId: true,
+      buildingId: true,
+      propertyObject: {
+        select: {
           residence: {
             select: {
-              entrance: true,
+              id: true,
               elevator: true,
+              deleted: true,
+              code: true,
               hygieneFacility: true,
+              name: true,
+              quantityValues: true,
               residenceType: {
                 select: {
                   code: true,
                   name: true,
-                },
-              },
-            },
-          },
-          rentalInformation: {
-            include: {
-              rentalInformationType: {
-                select: {
-                  code: true,
-                  name: true,
+                  roomCount: true,
+                  kitchen: true,
                 },
               },
             },
@@ -107,35 +124,15 @@ export const getResidenceRentalPropertyInfoByRentalId = async (
     },
   })
 
-  const propertyCode = propertyInfo?.propertyCode
-  const propertyObject = propertyInfo?.propertyObject
-  const residence = propertyObject?.residence
-  const rentalInformation = propertyObject?.rentalInformation
+  if (!propertyStructure) throw 'not-found'
+  if (!propertyStructure.propertyObject) throw 'not-found'
+  if (!propertyStructure.propertyObject.residence) throw 'not-found'
 
-  if (!propertyInfo || !propertyCode || !residence || !rentalInformation) {
-    // TODO: Do something better here
-    return null
-  }
+  const {
+    propertyObject: { residence },
+  } = propertyStructure
 
-  const areaSize = await prisma.quantityValue.findFirst({
-    where: {
-      code: propertyInfo.propertyObject.id,
-      quantityTypeId: 'BOA',
-    },
-  })
-
-  return trimStrings({
-    ...propertyInfo,
-    propertyObject: {
-      ...propertyObject,
-      rentalInformation: rentalInformation,
-      residence: residence,
-    },
-    areaSize: areaSize?.value ?? null,
-    rentalTypeCode: rentalInformation.rentalInformationType.code,
-    rentalType: rentalInformation.rentalInformationType.name,
-    address: propertyInfo.name,
-  })
+  return trimStrings({ ...propertyStructure, propertyObject: { residence } })
 }
 
 export const getResidenceById = async (
