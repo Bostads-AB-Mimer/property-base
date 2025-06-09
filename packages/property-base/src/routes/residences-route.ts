@@ -9,6 +9,7 @@ import {
   getResidencesByBuildingCode,
   getResidencesByBuildingCodeAndStaircaseCode,
   searchResidences,
+  getResidenceByRentalId,
 } from '../adapters/residence-adapter'
 import {
   residencesQueryParamsSchema,
@@ -201,6 +202,53 @@ export const routes = (router: KoaRouter) => {
     }
   )
 
+  router.get('(.*)/residences/rental-id/:rentalId', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    logger.info(`GET /residences/rental-id/${ctx.params.rentalId}`, metadata)
+
+    try {
+      const result = await getResidenceByRentalId(ctx.params.rentalId)
+      if (!result) throw 'not-found'
+
+      const responsePayload = {
+        id: result.propertyObject.residence.id,
+        code: result.propertyObject.residence.code,
+        name: result.propertyObject.residence.name,
+        hygieneFacility: result.propertyObject.residence.hygieneFacility,
+        elevator: result.propertyObject.residence.elevator,
+        deleted: result.propertyObject.residence.deleted,
+        type: {
+          code: result.propertyObject.residence.residenceType.code,
+          name: result.propertyObject.residence.residenceType.name,
+        },
+        areaSize:
+          result.propertyObject.residence.quantityValues.find(
+            (v) => v.quantityTypeId === 'BOA'
+          )?.value ?? null,
+        building: {
+          id: result.buildingId,
+          code: result.buildingCode,
+          name: result.buildingName,
+        },
+        property: {
+          id: result.propertyId,
+          code: result.propertyCode,
+          name: result.propertyName,
+        },
+      }
+      ctx.status = 200
+      ctx.body = {
+        content: responsePayload,
+        ...metadata,
+      }
+    } catch (err) {
+      logger.error(err, 'Error fetching residence rental property info')
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
   /**
    * @swagger
    * /residences/rental-id/{rentalId}/rental-property-info:
@@ -236,7 +284,7 @@ export const routes = (router: KoaRouter) => {
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
       logger.info(
-        `GET /residences/rental-property-info/rental-id/${ctx.params.rentalId}`,
+        `GET /residences/rental-id/${ctx.params.rentalId}/rental-property-info`,
         metadata
       )
 
@@ -245,41 +293,9 @@ export const routes = (router: KoaRouter) => {
           ctx.params.rentalId
         )
 
-        if (!result) {
-          ctx.status = 404
-          return
-        }
-
-        // TODO: These fields are currently renamed into what they are called
-        // in onecore-type "ApartmentInfo". We should probably strive for not having
-        // different names for stuff.
-        const mapped = {
-          rentalTypeCode:
-            result.propertyObject.rentalInformation.rentalInformationType.code,
-          rentalType:
-            result.propertyObject.rentalInformation.rentalInformationType.name,
-          address: result.name,
-          code: result.residenceCode,
-          number: result.propertyObject.residence.residenceType.code,
-          type: result.propertyObject.residence.residenceType.name,
-          roomTypeCode: result.propertyObject.residence.residenceType.code,
-          entrance: result.staircaseCode,
-          floor: result.propertyObject.residence.entrance,
-          hasElevator:
-            result.propertyObject.residence.elevator === null
-              ? null
-              : Boolean(result.propertyObject.residence.elevator),
-          washSpace: result.propertyObject.residence.hygieneFacility,
-          area: result.areaSize,
-          estateCode: result.propertyCode,
-          building: result.buildingName,
-          buildingCode: result.buildingCode,
-          estate: result.propertyName,
-        } satisfies ResidenceRentalPropertyInfo
-
         ctx.status = 200
         ctx.body = {
-          content: mapped,
+          content: result,
           ...metadata,
         }
       } catch (err) {
