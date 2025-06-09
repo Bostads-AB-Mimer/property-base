@@ -203,7 +203,7 @@ export const routes = (router: KoaRouter) => {
 
   /**
    * @swagger
-   * /residences/rental-property-info/rental-id/{rentalId}:
+   * /residences/rental-id/{rentalId}/rental-property-info:
    *   get:
    *     summary: Gets a residence rental property info by rental id
    *     description: Returns residence rental property info
@@ -232,7 +232,7 @@ export const routes = (router: KoaRouter) => {
    *         description: Internal server error
    */
   router.get(
-    '(.*)/residences/rental-property-info/rental-id/:rentalId',
+    '(.*)/residences/rental-id/:rentalId/rental-property-info',
     async (ctx) => {
       const metadata = generateRouteMetadata(ctx)
       logger.info(
