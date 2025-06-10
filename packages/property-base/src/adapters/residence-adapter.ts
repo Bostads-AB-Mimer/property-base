@@ -59,32 +59,6 @@ const residenceSelect: Prisma.ResidenceSelect = {
   toDate: true,
 }
 
-export const getResidenceRentalPropertyInfoByRentalId = async (
-  rentalId: string
-) => {
-  const propertyInfo = await prisma.propertyStructure.findFirst({
-    where: {
-      rentalId,
-      propertyObject: { objectTypeId: 'balgh' },
-    },
-    select: {
-      propertyObject: {
-        select: {
-          id: true,
-          rentalInformation: {
-            select: {
-              apartmentNumber: true,
-              rentalInformationType: { select: { name: true, code: true } },
-            },
-          },
-        },
-      },
-    },
-  })
-
-  return trimStrings(propertyInfo)
-}
-
 export const getResidenceByRentalId = async (rentalId: string) => {
   const propertyStructure = await prisma.propertyStructure.findFirst({
     where: {
@@ -98,17 +72,26 @@ export const getResidenceByRentalId = async (rentalId: string) => {
       propertyName: true,
       propertyId: true,
       buildingId: true,
+      rentalId: true,
       propertyObject: {
         select: {
+          rentalInformation: {
+            select: {
+              apartmentNumber: true,
+              rentalInformationType: { select: { name: true, code: true } },
+            },
+          },
           residence: {
             select: {
               id: true,
               elevator: true,
+              entrance: true,
               deleted: true,
               code: true,
               hygieneFacility: true,
               name: true,
               quantityValues: true,
+              wheelchairAccessible: true,
               residenceType: {
                 select: {
                   code: true,
@@ -127,12 +110,16 @@ export const getResidenceByRentalId = async (rentalId: string) => {
   if (!propertyStructure) throw 'not-found'
   if (!propertyStructure.propertyObject) throw 'not-found'
   if (!propertyStructure.propertyObject.residence) throw 'not-found'
+  if (!propertyStructure.propertyObject.rentalInformation) throw 'not-found'
 
   const {
-    propertyObject: { residence },
+    propertyObject: { residence, rentalInformation },
   } = propertyStructure
 
-  return trimStrings({ ...propertyStructure, propertyObject: { residence } })
+  return trimStrings({
+    ...propertyStructure,
+    propertyObject: { residence, rentalInformation },
+  })
 }
 
 export const getResidenceById = async (

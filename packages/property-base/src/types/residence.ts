@@ -128,25 +128,49 @@ export const ResidenceDetailedSchema = z.object({
   size: z.number().nullable(),
 })
 
-export const ResidenceRentalPropertyInfoSchema = z.object({
-  rentalTypeCode: z.string(),
-  rentalType: z.string().nullable(),
-  address: z.string().nullable(),
-  code: z.string().nullable(),
-  number: z.string(),
-  type: z.string().nullable(),
-  roomTypeCode: z.string(),
+export const ResidenceByRentalIdSchema = z.object({
+  id: z.string(),
+  code: z.string(),
+  name: z.string().nullable(),
+  accessibility: z.object({
+    wheelchairAccessible: z.boolean(),
+    elevator: z.boolean(),
+  }),
+  features: z.object({
+    hygieneFacility: z.string().nullable(),
+  }),
   entrance: z.string().nullable(),
-  floor: z.string().nullable(),
-  hasElevator: z.boolean().nullable(),
-  washSpace: z.string().nullable(),
-  area: z.number().nullable(),
-  estateCode: z.string().nullable(),
-  estate: z.string().nullable(),
-  buildingCode: z.string().nullable(),
-  building: z.string().nullable(),
+  deleted: z.boolean(),
+  type: z.object({
+    code: z.string(),
+    name: z.string().nullable(),
+    roomCount: z.number().nullable(),
+    kitchen: z.number(),
+  }),
+  rentalInformation: z
+    .object({
+      apartmentNumber: z.string().nullable(),
+      rentalId: z.string().nullable(),
+      type: z.object({
+        code: z.string(),
+        name: z.string().nullable(),
+      }),
+    })
+    .nullable(),
+  property: z.object({
+    id: z.string().nullable(),
+    name: z.string().nullable(),
+    code: z.string().nullable(),
+  }),
+  building: z.object({
+    id: z.string().nullable(),
+    name: z.string().nullable(),
+    code: z.string().nullable(),
+  }),
+  areaSize: z.number().nullable(),
 })
 
 export type ExternalResidence = z.infer<typeof ResidenceSchema>
 export type Residence = ExternalResidence
 export type ResidenceSearchResult = z.infer<typeof ResidenceSearchResultSchema>
+export type ResidenceByRentalId = z.infer<typeof ResidenceByRentalIdSchema>
