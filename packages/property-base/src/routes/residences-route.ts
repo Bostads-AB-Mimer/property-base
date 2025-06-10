@@ -235,7 +235,6 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const result = await getResidenceByRentalId(ctx.params.rentalId)
-      if (!result) throw 'not-found'
 
       const responsePayload: ResidenceByRentalId = {
         id: result.propertyObject.residence.id,
