@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { createGenericResponseSchema } from './response'
 
 export const residencesQueryParamsSchema = z.object({
   buildingCode: z
@@ -170,7 +171,13 @@ export const ResidenceByRentalIdSchema = z.object({
   areaSize: z.number().nullable(),
 })
 
+export const GetResidenceByRentalIdResponseSchema = createGenericResponseSchema(
+  ResidenceByRentalIdSchema
+)
+
 export type ExternalResidence = z.infer<typeof ResidenceSchema>
 export type Residence = ExternalResidence
 export type ResidenceSearchResult = z.infer<typeof ResidenceSearchResultSchema>
-export type ResidenceByRentalId = z.infer<typeof ResidenceByRentalIdSchema>
+export type GetResidenceByRentalIdResponse = z.infer<
+  typeof GetResidenceByRentalIdResponseSchema
+>
