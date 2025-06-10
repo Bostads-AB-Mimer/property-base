@@ -2,8 +2,8 @@ import KoaRouter from '@koa/router'
 import swaggerJsdoc from 'swagger-jsdoc'
 import { swaggerSpec } from '../swagger'
 import {
+  ResidenceByRentalIdSchema,
   ResidenceDetailedSchema,
-  ResidenceRentalPropertyInfoSchema,
   ResidenceSchema,
   ResidenceSearchResultSchema,
 } from '../types/residence'
@@ -60,8 +60,8 @@ const schemas = {
     name: 'CompanyDetails',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ResidenceRentalPropertyInfoSchema, {
-    name: 'ResidenceRentalPropertyInfo',
+  ...zodToJsonSchema(ResidenceByRentalIdSchema, {
+    name: 'ResidenceByRentalId',
     target: 'openApi3',
   }).definitions,
 }
