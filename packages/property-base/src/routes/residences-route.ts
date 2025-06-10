@@ -15,7 +15,7 @@ import {
   ResidenceSchema,
   ResidenceDetailedSchema,
   ResidenceSearchResult,
-  ResidenceByRentalId,
+  GetResidenceByRentalIdResponse,
 } from '../types/residence'
 import { parseRequest } from '../middleware/parse-request'
 
@@ -218,12 +218,7 @@ export const routes = (router: KoaRouter) => {
    *         content:
    *           application/json:
    *             schema:
-   *               type: object
-   *               properties:
-   *                 content:
-   *                   application/json:
-   *                     schema:
-   *                       $ref: '#/components/schemas/Room'
+   *               $ref: '#/components/schemas/GetResidenceByRentalIdResponse'
    *       404:
    *         description: Residence not found
    *       500:
@@ -236,59 +231,59 @@ export const routes = (router: KoaRouter) => {
     try {
       const result = await getResidenceByRentalId(ctx.params.rentalId)
 
-      const responsePayload: ResidenceByRentalId = {
-        id: result.propertyObject.residence.id,
-        code: result.propertyObject.residence.code,
-        name: result.propertyObject.residence.name,
-        entrance: result.propertyObject.residence.entrance,
-        accessibility: {
-          elevator: Boolean(result.propertyObject.residence.elevator),
-          wheelchairAccessible: Boolean(
-            result.propertyObject.residence.wheelchairAccessible
-          ),
-        },
-        features: {
-          hygieneFacility: result.propertyObject.residence.hygieneFacility,
-        },
-        deleted: Boolean(result.propertyObject.residence.deleted),
-        type: {
-          code: result.propertyObject.residence.residenceType.code,
-          name: result.propertyObject.residence.residenceType.name,
-          roomCount: result.propertyObject.residence.residenceType.roomCount,
-          kitchen: result.propertyObject.residence.residenceType.kitchen,
-        },
-        areaSize:
-          result.propertyObject.residence.quantityValues.find(
-            (v) => v.quantityTypeId === 'BOA'
-          )?.value ?? null,
-        building: {
-          id: result.buildingId,
-          code: result.buildingCode,
-          name: result.buildingName,
-        },
-        property: {
-          id: result.propertyId,
-          code: result.propertyCode,
-          name: result.propertyName,
-        },
-        rentalInformation: {
-          rentalId: result.rentalId,
-          apartmentNumber:
-            result.propertyObject.rentalInformation.apartmentNumber,
+      const payload: GetResidenceByRentalIdResponse = {
+        content: {
+          id: result.propertyObject.residence.id,
+          code: result.propertyObject.residence.code,
+          name: result.propertyObject.residence.name,
+          entrance: result.propertyObject.residence.entrance,
+          accessibility: {
+            elevator: Boolean(result.propertyObject.residence.elevator),
+            wheelchairAccessible: Boolean(
+              result.propertyObject.residence.wheelchairAccessible
+            ),
+          },
+          features: {
+            hygieneFacility: result.propertyObject.residence.hygieneFacility,
+          },
+          deleted: Boolean(result.propertyObject.residence.deleted),
           type: {
-            code: result.propertyObject.rentalInformation.rentalInformationType
-              .code,
-            name: result.propertyObject.rentalInformation.rentalInformationType
-              .name,
+            code: result.propertyObject.residence.residenceType.code,
+            name: result.propertyObject.residence.residenceType.name,
+            roomCount: result.propertyObject.residence.residenceType.roomCount,
+            kitchen: result.propertyObject.residence.residenceType.kitchen,
+          },
+          areaSize:
+            result.propertyObject.residence.quantityValues.find(
+              (v) => v.quantityTypeId === 'BOA'
+            )?.value ?? null,
+          building: {
+            id: result.buildingId,
+            code: result.buildingCode,
+            name: result.buildingName,
+          },
+          property: {
+            id: result.propertyId,
+            code: result.propertyCode,
+            name: result.propertyName,
+          },
+          rentalInformation: {
+            rentalId: result.rentalId,
+            apartmentNumber:
+              result.propertyObject.rentalInformation.apartmentNumber,
+            type: {
+              code: result.propertyObject.rentalInformation
+                .rentalInformationType.code,
+              name: result.propertyObject.rentalInformation
+                .rentalInformationType.name,
+            },
           },
         },
+        ...metadata,
       }
 
       ctx.status = 200
-      ctx.body = {
-        content: responsePayload,
-        ...metadata,
-      }
+      ctx.body = payload
     } catch (err) {
       logger.error(err, 'Error fetching residence rental property info')
       ctx.status = 500
