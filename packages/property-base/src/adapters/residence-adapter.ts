@@ -5,6 +5,7 @@ import { logger } from 'onecore-utilities'
 import { trimStrings } from '@src/utils/data-conversion'
 
 import { prisma } from './db'
+import assert from 'node:assert'
 
 //todo: add types
 
@@ -60,66 +61,74 @@ const residenceSelect: Prisma.ResidenceSelect = {
 }
 
 export const getResidenceByRentalId = async (rentalId: string) => {
-  const propertyStructure = await prisma.propertyStructure.findFirst({
-    where: {
-      rentalId,
-      propertyObject: { objectTypeId: 'balgh' },
-    },
-    select: {
-      buildingCode: true,
-      buildingName: true,
-      propertyCode: true,
-      propertyName: true,
-      propertyId: true,
-      buildingId: true,
-      rentalId: true,
-      propertyObject: {
-        select: {
-          rentalInformation: {
-            select: {
-              apartmentNumber: true,
-              rentalInformationType: { select: { name: true, code: true } },
+  try {
+    const propertyStructure = await prisma.propertyStructure.findFirst({
+      where: {
+        rentalId,
+        propertyObject: { objectTypeId: 'balgh' },
+      },
+      select: {
+        buildingCode: true,
+        buildingName: true,
+        propertyCode: true,
+        propertyName: true,
+        propertyId: true,
+        buildingId: true,
+        rentalId: true,
+        propertyObject: {
+          select: {
+            rentalInformation: {
+              select: {
+                apartmentNumber: true,
+                rentalInformationType: { select: { name: true, code: true } },
+              },
             },
-          },
-          residence: {
-            select: {
-              id: true,
-              elevator: true,
-              entrance: true,
-              deleted: true,
-              code: true,
-              hygieneFacility: true,
-              name: true,
-              quantityValues: true,
-              wheelchairAccessible: true,
-              residenceType: {
-                select: {
-                  code: true,
-                  name: true,
-                  roomCount: true,
-                  kitchen: true,
+            residence: {
+              select: {
+                id: true,
+                elevator: true,
+                entrance: true,
+                deleted: true,
+                code: true,
+                hygieneFacility: true,
+                name: true,
+                quantityValues: true,
+                wheelchairAccessible: true,
+                residenceType: {
+                  select: {
+                    code: true,
+                    name: true,
+                    roomCount: true,
+                    kitchen: true,
+                  },
                 },
               },
             },
           },
         },
       },
-    },
-  })
+    })
 
-  if (!propertyStructure) throw 'not-found'
-  if (!propertyStructure.propertyObject) throw 'not-found'
-  if (!propertyStructure.propertyObject.residence) throw 'not-found'
-  if (!propertyStructure.propertyObject.rentalInformation) throw 'not-found'
+    assert(propertyStructure, 'property-structure-not-found')
+    assert(propertyStructure.propertyObject, 'property-object-not-found')
+    assert(propertyStructure.propertyObject.residence, 'residence-not-found')
+    assert(
+      propertyStructure.propertyObject.rentalInformation,
+      'rentalinformation-not-found'
+    )
 
-  const {
-    propertyObject: { residence, rentalInformation },
-  } = propertyStructure
+    const {
+      propertyObject: { residence, rentalInformation },
+    } = propertyStructure
 
-  return trimStrings({
-    ...propertyStructure,
-    propertyObject: { residence, rentalInformation },
-  })
+    return trimStrings({
+      ...propertyStructure,
+      propertyObject: { residence, rentalInformation },
+    })
+  } catch (err) {
+    logger.error({ err }, 'residence-adapter.getResidenceByRentalId')
+    throw err
+  }
 }
 
 export const getResidenceById = async (
