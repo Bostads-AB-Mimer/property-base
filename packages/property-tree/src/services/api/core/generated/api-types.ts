@@ -1163,6 +1163,32 @@ export interface paths {
       };
     };
   };
+  "/listings": {
+    /**
+     * Get listings
+     * @description Retrieves a list of listings.
+     */
+    get: {
+      parameters: {
+        query?: {
+          /** @description true for published listings, false for unpublished listings. */
+          published?: boolean;
+          /** @description ie "Bilplats (Intern)" or "Bilplats (Extern)". */
+          waitingListType?: string;
+          /** @description A contact code to filter out listings that are not valid to rent for the contact. */
+          validToRentForContactCode?: string;
+        };
+      };
+      responses: {
+        /** @description Successful response with the requested list of listings. */
+        200: {
+          content: {
+            "application/json": Record<string, never>;
+          };
+        };
+      };
+    };
+  };
   "/rentalproperties/{id}/floorplan": {
     /**
      * Get floor plan for a rental property
@@ -1358,6 +1384,33 @@ export interface paths {
       };
     };
   };
+  "/vacant-parkingspaces": {
+    /**
+     * Get all vacant parking spaces
+     * @description Retrieves a list of all vacant parking spaces.
+     */
+    get: {
+      responses: {
+        /** @description A list of vacant parking spaces. */
+        200: {
+          content: {
+            "application/json": {
+              content?: components["schemas"]["VacantParkingSpace"][];
+            };
+          };
+        };
+        /** @description Internal server error. Failed to retrieve vacant parking spaces. */
+        500: {
+          content: {
+            "application/json": {
+              /** @description Error message. */
+              error?: string;
+            };
+          };
+        };
+      };
+    };
+  };
   "/parkingspaces/{parkingSpaceId}/leases": {
     /**
      * Create lease for an external parking space
@@ -1432,6 +1485,33 @@ export interface paths {
             "application/json": {
               /** @example A technical error has occured. */
               message?: string;
+            };
+          };
+        };
+      };
+    };
+  };
+  "/rental-object/by-code/{rentalObjectCode}": {
+    /**
+     * Get a rental object
+     * @description Fetches a rental object by Rental Object Code.
+     */
+    get: {
+      responses: {
+        /** @description Successfully retrieved the rental object. */
+        200: {
+          content: {
+            "application/json": {
+              content?: components["schemas"]["RentalObject"][];
+            };
+          };
+        };
+        /** @description Internal server error. Failed to fetch rental object. */
+        500: {
+          content: {
+            "application/json": {
+              /** @description The error message. */
+              error?: string;
             };
           };
         };
@@ -2506,7 +2586,6 @@ export interface components {
         code: string | null;
       };
       malarEnergiFacilityId: string | null;
-      size: number | null;
     };
     Staircase: {
       id: string;
@@ -2672,6 +2751,8 @@ export interface components {
         name: string | null;
       };
     });
+    /** @description Represents a vacant parking space. */
+    VacantParkingSpace: Record<string, never>;
   };
   responses: never;
   parameters: never;
