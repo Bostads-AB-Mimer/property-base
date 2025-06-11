@@ -1502,7 +1502,7 @@ export interface paths {
         200: {
           content: {
             "application/json": {
-              content?: components["schemas"]["RentalObject"][];
+              content?: Record<string, never>[];
             };
           };
         };
