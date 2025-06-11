@@ -6,6 +6,7 @@ export const { GET, POST, PUT, DELETE, PATCH } = createClient<paths>({
   headers: {
     'Content-Type': 'application/json',
   },
+  credentials: 'include',
 })
 
 export class ApiError extends Error {
