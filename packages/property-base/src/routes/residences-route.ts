@@ -230,6 +230,7 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const result = await getResidenceByRentalId(ctx.params.rentalId)
+      const areaSize = await getResidenceSizeByRentalId(ctx.params.rentalId)
 
       const payload: GetResidenceByRentalIdResponse = {
         content: {
@@ -253,10 +254,7 @@ export const routes = (router: KoaRouter) => {
             roomCount: result.propertyObject.residence.residenceType.roomCount,
             kitchen: result.propertyObject.residence.residenceType.kitchen,
           },
-          areaSize:
-            result.propertyObject.residence.quantityValues.find(
-              (v) => v.quantityTypeId === 'BOA'
-            )?.value ?? null,
+          areaSize: areaSize?.value ?? null,
           building: {
             id: result.buildingId,
             code: result.buildingCode,

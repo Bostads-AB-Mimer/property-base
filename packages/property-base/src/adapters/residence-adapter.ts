@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client'
 import { map } from 'lodash'
 import { logger } from 'onecore-utilities'
+import assert from 'node:assert'
 
 import { trimStrings } from '@src/utils/data-conversion'
 
 import { prisma } from './db'
-import assert from 'node:assert'
 
 //todo: add types
 
@@ -92,7 +92,6 @@ export const getResidenceByRentalId = async (rentalId: string) => {
                 code: true,
                 hygieneFacility: true,
                 name: true,
-                quantityValues: true,
                 wheelchairAccessible: true,
                 residenceType: {
                   select: {
