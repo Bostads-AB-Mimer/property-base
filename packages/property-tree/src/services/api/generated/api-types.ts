@@ -351,6 +351,42 @@ export interface paths {
       };
     };
   };
+  "/parking-spaces/by-rental-id/{id}": {
+    /**
+     * Gets a list of parking space by rental id
+     * @description Retrieves parking space from rental id.
+     */
+    get: {
+      parameters: {
+        path: {
+          /** @description The rental id. */
+          id: string;
+        };
+      };
+      responses: {
+        /** @description Successfully retrieved the parking space. Returns parking space object. */
+        200: {
+          content: {
+            "application/json": {
+              content?: components["schemas"]["ParkingSpace"];
+            };
+          };
+        };
+        /** @description Invalid id provided */
+        400: {
+          content: never;
+        };
+        /** @description No parking spaces found for the specified id */
+        404: {
+          content: never;
+        };
+        /** @description Internal server error */
+        500: {
+          content: never;
+        };
+      };
+    };
+  };
   "/staircases": {
     /**
      * Gets staircases belonging to a building by building code
@@ -905,6 +941,33 @@ export interface components {
       subletFeeAmount: number;
       disableQuantitiesBelowCompany: number;
       timestamp: string;
+    };
+    ParkingSpace: {
+      rentalId: string;
+      companyCode: string;
+      companyName: string;
+      managementUnitCode: string;
+      managementUnitName: string;
+      propertyCode: string;
+      propertyName: string;
+      buildingCode: string | null;
+      buildingName: string | null;
+      parkingSpace: {
+        propertyObjectId: string;
+        code: string;
+        name: string;
+        parkingNumber: string;
+        parkingSpaceType: {
+          code: string;
+          name: string;
+        };
+      };
+      address: ({
+        streetAddress: string | null;
+        streetAddress2: string | null;
+        postalCode: string | null;
+        city: string | null;
+      }) | null;
     };
   };
   responses: never;
