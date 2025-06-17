@@ -1291,7 +1291,7 @@ export interface paths {
       };
     };
   };
-  "e  * /rentalproperties/{id}/material-choices": {
+  "/rentalproperties/{id}/material-choices": {
     /**
      * Get material choices for a specific rental property
      * @description Retrieve material choices associated with a rental property identified by {id}.
@@ -1305,6 +1305,31 @@ export interface paths {
       };
       responses: {
         /** @description Successful response with the requested material choices */
+        200: {
+          content: {
+            "application/json": Record<string, never>;
+          };
+        };
+      };
+    };
+    /**
+     * Save material choices for a rental property
+     * @description Saves material choices for a specific rental property.
+     */
+    post: {
+      parameters: {
+        path: {
+          /** @description ID of the rental property to save material choices for. */
+          id: string;
+        };
+      };
+      requestBody: {
+        content: {
+          "application/json": Record<string, never>;
+        };
+      };
+      responses: {
+        /** @description Material choices successfully saved */
         200: {
           content: {
             "application/json": Record<string, never>;
@@ -1330,33 +1355,6 @@ export interface paths {
         200: {
           content: {
             "application/json": unknown[];
-          };
-        };
-      };
-    };
-  };
-  "/rentalproperties/{id}/material-choices": {
-    /**
-     * Save material choices for a rental property
-     * @description Saves material choices for a specific rental property.
-     */
-    post: {
-      parameters: {
-        path: {
-          /** @description ID of the rental property to save material choices for. */
-          id: string;
-        };
-      };
-      requestBody: {
-        content: {
-          "application/json": Record<string, never>;
-        };
-      };
-      responses: {
-        /** @description Material choices successfully saved */
-        200: {
-          content: {
-            "application/json": Record<string, never>;
           };
         };
       };
