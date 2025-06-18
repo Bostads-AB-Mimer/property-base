@@ -54,7 +54,9 @@ model PropertyObject {
 
   rooms           Room[]
   residence       Residence?
+  location        Location?
   maintenanceUnit MaintenanceUnit[]
+  locationId      String?           @db.Char(15)
 
   @@index([objectTypeId], map: "fkcmobjcmobt")
   @@map("cmobj")
