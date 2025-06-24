@@ -32,7 +32,7 @@ import {
 } from './components/ui/Breadcrumb'
 import { ProtectedRoute } from './auth/ProtectedRoute'
 import { useAuth } from './auth/useAuth'
-import { useUser } from './auth/userUser'
+import { useUser } from './auth/useUser'
 
 const queryClient = new QueryClient({
   defaultOptions: {
