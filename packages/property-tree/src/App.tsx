@@ -7,8 +7,7 @@ import {
 import { CommandPalette } from './components/CommandPalette'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { CommandPaletteProvider } from './components/hooks/useCommandPalette'
-import { ProtectedRoute, useAuth, useUser } from './components/auth/useAuth'
-import { AuthCallback } from './components/auth/AuthCallback'
+import { AuthCallback } from './auth/AuthCallback'
 
 import { CompanyView } from './components/views/CompanyView'
 import { PropertyView } from './components/views/PropertyView'
@@ -31,6 +30,9 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
 } from './components/ui/Breadcrumb'
+import { ProtectedRoute } from './auth/ProtectedRoute'
+import { useAuth } from './auth/useAuth'
+import { useUser } from './auth/userUser'
 
 const queryClient = new QueryClient({
   defaultOptions: {

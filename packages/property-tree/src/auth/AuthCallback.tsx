@@ -28,7 +28,7 @@ export function AuthCallback() {
       })
     } else {
       if (!requested.current) {
-        // Prevent duplicate requests caused by <StrictMode/> in development
+        // Prevent duplicate requests caused by <StrictMode/> in development ¯\_(ツ)_/¯
         requested.current = true
         POST('/auth/callback', {
           credentials: 'include',
