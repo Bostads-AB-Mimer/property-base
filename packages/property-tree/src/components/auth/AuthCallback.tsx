@@ -1,22 +1,20 @@
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from './useAuth'
 
-export function AuthCallback() {
+export function AuthCallback({ authConfig }: { authConfig: AuthConfig }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const { handleCallback } = useAuth()
   const [error, setError] = useState<string | null>(null)
+  const { handleCallback } = useAuth()
 
   useEffect(() => {
+    console.log('rendering auth callback')
     const code = searchParams.get('code')
+
     if (code) {
-      handleCallback(code)
-        .then(() => navigate('/'))
-        .catch((err) => {
-          console.error(err)
-          setError('Autentisering misslyckades. Försök igen.')
-        })
+      handleCallback(code).then(() => navigate('/'))
     } else {
       setError('Ingen autentiseringskod hittades i URL:en.')
     }
