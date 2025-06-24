@@ -13,7 +13,6 @@ interface AuthContextType {
   login: () => void
   logout: () => void
   config: AuthConfig
-  handleCallback: (code: string, customRedirectUri?: string) => Promise<void>
 }
 
 interface AuthConfig {
@@ -41,7 +40,7 @@ export function useUser(config: AuthConfig) {
       try {
         const res = await fetch(`${config.apiUrl}/auth/profile`, {
           credentials: 'include',
-          signal: abortController.signal,
+          // signal: abortController.signal,
         })
 
         if (res.ok) {
@@ -77,7 +76,7 @@ export function useUser(config: AuthConfig) {
     }
   }, [config.apiUrl])
 
-  return [user, setUser] as const
+  return user
 }
 
 export function AuthProvider({
@@ -90,6 +89,7 @@ export function AuthProvider({
   const redirectUri = config.redirectUri || `${window.location.origin}/callback`
   const apiUrl = config.apiUrl || '/api'
 
+  console.log('AuthProvider', { config })
   const login = () => {
     console.log('login', config)
     const authUrl = new URL(
@@ -103,38 +103,7 @@ export function AuthProvider({
     window.location.href = authUrl.toString()
   }
 
-  const [user, setUser] = useUser(config)
-
-  const handleCallback = React.useCallback(
-    async (code: string) => {
-      try {
-        console.log('doing auth callback', { code })
-        setUser({ tag: 'loading' })
-        const response = await fetch(`${config.apiUrl}/auth/callback`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            code,
-            redirectUri: config.redirectUri,
-          }),
-          credentials: 'include',
-        })
-
-        if (!response.ok) {
-          console.error('auth callback failed')
-          return setUser({ tag: 'error', error: 'unknown' })
-        }
-        console.log('auth callback success')
-        return setUser({ tag: 'success', user: await response.json() })
-      } catch (err) {
-        console.error(err)
-        return setUser({ tag: 'error', error: 'unknown' })
-      }
-    },
-    [config.apiUrl, config.redirectUri, setUser]
-  )
+  const user = useUser(config)
 
   const logout = async () => {
     const logoutUrl = new URL(`${apiUrl}/auth/logout`)
@@ -148,7 +117,6 @@ export function AuthProvider({
         login,
         logout,
         config,
-        handleCallback,
       }}
     >
       {children}
@@ -174,7 +142,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
       console.log('Protected route: unauthenticated, logging in')
       login()
     }
-  }, [login, user])
+  }, [login])
 
   return match(user)
     .with({ tag: 'loading' }, () => (

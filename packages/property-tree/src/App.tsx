@@ -136,23 +136,26 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider config={authConfig}>
+      <CommandPaletteProvider>
         <Router>
-          <CommandPaletteProvider>
-            <Routes>
-              <Route path="/callback" element={<AuthCallback />} />
-              <Route
-                path="/*"
-                element={
+          <Routes>
+            <Route
+              path="/callback"
+              element={<AuthCallback config={authConfig} />}
+            />
+            <Route
+              path="/*"
+              element={
+                <AuthProvider config={authConfig}>
                   <ProtectedRoute>
                     <AppContent />
                   </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </CommandPaletteProvider>
+                </AuthProvider>
+              }
+            />
+          </Routes>
         </Router>
-      </AuthProvider>
+      </CommandPaletteProvider>
     </QueryClientProvider>
   )
 }

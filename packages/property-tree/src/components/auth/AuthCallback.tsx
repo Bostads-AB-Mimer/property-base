@@ -1,24 +1,58 @@
-import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useAuth } from './useAuth'
 
-export function AuthCallback({ authConfig }: { authConfig: AuthConfig }) {
+interface AuthConfig {
+  apiUrl: string
+  redirectUri: string
+}
+
+function relayAuthCallback(params: {
+  apiUrl: string
+  redirectUri: string
+  code: string
+}) {
+  return fetch(`${params.apiUrl}/auth/callback`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      code: params.code,
+      redirectUri: params.redirectUri,
+    }),
+    credentials: 'include',
+  })
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error('auth callback failed')
+      }
+
+      return res.json()
+    })
+    .catch(console.error)
+}
+
+export function AuthCallback({ config }: { config: AuthConfig }) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
-  const { handleCallback } = useAuth()
+  const { apiUrl, redirectUri } = config
+  console.log('AuthCallback', { config })
+
+  const code = searchParams.get('code')
 
   useEffect(() => {
-    console.log('rendering auth callback')
-    const code = searchParams.get('code')
-
     if (code) {
-      handleCallback(code).then(() => navigate('/'))
+      console.log('relaying auth callback')
+      relayAuthCallback({
+        apiUrl,
+        redirectUri,
+        code,
+      }).then(() => navigate('/'))
     } else {
       setError('Ingen autentiseringskod hittades i URL:en.')
     }
-  }, [handleCallback, navigate, searchParams])
+  }, [code, apiUrl, redirectUri, navigate])
 
   if (error) {
     return (
