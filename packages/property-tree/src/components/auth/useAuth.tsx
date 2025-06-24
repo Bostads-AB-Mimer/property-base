@@ -34,6 +34,7 @@ export function useUser(config: AuthConfig) {
   const q = useQuery<User, 'unauthenticated' | 'unknown'>({
     queryKey: ['auth', 'user'],
     retry: false,
+    staleTime: 500,
     queryFn: () =>
       fetch(`${config.apiUrl}/auth/profile`, {
         credentials: 'include',
@@ -81,9 +82,7 @@ export function AuthProvider({
   const redirectUri = config.redirectUri || `${window.location.origin}/callback`
   const apiUrl = config.apiUrl || '/api'
 
-  console.log('AuthProvider', { config })
   const login = () => {
-    console.log('login', config)
     const authUrl = new URL(
       `${config.keycloakUrl}/protocol/openid-connect/auth`
     )
@@ -127,14 +126,12 @@ export function useAuth() {
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, login } = useAuth()
 
-  console.log('rendering protected route', user)
-
   useEffect(() => {
     if (user.tag === 'error' && user.error === 'unauthenticated') {
       console.log('Protected route: unauthenticated, logging in')
       login()
     }
-  }, [login])
+  }, [login, user])
 
   return match(user)
     .with({ tag: 'loading' }, () => (

@@ -1,41 +1,25 @@
+import { POST } from '@/services/api/core/base-api'
 import { useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-interface AuthConfig {
-  apiUrl: string
-  redirectUri: string
-}
-
-function relayAuthCallback(params: {
-  apiUrl: string
-  redirectUri: string
-  code: string
-}) {
-  return fetch(`${params.apiUrl}/auth/callback`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
+function relayAuthCallback(params: { redirectUri: string; code: string }) {
+  return POST('/auth/callback', {
+    credentials: 'include',
+    body: {
       code: params.code,
       redirectUri: params.redirectUri,
-    }),
-    credentials: 'include',
+    },
   })
-    .then((res) => {
-      if (!res.ok) {
-        throw new Error('auth callback failed')
-      }
-
-      return res.json()
-    })
-    .catch((err) => {
-      console.error(err)
-      throw err
-    })
 }
 
-export function AuthCallback({ config }: { config: AuthConfig }) {
+interface Props {
+  config: {
+    apiUrl: string
+    redirectUri: string
+  }
+}
+
+export function AuthCallback({ config }: Props) {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
@@ -45,9 +29,7 @@ export function AuthCallback({ config }: { config: AuthConfig }) {
 
   useEffect(() => {
     if (code) {
-      console.log('relaying auth callback')
       relayAuthCallback({
-        apiUrl,
         redirectUri,
         code,
       })
@@ -58,10 +40,6 @@ export function AuthCallback({ config }: { config: AuthConfig }) {
         })
     } else {
       setError('Ingen autentiseringskod hittades i URL:en.')
-    }
-
-    return () => {
-      console.log('aborting auth callback')
     }
   }, [code, apiUrl, redirectUri, navigate])
 
