@@ -1,47 +1,34 @@
-import { POST } from '@/services/api/core/base-api'
-import { useEffect, useState } from 'react'
+import React from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
-function relayAuthCallback(params: { redirectUri: string; code: string }) {
-  return POST('/auth/callback', {
-    credentials: 'include',
-    body: {
-      code: params.code,
-      redirectUri: params.redirectUri,
-    },
-  })
-}
+import { authConfig } from '@/auth-config'
+import { POST } from '@/services/api/core/base-api'
 
-interface Props {
-  config: {
-    apiUrl: string
-    redirectUri: string
-  }
-}
-
-export function AuthCallback({ config }: Props) {
+export function AuthCallback() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const [error, setError] = useState<string | null>(null)
-  const { apiUrl, redirectUri } = config
+  const [error, setError] = React.useState<string | null>(null)
 
   const code = searchParams.get('code')
 
-  useEffect(() => {
-    if (code) {
-      relayAuthCallback({
-        redirectUri,
-        code,
+  React.useEffect(() => {
+    if (!code) {
+      return setError('Ingen autentiseringskod hittades i URL:en.')
+    } else {
+      POST('/auth/callback', {
+        credentials: 'include',
+        body: {
+          code,
+          redirectUri: authConfig.redirectUri,
+        },
       })
         .then(() => navigate('/'))
         .catch((err) => {
           console.error(err)
           setError('Ett fel uppstod vid autentisering.')
         })
-    } else {
-      setError('Ingen autentiseringskod hittades i URL:en.')
     }
-  }, [code, apiUrl, redirectUri, navigate])
+  }, [code, navigate])
 
   if (error) {
     return (

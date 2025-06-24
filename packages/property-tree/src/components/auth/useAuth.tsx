@@ -1,5 +1,6 @@
+import { authConfig } from '@/auth-config'
 import { useQuery } from '@tanstack/react-query'
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React from 'react'
 import { match, P } from 'ts-pattern'
 
 interface User {
@@ -9,34 +10,18 @@ interface User {
   roles: string[]
 }
 
-interface AuthContextType {
-  user: FooUser
-  login: () => void
-  logout: () => void
-  config: AuthConfig
-}
-
-interface AuthConfig {
-  keycloakUrl: string
-  clientId: string
-  apiUrl?: string
-  redirectUri?: string
-}
-
-const AuthContext = createContext<AuthContextType | null>(null)
-
-type FooUser =
+type UserState =
   | { tag: 'loading' }
-  | { tag: 'success'; user: User }
   | { tag: 'error'; error: 'unauthenticated' | 'unknown' }
+  | { tag: 'success'; user: User }
 
-export function useUser(config: AuthConfig) {
+export function useUser() {
   const q = useQuery<User, 'unauthenticated' | 'unknown'>({
     queryKey: ['auth', 'user'],
     retry: false,
     staleTime: 500,
     queryFn: () =>
-      fetch(`${config.apiUrl}/auth/profile`, {
+      fetch(`${authConfig.apiUrl}/auth/profile`, {
         credentials: 'include',
       }).then((res) => {
         if (!res.ok) {
@@ -52,7 +37,7 @@ export function useUser(config: AuthConfig) {
   })
 
   return match(q)
-    .returnType<FooUser>()
+    .returnType<UserState>()
     .with({ isLoading: true }, () => ({ tag: 'loading' }))
     .with(
       { data: P.not(P.nullish), isLoading: false, isError: false },
@@ -72,63 +57,36 @@ export function useUser(config: AuthConfig) {
     .otherwise(() => ({ tag: 'loading' }))
 }
 
-export function AuthProvider({
-  children,
-  config,
-}: {
-  children: React.ReactNode
-  config: AuthConfig
-}) {
-  const redirectUri = config.redirectUri || `${window.location.origin}/callback`
-  const apiUrl = config.apiUrl || '/api'
-
+export function useAuth() {
   const login = () => {
     const authUrl = new URL(
-      `${config.keycloakUrl}/protocol/openid-connect/auth`
+      `${authConfig.keycloakUrl}/protocol/openid-connect/auth`
     )
-    authUrl.searchParams.append('client_id', config.clientId)
-    authUrl.searchParams.append('redirect_uri', redirectUri)
+    authUrl.searchParams.append('client_id', authConfig.clientId)
+    authUrl.searchParams.append('redirect_uri', authConfig.redirectUri)
     authUrl.searchParams.append('response_type', 'code')
     authUrl.searchParams.append('scope', 'openid profile email')
 
     window.location.href = authUrl.toString()
   }
 
-  const user = useUser(config)
-
-  const logout = async () => {
-    const logoutUrl = new URL(`${apiUrl}/auth/logout`)
+  const logout = () => {
+    const logoutUrl = new URL(`${authConfig.apiUrl}/auth/logout`)
     window.location.href = logoutUrl.toString()
   }
 
-  return (
-    <AuthContext.Provider
-      value={{
-        user,
-        login,
-        logout,
-        config,
-      }}
-    >
-      {children}
-    </AuthContext.Provider>
-  )
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
+  return {
+    login,
+    logout,
   }
-  return context
 }
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { user, login } = useAuth()
+  const { login } = useAuth()
+  const user = useUser()
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (user.tag === 'error' && user.error === 'unauthenticated') {
-      console.log('Protected route: unauthenticated, logging in')
       login()
     }
   }, [login, user])
@@ -139,7 +97,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     ))
     .with({ tag: 'error' }, (e) => (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-red-500">{e.error}</div>
+        <div className="text-red-500">Okänt fel, kontakta support."</div>
       </div>
     ))
     .with({ tag: 'success' }, () => <>{children}</>)
