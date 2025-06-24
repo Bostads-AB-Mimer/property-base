@@ -1,7 +1,7 @@
 import { authConfig } from '@/auth-config'
 
 export function useAuth() {
-  const login = () => {
+  const login = (currentClientPath?: string) => {
     const authUrl = new URL(
       `${authConfig.keycloakUrl}/protocol/openid-connect/auth`
     )
@@ -9,6 +9,13 @@ export function useAuth() {
     authUrl.searchParams.append('redirect_uri', authConfig.redirectUri)
     authUrl.searchParams.append('response_type', 'code')
     authUrl.searchParams.append('scope', 'openid profile email')
+
+    if (currentClientPath) {
+      authUrl.searchParams.append(
+        'state',
+        encodeURIComponent(currentClientPath)
+      )
+    }
 
     window.location.href = authUrl.toString()
   }

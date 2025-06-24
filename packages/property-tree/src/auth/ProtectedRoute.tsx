@@ -10,7 +10,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
   React.useEffect(() => {
     if (user.tag === 'error' && user.error === 'unauthenticated') {
-      login()
+      login(location.pathname)
     }
   }, [login, user])
 
@@ -20,7 +20,7 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
     ))
     .with({ tag: 'error' }, (e) => (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-red-500">Okänt fel, kontakta support."</div>
+        <div className="text-red-500">Okänt fel, kontakta support.</div>
       </div>
     ))
     .with({ tag: 'success' }, () => <>{children}</>)

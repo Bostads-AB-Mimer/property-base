@@ -1,6 +1,6 @@
 import React from 'react'
 import { Navigate, useNavigate, useSearchParams } from 'react-router-dom'
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 
 import { authConfig } from '@/auth-config'
 import { POST } from '@/services/api/core/base-api'
@@ -18,6 +18,11 @@ export function AuthCallback() {
   })
 
   const code = searchParams.get('code')
+
+  const lastKnownClientPath = match(searchParams.get('state'))
+    .with(P.string, decodeURIComponent)
+    .otherwise(() => '/')
+
   const requested = React.useRef(false)
 
   React.useEffect(() => {
@@ -68,7 +73,7 @@ export function AuthCallback() {
     ))
     .with({ tag: 'success' }, () => (
       <div className="flex items-center justify-center h-screen">
-        <Navigate to="/" />
+        <Navigate to={lastKnownClientPath} />
       </div>
     ))
     .exhaustive()
