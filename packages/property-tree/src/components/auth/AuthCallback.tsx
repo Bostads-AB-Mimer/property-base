@@ -29,7 +29,10 @@ function relayAuthCallback(params: {
 
       return res.json()
     })
-    .catch(console.error)
+    .catch((err) => {
+      console.error(err)
+      throw err
+    })
 }
 
 export function AuthCallback({ config }: { config: AuthConfig }) {
@@ -37,7 +40,6 @@ export function AuthCallback({ config }: { config: AuthConfig }) {
   const [searchParams] = useSearchParams()
   const [error, setError] = useState<string | null>(null)
   const { apiUrl, redirectUri } = config
-  console.log('AuthCallback', { config })
 
   const code = searchParams.get('code')
 
@@ -48,9 +50,18 @@ export function AuthCallback({ config }: { config: AuthConfig }) {
         apiUrl,
         redirectUri,
         code,
-      }).then(() => navigate('/'))
+      })
+        .then(() => navigate('/'))
+        .catch((err) => {
+          console.error(err)
+          setError('Ett fel uppstod vid autentisering.')
+        })
     } else {
       setError('Ingen autentiseringskod hittades i URL:en.')
+    }
+
+    return () => {
+      console.log('aborting auth callback')
     }
   }, [code, apiUrl, redirectUri, navigate])
 

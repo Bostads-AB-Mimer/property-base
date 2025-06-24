@@ -1,5 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { match } from 'ts-pattern'
+import { match, P } from 'ts-pattern'
 
 interface User {
   id: string
@@ -30,53 +31,44 @@ type FooUser =
   | { tag: 'error'; error: 'unauthenticated' | 'unknown' }
 
 export function useUser(config: AuthConfig) {
-  const [user, setUser] = useState<FooUser>({ tag: 'loading' })
-
-  useEffect(() => {
-    const abortController = new AbortController()
-
-    const checkAuth = async () => {
-      console.log('checking auth')
-      try {
-        const res = await fetch(`${config.apiUrl}/auth/profile`, {
-          credentials: 'include',
-          // signal: abortController.signal,
-        })
-
-        if (res.ok) {
-          const userData = await res.json()
-          console.log(
-            'auth provider, got user data and setting loading false',
-            userData
-          )
-          setUser({ tag: 'success', user: userData })
-        } else {
+  const q = useQuery<User, 'unauthenticated' | 'unknown'>({
+    queryKey: ['auth', 'user'],
+    retry: false,
+    queryFn: () =>
+      fetch(`${config.apiUrl}/auth/profile`, {
+        credentials: 'include',
+      }).then((res) => {
+        if (!res.ok) {
           if (res.status === 401) {
-            setUser({ tag: 'error', error: 'unauthenticated' })
+            throw 'unauthenticated'
           } else {
-            setUser({
-              tag: 'error',
-              error: 'unknown',
-            })
+            throw 'unknown'
           }
         }
-      } catch (err) {
-        if (err === 'abort-auth-check') {
-          console.log('abort-auth-check, ignoring')
-        } else {
-          setUser({ tag: 'error', error: 'unknown' })
-        }
-      }
-    }
 
-    checkAuth()
+        return res.json()
+      }),
+  })
 
-    return () => {
-      abortController.abort('abort-auth-check')
-    }
-  }, [config.apiUrl])
-
-  return user
+  return match(q)
+    .returnType<FooUser>()
+    .with({ isLoading: true }, () => ({ tag: 'loading' }))
+    .with(
+      { data: P.not(P.nullish), isLoading: false, isError: false },
+      (v) => ({
+        tag: 'success',
+        user: v.data,
+      })
+    )
+    .with({ error: 'unauthenticated', isLoading: false }, () => ({
+      tag: 'error',
+      error: 'unauthenticated',
+    }))
+    .with({ error: 'unknown', isLoading: false }, () => ({
+      tag: 'error',
+      error: 'unknown',
+    }))
+    .otherwise(() => ({ tag: 'loading' }))
 }
 
 export function AuthProvider({
