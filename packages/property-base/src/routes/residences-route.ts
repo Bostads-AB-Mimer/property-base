@@ -238,6 +238,7 @@ export const routes = (router: KoaRouter) => {
           code: result.propertyObject.residence.code,
           name: result.propertyObject.residence.name,
           entrance: result.propertyObject.residence.entrance,
+          floor: result.staircaseCode,
           accessibility: {
             elevator: Boolean(result.propertyObject.residence.elevator),
             wheelchairAccessible: Boolean(

@@ -33,6 +33,7 @@ export type ResidenceWithRelations = Prisma.ResidenceGetPayload<{
             propertyName: true
             buildingCode: true
             buildingName: true
+            staircaseCode: true
           }
         }
       }
@@ -74,6 +75,7 @@ export const getResidenceByRentalId = async (rentalId: string) => {
         propertyName: true,
         propertyId: true,
         buildingId: true,
+        staircaseCode: true,
         rentalId: true,
         propertyObject: {
           select: {
