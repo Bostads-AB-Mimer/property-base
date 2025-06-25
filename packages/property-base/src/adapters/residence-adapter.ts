@@ -89,7 +89,7 @@ export const getResidenceByRentalId = async (rentalId: string) => {
               select: {
                 id: true,
                 elevator: true,
-                entrance: true,
+                floor: true,
                 deleted: true,
                 code: true,
                 hygieneFacility: true,

@@ -77,7 +77,7 @@ export const ResidenceDetailedSchema = z.object({
     smokeFree: z.boolean(),
     asbestos: z.boolean(),
   }),
-  entrance: z.string().nullable(),
+  floor: z.string().nullable(),
   partNo: z.number().optional().nullable(),
   part: z.string().optional().nullable(),
   deleted: z.boolean(),
