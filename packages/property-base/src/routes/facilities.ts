@@ -48,6 +48,12 @@ export const routes = (router: KoaRouter) => {
 
     try {
       const facility = await getFacilityByRentalId(ctx.params.rentalId)
+      if (!facility) {
+        ctx.status = 404
+        ctx.body = { reason: 'facility-not-found', ...metadata }
+        return
+      }
+
       const areaSize = await getFacilitySizeByRentalId(ctx.params.rentalId)
 
       const payload: GetFacilityByRentalIdResponse = {

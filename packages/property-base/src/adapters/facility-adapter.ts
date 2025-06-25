@@ -65,6 +65,16 @@ export const getFacilityByRentalId = async (rentalId: string) => {
       propertyObject: { facility, rentalInformation },
     })
   } catch (err) {
+    if (
+      err instanceof Error &&
+      (err.message === 'property-structure-not-found' ||
+        err.message === 'property-object-not-found' ||
+        err.message === 'facility-not-found' ||
+        err.message === 'rentalinformation-not-found')
+    ) {
+      return null
+    }
+
     logger.error({ err }, 'facility-adapter.getFacilityByRentalId')
     throw err
   }
