@@ -1,46 +1,44 @@
 import KoaRouter from '@koa/router'
-import { prisma } from '@src/adapters/db'
+import { logger, generateRouteMetadata } from 'onecore-utilities'
+
 import {
   getLocationByRentalId,
   getLocationSizeByRentalId,
 } from '@src/adapters/location-adapter'
-import { getResidenceSizeByRentalId } from '@src/adapters/residence-adapter'
 import { GetLocationByRentalIdResponse } from '@src/types/location'
-import { logger, generateRouteMetadata } from 'onecore-utilities'
-import { z } from 'zod'
 
 /**
  * @swagger
  * openapi: 3.0.0
  * tags:
- *   - name: Residences
- *     description: Operations related to residences
+ *   - name: Locations
+ *     description: Operations related to locations
  */
 export const routes = (router: KoaRouter) => {
   /**
    * @swagger
-   * /residences/rental-id/{rentalId}:
+   * /locations/rental-id/{rentalId}:
    *   get:
-   *     summary: Get a residence by rental ID
-   *     description: Returns a residence with the specified rental ID
+   *     summary: Get a location by rental ID
+   *     description: Returns a location with the specified rental ID
    *     tags:
-   *       - Residences
+   *       - Locations
    *     parameters:
    *       - in: path
    *         name: rentalId
    *         required: true
    *         schema:
    *           type: string
-   *         description: The rental ID of the residence
+   *         description: The rental ID of the location
    *     responses:
    *       200:
-   *         description: Successfully retrieved the residence
+   *         description: Successfully retrieved the location
    *         content:
    *           application/json:
    *             schema:
-   *               $ref: '#/components/schemas/GetResidenceByRentalIdResponse'
+   *               $ref: '#/components/schemas/GetLocationByRentalIdResponse'
    *       404:
-   *         description: Residence not found
+   *         description: Location not found
    *       500:
    *         description: Internal server error
    */
@@ -92,7 +90,7 @@ export const routes = (router: KoaRouter) => {
       ctx.status = 200
       ctx.body = payload
     } catch (err) {
-      logger.error(err, 'Error fetching location rental property info')
+      logger.error(err, 'Error fetching location by rental id')
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
       ctx.body = { reason: errorMessage, ...metadata }

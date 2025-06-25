@@ -1,6 +1,16 @@
 import KoaRouter from '@koa/router'
 import swaggerJsdoc from 'swagger-jsdoc'
-import { swaggerSpec } from '../swagger'
+import zodToJsonSchema from 'zod-to-json-schema'
+
+import {
+  GetLocationByRentalIdResponseSchema,
+  LocationDetailsSchema,
+} from '@src/types/location'
+import { BuildingSchema } from '../types/building'
+import { CompanyDetailsSchema, CompanySchema } from '../types/company'
+import { ComponentSchema } from '../types/component'
+import { MaintenanceUnitSchema } from '../types/maintenance-unit'
+import { PropertyDetailsSchema, PropertySchema } from '../types/property'
 import {
   GetResidenceByRentalIdResponseSchema,
   ResidenceByRentalIdSchema,
@@ -8,15 +18,11 @@ import {
   ResidenceSchema,
   ResidenceSearchResultSchema,
 } from '../types/residence'
-import { BuildingSchema } from '../types/building'
-import { ComponentSchema } from '../types/component'
-import { PropertySchema, PropertyDetailsSchema } from '../types/property'
-import { StaircaseSchema } from '../types/staircase'
 import { RoomSchema } from '../types/room'
-import { CompanySchema, CompanyDetailsSchema } from '../types/company'
-import { ParkingSpaceSchema } from '../types/parking-space'
-import zodToJsonSchema from 'zod-to-json-schema'
-import { MaintenanceUnitSchema } from '../types/maintenance-unit'
+import { StaircaseSchema } from '../types/staircase'
+
+import { swaggerSpec } from '../swagger'
+import { ParkingSpaceSchema } from '@src/types/parking-space'
 
 const schemas = {
   ...zodToJsonSchema(ResidenceSchema, {
@@ -76,6 +82,14 @@ const schemas = {
   }).definitions,
   ...zodToJsonSchema(ParkingSpaceSchema, {
     name: 'ParkingSpace',
+    target: 'openApi3',
+  }).definitions,
+  ...zodToJsonSchema(LocationDetailsSchema, {
+    name: 'LocationDetails',
+    target: 'openApi3',
+  }).definitions,
+  ...zodToJsonSchema(GetLocationByRentalIdResponseSchema, {
+    name: 'GetLocationByRentalIdResponse',
     target: 'openApi3',
   }).definitions,
 }
