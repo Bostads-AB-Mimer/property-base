@@ -56,7 +56,6 @@ model PropertyObject {
   residence       Residence?
   facility        Facility?
   maintenanceUnit MaintenanceUnit[]
-  locationId      String?           @db.Char(15)
 
   @@index([objectTypeId], map: "fkcmobjcmobt")
   @@map("cmobj")
