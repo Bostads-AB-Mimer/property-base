@@ -5,7 +5,7 @@ import { trimStrings } from '@src/utils/data-conversion'
 
 import { prisma } from './db'
 
-export const getLocationByRentalId = async (rentalId: string) => {
+export const getFacilityByRentalId = async (rentalId: string) => {
   try {
     const result = await prisma.propertyStructure.findFirst({
       where: {
@@ -28,7 +28,7 @@ export const getLocationByRentalId = async (rentalId: string) => {
                 rentalInformationType: { select: { name: true, code: true } },
               },
             },
-            location: {
+            facility: {
               select: {
                 id: true,
                 location: true,
@@ -40,7 +40,7 @@ export const getLocationByRentalId = async (rentalId: string) => {
                 availableFrom: true,
                 availableTo: true,
                 deleteMark: true,
-                propertyType: { select: { code: true, name: true } },
+                facilityType: { select: { code: true, name: true } },
               },
             },
           },
@@ -50,27 +50,27 @@ export const getLocationByRentalId = async (rentalId: string) => {
 
     assert(result, 'property-structure-not-found')
     assert(result.propertyObject, 'property-object-not-found')
-    assert(result.propertyObject.location, 'location-not-found')
+    assert(result.propertyObject.facility, 'facility-not-found')
     assert(
       result.propertyObject.rentalInformation,
       'rentalinformation-not-found'
     )
 
     const {
-      propertyObject: { location, rentalInformation },
+      propertyObject: { facility, rentalInformation },
     } = result
 
     return trimStrings({
       ...result,
-      propertyObject: { location, rentalInformation },
+      propertyObject: { facility, rentalInformation },
     })
   } catch (err) {
-    logger.error({ err }, 'location-adapter.getLocationByRentalId')
+    logger.error({ err }, 'facility-adapter.getFacilityByRentalId')
     throw err
   }
 }
 
-export const getLocationSizeByRentalId = async (rentalId: string) => {
+export const getFacilitySizeByRentalId = async (rentalId: string) => {
   try {
     const propertyInfo = await prisma.propertyStructure.findFirst({
       where: {
@@ -90,7 +90,7 @@ export const getLocationSizeByRentalId = async (rentalId: string) => {
 
     if (propertyInfo === null) {
       logger.warn(
-        'residence-adapter.getLocationSizeByRentalId: No property structure found for rentalId'
+        'residence-adapter.getFacilitySizeByRentalId: No property structure found for rentalId'
       )
       return null
     }
@@ -103,7 +103,7 @@ export const getLocationSizeByRentalId = async (rentalId: string) => {
 
     return areaSize
   } catch (err) {
-    logger.error({ err }, 'location-adapter.getLocationSizeByRentalId')
+    logger.error({ err }, 'facility-adapter.getFacilitySizeByRentalId')
     throw err
   }
 }

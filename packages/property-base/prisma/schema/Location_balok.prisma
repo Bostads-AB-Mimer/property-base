@@ -1,4 +1,4 @@
-model Location {
+model Facility {
   id                  String  @id(map: "pkbalok") @map("keybalok") @db.Char(15)
   propertyObjectId    String  @unique(map: "akbalok1") @map("keycmobj") @db.Char(15)
   typeCodeId          String  @map("keybalot") @db.Char(15)
@@ -21,7 +21,7 @@ model Location {
   availableTo   DateTime? @map("availto") @db.Time
   timestamp     String    @map("timestamp") @db.Char(10)
 
-  propertyType   PropertyType   @relation(fields: [typeCodeId], references: [id], onUpdate: NoAction, map: "fkbalokkeybalot")
+  facilityType   FacilityType   @relation(fields: [typeCodeId], references: [id], onUpdate: NoAction, map: "fkbalokkeybalot")
   propertyObject PropertyObject @relation(fields: [propertyObjectId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "fkbalokkeycmobj")
   //inspectionProtocol InspectionProtocol? @relation(fields: [checklistId], references: [inspectionProtocolId], onUpdate: NoAction, map: "fkbalokkeylbpro")
 

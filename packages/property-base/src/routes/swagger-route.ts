@@ -2,94 +2,76 @@ import KoaRouter from '@koa/router'
 import swaggerJsdoc from 'swagger-jsdoc'
 import zodToJsonSchema from 'zod-to-json-schema'
 
-import {
-  GetLocationByRentalIdResponseSchema,
-  LocationDetailsSchema,
-} from '@src/types/location'
-import { BuildingSchema } from '../types/building'
-import { CompanyDetailsSchema, CompanySchema } from '../types/company'
-import { ComponentSchema } from '../types/component'
-import { MaintenanceUnitSchema } from '../types/maintenance-unit'
-import { PropertyDetailsSchema, PropertySchema } from '../types/property'
-import {
-  GetResidenceByRentalIdResponseSchema,
-  ResidenceByRentalIdSchema,
-  ResidenceDetailedSchema,
-  ResidenceSchema,
-  ResidenceSearchResultSchema,
-} from '../types/residence'
-import { RoomSchema } from '../types/room'
-import { StaircaseSchema } from '../types/staircase'
+import * as types from '@src/types'
 
 import { swaggerSpec } from '../swagger'
-import { ParkingSpaceSchema } from '@src/types/parking-space'
 
 const schemas = {
-  ...zodToJsonSchema(ResidenceSchema, {
+  ...zodToJsonSchema(types.ResidenceSchema, {
     name: 'Residence',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ResidenceDetailedSchema, {
+  ...zodToJsonSchema(types.ResidenceDetailedSchema, {
     name: 'ResidenceDetails',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ResidenceSearchResultSchema, {
+  ...zodToJsonSchema(types.ResidenceSearchResultSchema, {
     name: 'ResidenceSearchResult',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(BuildingSchema, {
+  ...zodToJsonSchema(types.BuildingSchema, {
     name: 'Building',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ComponentSchema, {
+  ...zodToJsonSchema(types.ComponentSchema, {
     name: 'Component',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(PropertySchema, {
+  ...zodToJsonSchema(types.PropertySchema, {
     name: 'Property',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(PropertyDetailsSchema, {
+  ...zodToJsonSchema(types.PropertyDetailsSchema, {
     name: 'PropertyDetails',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(StaircaseSchema, {
+  ...zodToJsonSchema(types.StaircaseSchema, {
     name: 'Staircase',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(RoomSchema, {
+  ...zodToJsonSchema(types.RoomSchema, {
     name: 'Room',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(CompanySchema, {
+  ...zodToJsonSchema(types.CompanySchema, {
     name: 'Company',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(CompanyDetailsSchema, {
+  ...zodToJsonSchema(types.CompanyDetailsSchema, {
     name: 'CompanyDetails',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(MaintenanceUnitSchema, {
+  ...zodToJsonSchema(types.MaintenanceUnitSchema, {
     name: 'MaintenanceUnit',
   }).definitions,
-  ...zodToJsonSchema(ResidenceByRentalIdSchema, {
+  ...zodToJsonSchema(types.ResidenceByRentalIdSchema, {
     name: 'ResidenceByRentalId',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(GetResidenceByRentalIdResponseSchema, {
+  ...zodToJsonSchema(types.GetResidenceByRentalIdResponseSchema, {
     name: 'GetResidenceByRentalIdResponse',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(ParkingSpaceSchema, {
+  ...zodToJsonSchema(types.ParkingSpaceSchema, {
     name: 'ParkingSpace',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(LocationDetailsSchema, {
-    name: 'LocationDetails',
+  ...zodToJsonSchema(types.FacilityDetailsSchema, {
+    name: 'FacilityDetails',
     target: 'openApi3',
   }).definitions,
-  ...zodToJsonSchema(GetLocationByRentalIdResponseSchema, {
-    name: 'GetLocationByRentalIdResponse',
+  ...zodToJsonSchema(types.GetFacilityByRentalIdResponseSchema, {
+    name: 'GetFacilityByRentalIdResponse',
     target: 'openApi3',
   }).definitions,
 }

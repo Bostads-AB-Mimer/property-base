@@ -54,7 +54,7 @@ model PropertyObject {
 
   rooms           Room[]
   residence       Residence?
-  location        Location?
+  facility        Facility?
   maintenanceUnit MaintenanceUnit[]
   locationId      String?           @db.Char(15)
 

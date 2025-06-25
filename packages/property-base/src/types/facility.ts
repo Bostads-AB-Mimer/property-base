@@ -2,7 +2,7 @@ import { z } from 'zod'
 
 import { createGenericResponseSchema } from './response'
 
-export const LocationDetailsSchema = z.object({
+export const FacilityDetailsSchema = z.object({
   id: z.string(),
   code: z.string(),
   name: z.string().nullable(),
@@ -35,10 +35,10 @@ export const LocationDetailsSchema = z.object({
   areaSize: z.number().nullable(),
 })
 
-export const GetLocationByRentalIdResponseSchema = createGenericResponseSchema(
-  LocationDetailsSchema
+export const GetFacilityByRentalIdResponseSchema = createGenericResponseSchema(
+  FacilityDetailsSchema
 )
 
-export type GetLocationByRentalIdResponse = z.infer<
-  typeof GetLocationByRentalIdResponseSchema
+export type GetFacilityByRentalIdResponse = z.infer<
+  typeof GetFacilityByRentalIdResponseSchema
 >
