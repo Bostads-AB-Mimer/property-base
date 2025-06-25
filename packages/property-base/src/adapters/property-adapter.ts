@@ -38,6 +38,7 @@ const getPropertyById = async (
             energyReceived: true,
             energyIndex: true,
             heatingNature: true,
+            locationId: true,
           },
         },
       },
