@@ -1,5 +1,8 @@
 import KoaRouter from '@koa/router'
-import { getMaintenanceUnitsByRentalId } from '@src/adapters/maintenance-units-adapter'
+import {
+  getMaintenanceUnitsByRentalId,
+  getMaintenanceUnitsByPropertyCode,
+} from '@src/adapters/maintenance-units-adapter'
 import { MaintenanceUnitSchema } from '@src/types/maintenance-unit'
 import { generateRouteMetadata, logger } from 'onecore-utilities'
 
@@ -65,6 +68,70 @@ export const routes = (router: KoaRouter) => {
         ...metadata,
       }
     } catch (err) {
+      ctx.status = 500
+      const errorMessage = err instanceof Error ? err.message : 'unknown error'
+      ctx.body = { reason: errorMessage, ...metadata }
+    }
+  })
+
+  /**
+   * @swagger
+   * /maintenance-units/by-property-code/{code}:
+   *   get:
+   *     summary: Get all maintenance units for a specific property code
+   *     description: |
+   *       Retrieves all maintenance units associated with a given property code.
+   *     tags:
+   *       - Maintenance units
+   *     parameters:
+   *       - in: path
+   *         name: code
+   *         required: true
+   *         schema:
+   *           type: string
+   *         description: The code of the property or which to retrieve maintenance units.
+   *     responses:
+   *       200:
+   *         description: Successfully retrieved the maintenance units.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 content:
+   *                   type: array
+   *                   items:
+   *                     $ref: '#/components/schemas/MaintenanceUnit'
+   *       400:
+   *         description: Invalid query parameters.
+   *       500:
+   *         description: Internal server error.
+   */
+  router.get('(.*)/maintenance-units/by-property-code/:code', async (ctx) => {
+    const metadata = generateRouteMetadata(ctx)
+    const { code } = ctx.params
+    logger.info(`GET /maintenance-units/by-property-code/${code}`, metadata)
+
+    try {
+      const response = await getMaintenanceUnitsByPropertyCode(code)
+
+      if (!response) {
+        ctx.status = 404
+        return
+      }
+
+      const responseContent = MaintenanceUnitSchema.array().parse(response)
+
+      ctx.body = {
+        content: responseContent,
+        ...metadata,
+      }
+    } catch (err) {
+      logger.error(
+        `Error fetching maintenance units for property code ${code}`,
+        err,
+        metadata
+      )
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
       ctx.body = { reason: errorMessage, ...metadata }
