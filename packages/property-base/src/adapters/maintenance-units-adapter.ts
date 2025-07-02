@@ -1,5 +1,6 @@
 import { trimStrings } from '@src/utils/data-conversion'
 import { prisma } from './db'
+import { MaintenanceUnit } from '@src/types/maintenance-unit'
 
 export const getMaintenanceUnitsByRentalId = async (rentalId: string) => {
   /**
@@ -55,7 +56,7 @@ export const getMaintenanceUnitsByRentalId = async (rentalId: string) => {
       rentalPropertyId: rentalPropertyInfoTrimmed.rentalId,
       code: item.maintenanceUnit?.code,
       caption: item?.maintenanceUnit?.name,
-      type: item.maintenanceUnit?.maintenanceUnitType?.name,
+      type: item.maintenanceUnit?.maintenanceUnitType?.name ?? null,
       propertyCode: rentalPropertyInfoTrimmed.propertyCode,
       propertyName: rentalPropertyInfoTrimmed.propertyName,
     }
@@ -66,35 +67,8 @@ export const getMaintenanceUnitsByRentalId = async (rentalId: string) => {
 
 export const getMaintenanceUnitsByPropertyCode = async (
   propertyCode: string
-) => {
-  const propertyInfo = await prisma.propertyStructure.findFirst({
-    select: {
-      propertyId: true,
-      propertyCode: true,
-      propertyName: true,
-      propertyObjectId: true,
-    },
-    where: {
-      propertyCode: propertyCode,
-      roomCode: null,
-      NOT: {
-        propertyCode: null,
-        propertyName: null,
-        buildingCode: null,
-        buildingName: null,
-      },
-    },
-  })
-
-  if (!propertyInfo) {
-    console.error(`No property found for property code: ${propertyCode}`)
-    return []
-  }
-
+): Promise<MaintenanceUnit[]> => {
   const maintenanceUnits = await prisma.maintenanceUnit.findMany({
-    include: {
-      maintenanceUnitType: true,
-    },
     where: {
       propertyStructures: {
         some: {
@@ -102,21 +76,32 @@ export const getMaintenanceUnitsByPropertyCode = async (
         },
       },
     },
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      maintenanceUnitType: {
+        select: {
+          name: true,
+        },
+      },
+      propertyStructures: {
+        select: {
+          propertyCode: true,
+          propertyName: true,
+        },
+      },
+    },
   })
 
-  const propertyInfoTrimmed = trimStrings(propertyInfo)
-  const maintenanceUnitPropertyStructuresMapped = trimStrings(
-    maintenanceUnits
-  ).map((item) => {
+  return trimStrings(maintenanceUnits).map((item) => {
     return {
       id: item.id,
       code: item.code,
       caption: item.name,
-      type: item.maintenanceUnitType?.name,
-      propertyCode: propertyInfoTrimmed.propertyCode,
-      propertyName: propertyInfoTrimmed.propertyName,
+      type: item.maintenanceUnitType?.name ?? null,
+      propertyCode: item.propertyStructures[0]?.propertyCode ?? null,
+      propertyName: item.propertyStructures[0]?.propertyName ?? null,
     }
   })
-
-  return maintenanceUnitPropertyStructuresMapped
 }

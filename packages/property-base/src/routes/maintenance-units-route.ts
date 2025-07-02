@@ -3,7 +3,10 @@ import {
   getMaintenanceUnitsByRentalId,
   getMaintenanceUnitsByPropertyCode,
 } from '@src/adapters/maintenance-units-adapter'
-import { MaintenanceUnitSchema } from '@src/types/maintenance-unit'
+import {
+  MaintenanceUnit,
+  MaintenanceUnitSchema,
+} from '@src/types/maintenance-unit'
 import { generateRouteMetadata, logger } from 'onecore-utilities'
 
 /**
@@ -120,17 +123,13 @@ export const routes = (router: KoaRouter) => {
         return
       }
 
-      const responseContent = MaintenanceUnitSchema.array().parse(response)
-
       ctx.body = {
-        content: responseContent,
+        content: response satisfies MaintenanceUnit[],
         ...metadata,
       }
     } catch (err) {
       logger.error(
-        `Error fetching maintenance units for property code ${code}`,
-        err,
-        metadata
+        `Error fetching maintenance units for property code ${code}: ${err}`
       )
       ctx.status = 500
       const errorMessage = err instanceof Error ? err.message : 'unknown error'
